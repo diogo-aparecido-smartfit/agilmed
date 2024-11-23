@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const httpClient = axios.create({
-  baseURL: "https://agilmed-api.vercel.app/api",
+  baseURL: "http://192.168.100.37:3000/api",
   headers: {
     "Content-Type": "application/json",
   },

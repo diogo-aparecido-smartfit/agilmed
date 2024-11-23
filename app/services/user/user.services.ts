@@ -11,11 +11,11 @@ export const getUsers = async (
   page: number,
   quantity: number
 ): Promise<IUserData[]> => {
-  return await Get(`users/${page}/${quantity}`);
+  return await Get(`user/${page}/${quantity}`);
 };
 
 export const getUser = async (id: number): Promise<IUserData> => {
-  return await Get(`users/${id}`);
+  return await Get(`user/${id}`);
 };
 
 export const createUser = async (
@@ -29,14 +29,15 @@ export const updateUser = async (
   user: Partial<IUserData>,
   headers?: HeadersInit
 ): Promise<Partial<IUserData>> => {
-  return await Patch(`users/`, user, normalizeHeaders(headers));
+  console.log(user);
+  return await Patch(`user/${user.id}`, user, normalizeHeaders(headers));
 };
 
 export const deleteUser = async (
   id: number,
   headers?: HeadersInit
 ): Promise<void> => {
-  await Delete(`users/${id}`, normalizeHeaders(headers));
+  await Delete(`user/${id}`, normalizeHeaders(headers));
 };
 
 export const userLogin = async (

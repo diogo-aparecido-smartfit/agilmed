@@ -47,6 +47,22 @@ export interface ILoginData {
   password: string;
 }
 
+/**
+ * Payload para atualizar um usuário.
+ */
+export interface IUpdateUserData {
+  id?: number;
+  address?: string;
+  city?: string;
+  state?: string;
+  phone?: string;
+  email?: string;
+  gender?: string;
+  allergies?: string;
+  password?: string;
+  medical_history?: string;
+}
+
 export interface IResetPasswordData {
   document: string;
   typed_password: string;

@@ -11,8 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { logoffRequest } from "@/store/slices/auth.slice";
 import { router } from "expo-router";
+import { useSettingsController } from "./settings.controller";
+import { Controller } from "react-hook-form";
 
 export default function SettingsPage() {
+  const { control, error, formValues, handleSubmit, loading, onSubmit } =
+    useSettingsController();
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
@@ -39,43 +43,76 @@ export default function SettingsPage() {
         </S.PersonalInfo>
 
         <S.FormContainer>
-          <BasicInput
-            onChangeText={(text) => console.log(text)}
-            label="Email"
-            placeholder="Digite seu email"
-            defaultValue={user?.email}
-            keyboardType="email-address"
+          <Controller
+            name="password"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <BasicInput
+                onChangeText={(text) => onChange(text)}
+                label="Email"
+                placeholder="Digite seu email"
+                defaultValue={user?.email}
+                keyboardType="email-address"
+              />
+            )}
           />
-          <Input
-            onChangeText={(text) => console.log(text)}
-            label="CPF"
-            placeholder="Digite seu CPF"
-            defaultValue={user?.cpf}
-            mask="999.999.999-99"
-            keyboardType="number-pad"
+          <Controller
+            name="cpf"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <BasicInput
+                onChangeText={(text) => onChange(text)}
+                label="CPF"
+                placeholder="Digite seu CPF"
+                defaultValue={user?.cpf}
+                mask="999.999.999-99"
+                keyboardType="number-pad"
+              />
+            )}
           />
-          <Input
-            onChangeText={(text) => console.log(text)}
-            label="Telefone"
-            placeholder="Digite seu telefone"
-            defaultValue={user?.phone}
-            mask="+(99) 9 9999-9999"
-            keyboardType="phone-pad"
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <BasicInput
+                onChangeText={(text) => onChange(text)}
+                label="Telefone"
+                placeholder="Digite seu telefone"
+                defaultValue={user?.phone}
+                mask="+(99) 9 9999-9999"
+                keyboardType="phone-pad"
+              />
+            )}
           />
-          <Input
-            onChangeText={(text) => console.log(text)}
-            label="Senha"
-            placeholder="Digite sua senha"
-            value="teste123"
-            secureTextEntry
+          <Controller
+            name="password"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <BasicInput
+                onChangeText={(text) => onChange(text)}
+                label="Senha"
+                placeholder="Digite sua senha"
+                value="teste123"
+                secureTextEntry
+              />
+            )}
           />
         </S.FormContainer>
-        <Button
-          outlined
-          borderRadius={12}
-          text="Deslogar"
-          onPress={handleLogoff}
-        />
+        <S.ButtonWrapper>
+          <Button
+            disabled={loading}
+            isLoading={loading}
+            borderRadius={12}
+            text="Salvar"
+            onPress={() => handleSubmit(() => onSubmit(formValues))()}
+          />
+          <Button
+            outlined
+            borderRadius={12}
+            text="Deslogar"
+            onPress={handleLogoff}
+          />
+        </S.ButtonWrapper>
       </S.ContentContainer>
     </S.Container>
   );

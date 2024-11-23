@@ -89,6 +89,11 @@ const authSlice = createSlice({
       state.user = null;
       state.isLoading = false;
     },
+    updateUser(state, action: PayloadAction<Partial<IUserData>>) {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
+    },
   },
 });
 
@@ -106,6 +111,7 @@ export const {
   verifyCodeRequest,
   verifyCodeSuccess,
   logoffRequest,
+  updateUser,
 } = authSlice.actions;
 
 export default authSlice.reducer;

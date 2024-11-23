@@ -11,8 +11,6 @@ export function usePasswordController() {
   const { isLoading } = useSelector((state: RootState) => state.auth);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  console.log(isLoading);
-
   const {
     handleSubmit,
     control,

@@ -17,6 +17,14 @@ export const ContentContainer = styled.ScrollView.attrs({
   flex-direction: column;
 `;
 
+export const ButtonWrapper = styled.View`
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+  align-self: stretch;
+  gap: 8px;
+`;
+
 export const AvatarContainer = styled.View``;
 
 export const PersonalInfo = styled.View`
