@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -28,10 +27,12 @@ import {
 } from "@expo-google-fonts/poppins";
 import { ThemeProvider } from "styled-components/native";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
 import { Theme } from "@/config/theme";
+import { QueryProvider } from "@/providers/query.provider";
+import { Provider } from "react-redux";
+import { MainNavigator } from "./main";
+import store from "@/store";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -70,9 +71,9 @@ export default function RootLayout() {
   useEffect(() => {
     const token = AsyncStorage.getItem("token");
 
-    // if (!token) {
-    //   router.replace("/(auth)");
-    // }
+    if (!token) {
+      router.replace("/(auth)/login");
+    }
   }, []);
 
   if (!loaded) {
@@ -80,12 +81,13 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider theme={Theme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Provider store={store}>
+      <QueryProvider>
+        <ThemeProvider theme={Theme}>
+          <MainNavigator />
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </QueryProvider>
+    </Provider>
   );
 }

@@ -1,3 +1,5 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export const convertToISODate = (dateStr: string) => {
   // Extrai o dia, mês e ano da string DDMMYYYY
   const day = dateStr.substring(0, 2); // Pegando os 2 primeiros caracteres (dia)
@@ -26,3 +28,33 @@ export function getFirstAndLastName(fullName: string): string {
 
   return `${nameParts[0]} ${nameParts[1]}`;
 }
+
+export const normalizeHeaders = (
+  headers?: HeadersInit
+): Record<string, string> | undefined => {
+  if (!headers) return undefined;
+
+  if (headers instanceof Headers) {
+    const result: Record<string, string> = {};
+    headers.forEach((value: string, key: string | number) => {
+      result[key] = value;
+    });
+    return result;
+  }
+
+  if (Array.isArray(headers)) {
+    return headers.reduce((acc, [key, value]) => {
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>);
+  }
+
+  return headers as Record<string, string>;
+};
+
+export const clearStorage = () => {
+  return Promise.all([
+    AsyncStorage.removeItem("token"),
+    AsyncStorage.removeItem("user"),
+  ]);
+};
