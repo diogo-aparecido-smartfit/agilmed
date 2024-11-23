@@ -1,3 +1,4 @@
+import { showMessage } from "react-native-flash-message";
 import { put, call, takeLatest, Effect } from "redux-saga/effects";
 import { router } from "expo-router";
 import {
@@ -6,24 +7,16 @@ import {
   resetPassword,
   verifyCode,
 } from "@/services/user/user.services";
-import {
-  ILoginData,
-  IRegisterUserData,
-  IResetPasswordData,
-  IUserData,
-} from "@/types/types";
+import { IUserData } from "@/types/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   loginFailure,
-  loginRequest,
   loginSuccess,
-  logoffRequest,
   registerFailure,
   registerSuccess,
   resetPasswordFailure,
   resetPasswordSuccess,
   verifyCodeFailure,
-  verifyCodeRequest,
   verifyCodeSuccess,
 } from "../slices/auth.slice";
 import {
@@ -50,7 +43,10 @@ function* loginSaga(action: LoginAction): Generator<Effect> {
     router.push("/(home)");
   } catch (error) {
     console.error(error);
-    alert("Falha ao fazer login. Verifique as credenciais.");
+    showMessage({
+      message: "Credenciais inválidas ou erro de rede.",
+      type: "danger",
+    });
     yield put(loginFailure("Credenciais inválidas ou erro de rede."));
   }
 }
@@ -68,8 +64,11 @@ function* registerSaga(action: RegisterAction): Generator<Effect> {
     });
   } catch (error) {
     console.error(error);
+    showMessage({
+      message: "Erro ao registrar. Tente novamente mais tarde.",
+      type: "danger",
+    });
     yield put(registerFailure("Erro ao registrar. Tente novamente."));
-    alert("Erro ao registrar. Tente novamente.");
   }
 }
 
@@ -89,7 +88,11 @@ function* resetPasswordSaga(action: ResetPasswordAction): Generator<Effect> {
     yield put(resetPasswordSuccess());
   } catch (error) {
     console.error(error);
-    alert("Não foi possível resetar a senha.");
+    showMessage({
+      message:
+        "Não foi possível resetar a senha, por favor, tente novamente mais tarde.",
+      type: "danger",
+    });
     yield put(resetPasswordFailure("Não foi possível resetar a senha."));
   }
 }
@@ -122,6 +125,10 @@ function* verifyCodeSaga(action: VerifyCodeAction): Generator<Effect> {
     router.replace("/(home)");
   } catch (error) {
     console.error(error);
+    showMessage({
+      message: "Código incorreto.",
+      type: "danger",
+    });
     yield put(verifyCodeFailure("Erro ao verificar código. Tente novamente."));
   }
 }

@@ -1,3 +1,4 @@
+import FlashMessage from "react-native-flash-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import { router, Stack } from "expo-router";
@@ -82,6 +83,7 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
+      <FlashMessage position="top" />
       <QueryProvider>
         <ThemeProvider theme={Theme}>
           <MainNavigator />
