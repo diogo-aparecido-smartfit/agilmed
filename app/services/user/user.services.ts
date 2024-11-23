@@ -1,3 +1,4 @@
+import FormData from "form-data";
 import {
   IUserData,
   IRegisterUserData,
@@ -29,8 +30,29 @@ export const updateUser = async (
   user: Partial<IUserData>,
   headers?: HeadersInit
 ): Promise<Partial<IUserData>> => {
-  console.log(user);
   return await Patch(`user/${user.id}`, user, normalizeHeaders(headers));
+};
+
+export const updateProfilePicture = async (
+  uri: string,
+  userId: number
+): Promise<IUserData> => {
+  const formData = new FormData();
+  formData.append("profileImage", {
+    uri: uri,
+    type: "image/png",
+    name: "imagem.png",
+  });
+
+  try {
+    const response = await Patch<IUserData>(`user/${userId}`, formData);
+
+    return response;
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Erro desconhecido"
+    );
+  }
 };
 
 export const deleteUser = async (

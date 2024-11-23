@@ -15,8 +15,17 @@ import { useSettingsController } from "./settings.controller";
 import { Controller } from "react-hook-form";
 
 export default function SettingsPage() {
-  const { control, error, formValues, handleSubmit, loading, onSubmit } =
-    useSettingsController();
+  const {
+    control,
+    error,
+    formValues,
+    handleSubmit,
+    loading,
+    onSubmit,
+    imageUploadError,
+    imageUploadLoading,
+    handleImageChange,
+  } = useSettingsController();
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
@@ -30,8 +39,12 @@ export default function SettingsPage() {
       <StatusBar style="dark" />
       <S.ContentContainer automaticallyAdjustKeyboardInsets>
         <S.AvatarContainer>
-          <Avatar size={139} />
-          <EditButton />
+          <Avatar
+            uri={user?.profile_picture_url ?? undefined}
+            isLoading={imageUploadLoading}
+            size={139}
+          />
+          <EditButton onChange={handleImageChange} />
         </S.AvatarContainer>
         <S.PersonalInfo>
           <Text color="black" fontSize="xl" fontWeight="600">

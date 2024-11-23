@@ -41,6 +41,12 @@ export async function Patch<T>(
   body?: object,
   headers?: Record<string, string>
 ): Promise<T> {
+  if (body instanceof FormData) {
+    headers = {
+      "Content-Type": "multipart/form-data",
+    };
+  }
+
   return await fetchWrapper<T>(route, {
     method: "PATCH",
     data: body,

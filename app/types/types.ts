@@ -19,6 +19,7 @@ export interface IUserData {
   isVerified?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  profile_picture_url?: string;
 }
 
 /**

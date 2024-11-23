@@ -9,6 +9,7 @@ import { RootState } from "@/store";
 export function usePasswordController() {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state: RootState) => state.auth);
+  useSelector((state: RootState) => state.user);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const {
