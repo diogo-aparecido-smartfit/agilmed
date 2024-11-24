@@ -62,8 +62,7 @@ export default function AppointmentDetailsPage() {
                   Endereço da Clínica
                 </Text>
                 <Text color="description">
-                  Praça dos Araújos 181 - Mansões Aeroporto, Uberlândia MG.
-                  38406-398
+                  Av. Afonso Pena, 1177 - Centro, Uberlândia - MG, 38400-706
                 </Text>
                 <S.CustomMap
                   onPress={handleOpenOnMaps}
