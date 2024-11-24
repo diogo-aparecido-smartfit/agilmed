@@ -1,6 +1,11 @@
 import { ArrowLeft, Cpu, Microphone2, Send2 } from "iconsax-react-native";
 import * as S from "./chatbot.style";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Theme } from "@/config/theme";
 import { router } from "expo-router";
 import Avatar from "@/components/Avatar/Avatar";
@@ -14,12 +19,17 @@ export default function ChatBotPage() {
   const {
     today,
     onSendMessage,
-    chatState,
     handleSelectOption,
     setMessage,
     message,
     scrollViewRef,
-  } = useChatbotController("1234");
+    loading,
+    userId,
+    messages,
+    loadingMessages,
+  } = useChatbotController();
+
+  const hasMessages = messages.length > 0;
 
   return (
     <S.Container>
@@ -32,7 +42,7 @@ export default function ChatBotPage() {
           <Avatar uri={Cpu} size={44} />
           <S.BotInfoWrapper>
             <Text fontSize="sm" fontWeight="700">
-              AgilMed
+              Jordan
             </Text>
             <S.StatusWrapper>
               <S.ActivePointer />
@@ -43,47 +53,57 @@ export default function ChatBotPage() {
           </S.BotInfoWrapper>
         </S.BotInfoContainer>
       </S.HeaderContainer>
-      <S.ChatContainer
-        onContentSizeChange={() =>
-          scrollViewRef.current?.scrollToEnd({ animated: true })
-        }
-        ref={scrollViewRef}
-      >
-        <Text textAlign="center" fontWeight="500" color="description">
-          {today}
-        </Text>
-        <FlatList
-          data={chatState.chatHistory}
-          scrollEnabled={false}
-          ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-          style={{ marginBottom: 16 }}
-          renderItem={({ item }) => (
-            <S.MessageContainer>
-              <MessageBubble isReceived={item.isReceived}>
-                {item.text}
-              </MessageBubble>
-              {item.options && (
-                <S.OptionsRow>
-                  {item.options.map((item, index) => (
-                    <OptionBubble
-                      onPress={() => handleSelectOption(item)}
-                      key={index}
-                    >
-                      {item}
-                    </OptionBubble>
-                  ))}
-                </S.OptionsRow>
-              )}
-            </S.MessageContainer>
-          )}
-          keyExtractor={(item) => item.id}
-        />
-        {chatState.isLoading && (
-          <MessageBubble isLoading isReceived>
-            carregando
-          </MessageBubble>
-        )}
-      </S.ChatContainer>
+      {!hasMessages ? (
+        <S.EmptyContainer>
+          <Text fontSize="4xl" color="mainColor" fontWeight="700">
+            AgilMed
+          </Text>
+          <Text fontSize="xs" color="description" fontWeight="500">
+            Digite uma mensagem para iniciar a conversa
+          </Text>
+        </S.EmptyContainer>
+      ) : (
+        <S.ChatContainer
+          onContentSizeChange={() =>
+            scrollViewRef.current?.scrollToEnd({ animated: true })
+          }
+          ref={scrollViewRef}
+        >
+          {/* Exibe as mensagens */}
+          <FlatList
+            data={messages}
+            scrollEnabled={false}
+            renderItem={({ item }) => (
+              <S.MessageContainer key={item.id}>
+                <MessageBubble isReceived={item.userId !== userId?.toString()}>
+                  {item.payload.text}
+                </MessageBubble>
+                {/* Caso haja opções no payload da mensagem */}
+                {item.payload.options && (
+                  <S.OptionsRow>
+                    {item.payload.options.map((option, index) => (
+                      <OptionBubble
+                        onPress={() => handleSelectOption(option.value)}
+                        key={index}
+                      >
+                        {option.label}
+                      </OptionBubble>
+                    ))}
+                  </S.OptionsRow>
+                )}
+              </S.MessageContainer>
+            )}
+            keyExtractor={(item) => item.id}
+            ListFooterComponent={() =>
+              loadingMessages ? (
+                <MessageBubble isLoading isReceived={true}>
+                  Carregando...
+                </MessageBubble>
+              ) : null
+            }
+          />
+        </S.ChatContainer>
+      )}
       <S.FooterContainer>
         <S.TextInputWrapper>
           <S.TextInput
@@ -95,8 +115,12 @@ export default function ChatBotPage() {
             <Microphone2 color={Theme.colors.inputColor} />
           </S.MicrophoneButton>
         </S.TextInputWrapper>
-        <S.SendMessageButton onPress={onSendMessage}>
-          <Send2 color="#FFF" />
+        <S.SendMessageButton disabled={loading} onPress={onSendMessage}>
+          {loading ? (
+            <ActivityIndicator color="#FFF" />
+          ) : (
+            <Send2 color="#FFF" />
+          )}
         </S.SendMessageButton>
       </S.FooterContainer>
     </S.Container>

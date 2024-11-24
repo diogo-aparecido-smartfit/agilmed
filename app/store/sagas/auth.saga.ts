@@ -55,7 +55,10 @@ function* registerSaga(action: RegisterAction): Generator<Effect> {
   try {
     const response = yield call(createUser, action.payload);
 
-    alert("Código de confirmação enviado!");
+    showMessage({
+      message: "Código de confirmação enviado. Por favor, verifique seu email.",
+      type: "info",
+    });
 
     yield put(registerSuccess());
     router.push({

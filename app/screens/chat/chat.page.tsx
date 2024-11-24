@@ -2,10 +2,13 @@ import Text from "@/components/Text/Text";
 import * as S from "./chat.style";
 import { Message } from "iconsax-react-native";
 import { Theme } from "@/config/theme";
-import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useChatlistController } from "./chat-list.controller";
+import { ActivityIndicator } from "react-native";
 
 export default function ChatPage() {
+  const { handleCreateConversation, loading } = useChatlistController();
+
   return (
     <S.Container>
       <StatusBar style="dark" />
@@ -23,17 +26,21 @@ export default function ChatPage() {
             Agende suas próximas consultas online
           </Text>
         </S.NavigationButton>
-        <S.ScheduleButton onPress={() => router.push("/(chat)/chat")}>
+        <S.ScheduleButton disabled={loading} onPress={handleCreateConversation}>
           <S.ScheduleTextWrapper>
             <Text color="white" fontWeight="700">
               Que tal marcar uma consulta?
             </Text>
             <Text color="lightDescription" fontWeight="400" fontSize="sm">
-              O nosso assistente pode te ajudar
+              Clique aqui e inicie uma nova conversa
             </Text>
           </S.ScheduleTextWrapper>
           <S.ChatButton>
-            <Message color={Theme.colors.black} />
+            {loading ? (
+              <ActivityIndicator color={Theme.colors.black} />
+            ) : (
+              <Message color={Theme.colors.black} />
+            )}
           </S.ChatButton>
         </S.ScheduleButton>
       </S.ContentContainer>

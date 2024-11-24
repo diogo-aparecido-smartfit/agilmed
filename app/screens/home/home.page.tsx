@@ -30,7 +30,10 @@ export default function HomePage() {
               {getFirstAndLastName(user?.full_name ?? "")}
             </S.Username>
           </S.WelcomeWrapper>
-          <Avatar onPress={handleNavigateToProfile} />
+          <Avatar
+            uri={user?.profile_picture_url ?? undefined}
+            onPress={handleNavigateToProfile}
+          />
         </S.Header>
         <S.NextAppointmentsContainer>
           <Text fontWeight="600">Agendamentos futuros 🚀</Text>

@@ -20,6 +20,7 @@ export interface IUserData {
   createdAt?: string;
   updatedAt?: string;
   profile_picture_url?: string;
+  chatbot_user_id?: string;
 }
 
 /**

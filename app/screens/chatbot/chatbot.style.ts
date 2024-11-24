@@ -20,6 +20,7 @@ export const ChatContainer = styled(ScrollView).attrs({
 
 export const MessageContainer = styled.View`
   gap: 16px;
+  margin-bottom: 16px;
 `;
 
 export const FooterContainer = styled.KeyboardAvoidingView`
@@ -118,4 +119,11 @@ export const MarkOnMap = styled.TouchableOpacity`
   gap: 4px;
   align-items: center;
   justify-content: center;
+`;
+
+export const EmptyContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.4;
 `;
