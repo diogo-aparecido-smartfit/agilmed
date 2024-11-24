@@ -48,6 +48,7 @@ function* handleCreateConversation(): Generator<Effect> {
     const chatbotUserId = <string>getChatbotUserId;
 
     if (conversationId) {
+      yield put(createConversationSuccess({ conversationId: conversationId }));
       router.push("/(home)/(chat)/chat");
       return;
     }
@@ -62,8 +63,6 @@ function* handleCreateConversation(): Generator<Effect> {
     );
 
     const response = <CreateConversationResponse>data;
-
-    console.log(response);
 
     yield put(
       createConversationSuccess({ conversationId: response.conversation.id })

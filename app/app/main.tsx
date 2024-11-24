@@ -31,6 +31,10 @@ export function MainNavigator() {
         name="(auth)"
         options={{ headerShown: false, headerTitle: "Auth" }}
       />
+      <Stack.Screen
+        name="(appointment)"
+        options={{ headerShown: false, headerTitle: "Appointment" }}
+      />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

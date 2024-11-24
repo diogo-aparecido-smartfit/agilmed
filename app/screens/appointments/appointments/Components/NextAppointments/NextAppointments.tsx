@@ -36,7 +36,7 @@ const NextAppointments = () => {
         </S.ScheduleContainer>
       </S.SchedulesWrapper>
       <Button
-        onPress={() => router.navigate("/(home)/(appointments)/details/1")}
+        onPress={() => router.navigate("/(appointment)/details/1")}
         isSecondary
         text="Detalhes"
       />

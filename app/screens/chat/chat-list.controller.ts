@@ -11,7 +11,6 @@ export const useChatlistController = () => {
 
   const handleCreateConversation = () => {
     if (user?.chatbot_user_id) {
-      console.log("entrou aqui");
       dispatch(createConversationRequest());
     }
   };

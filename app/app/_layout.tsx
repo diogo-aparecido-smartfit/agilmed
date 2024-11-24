@@ -33,6 +33,7 @@ import { QueryProvider } from "@/providers/query.provider";
 import { Provider } from "react-redux";
 import { MainNavigator } from "./main";
 import store from "@/store";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -83,13 +84,15 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <FlashMessage position="top" />
-      <QueryProvider>
-        <ThemeProvider theme={Theme}>
-          <MainNavigator />
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </QueryProvider>
+      <GestureHandlerRootView>
+        <FlashMessage position="top" />
+        <QueryProvider>
+          <ThemeProvider theme={Theme}>
+            <MainNavigator />
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </QueryProvider>
+      </GestureHandlerRootView>
     </Provider>
   );
 }
