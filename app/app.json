@@ -9,13 +9,15 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.diogoamv.agilmed"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.diogoamv.agilmed"
     },
     "web": {
       "bundler": "metro",
@@ -43,9 +45,7 @@
       }
     },
     "owner": "diogoamv",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "exposdk:52.0.0",
     "updates": {
       "url": "https://u.expo.dev/7b4121bd-eee4-4d44-b77a-43186f940250"
     }
