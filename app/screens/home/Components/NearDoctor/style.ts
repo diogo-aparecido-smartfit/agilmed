@@ -42,4 +42,5 @@ export const DistanceContainer = styled.View`
   gap: 8px;
   flex-direction: row;
   align-items: center;
+  margin-left: auto;
 `;
