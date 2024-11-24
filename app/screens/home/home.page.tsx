@@ -11,6 +11,7 @@ import { StatusBar } from "expo-status-bar";
 import { getFirstAndLastName } from "@/utils/utils";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
+import { showMessage } from "react-native-flash-message";
 
 export default function HomePage() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -57,20 +58,47 @@ export default function HomePage() {
           </S.NextAppointmentsWrapper>
         </S.NextAppointmentsContainer>
         <S.FastActionContainer>
-          <FastAction Icon={Sun} text="Covid 19" />
+          <FastAction
+            onPress={() =>
+              showMessage({
+                message: "Desculpe, mas esta ação ainda não foi implementada.",
+                type: "warning",
+              })
+            }
+            Icon={Sun}
+            text="Covid 19"
+          />
           <FastAction
             onPress={() => router.push("/(home)/(appointments)/appointments")}
             Icon={Calendar1}
             text="Consultas"
           />
-          <FastAction Icon={Link2} text="Remédios" />
-          <FastAction Icon={Hospital} text="Unidades" />
+          <FastAction
+            onPress={() =>
+              showMessage({
+                message: "Desculpe, mas esta ação ainda não foi implementada.",
+                type: "warning",
+              })
+            }
+            Icon={Link2}
+            text="Remédios"
+          />
+          <FastAction
+            onPress={() =>
+              showMessage({
+                message: "Desculpe, mas esta ação ainda não foi implementada.",
+                type: "warning",
+              })
+            }
+            Icon={Hospital}
+            text="Unidades"
+          />
         </S.FastActionContainer>
         <S.NearDoctorsContainer>
-          <Text fontWeight="600">Unidades próximas de você 📍</Text>
-          <Text fontSize="sm" color="description">
+          <Text fontWeight="600">Unidades médicas próximas de você 📍</Text>
+          {/* <Text fontSize="sm" color="description">
             Clique na unidade desejada para mais detalhes
-          </Text>
+          </Text> */}
           <NearDoctor
             name="Hospital Santa Maria"
             type="Ortopédico"
