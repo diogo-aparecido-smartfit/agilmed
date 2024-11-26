@@ -22,7 +22,6 @@ export default function HomePage() {
 
   return (
     <S.Container>
-      <StatusBar style="dark" />
       <S.ContentContainer>
         <S.Header>
           <S.WelcomeWrapper>

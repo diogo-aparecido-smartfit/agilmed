@@ -1,7 +1,7 @@
 import { Theme } from "@/config/theme";
 import styled from "styled-components/native";
 
-export const Container = styled.View`
+export const Container = styled.TouchableOpacity`
   background-color: ${Theme.colors.mainColor};
   padding: 20px;
   flex-direction: column;

@@ -13,7 +13,6 @@ export default function LoginPage() {
 
   return (
     <S.Container>
-      <StatusBar style="dark" />
       <S.ContentContainer keyboardShouldPersistTaps="always">
         <Text fontSize="2xl" textAlign="center" fontWeight="700">
           Entrar

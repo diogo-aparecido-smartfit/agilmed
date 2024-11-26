@@ -10,6 +10,7 @@ export const ContentContainer = styled.ScrollView.attrs({
   contentContainerStyle: {
     flexGrow: 1,
     alignItems: "center",
+    justifyContent: "center"
   },
 })`
   flex-direction: column;

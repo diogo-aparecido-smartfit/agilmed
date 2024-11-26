@@ -1,6 +1,8 @@
 import Avatar from "@/components/Avatar/Avatar";
 import * as S from "./style";
 import { Calendar, Clock } from "iconsax-react-native";
+import { useCallback } from "react";
+import { router } from "expo-router";
 
 interface NextAppointmentProps {
   doctorName: string;
@@ -17,8 +19,12 @@ const NextAppointment = ({
   endAt,
   startAt,
 }: NextAppointmentProps) => {
+  const handleNavigateToAppointment = useCallback(() => {
+    router.push("/(appointment)/details/1")
+  }, [])
+
   return (
-    <S.Container>
+    <S.Container onPress={handleNavigateToAppointment}>
       <S.PrimaryContentWrapper>
         <Avatar uri="https://loremflickr.com/320/240" />
         <S.DoctorInfoWrapper>
