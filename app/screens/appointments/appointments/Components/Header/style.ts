@@ -8,5 +8,4 @@ export const Container = styled.ScrollView.attrs({
   horizontal: true,
   scrollEnabled: true,
   showsHorizontalScrollIndicator: false,
-})`
-`;
+})``;
