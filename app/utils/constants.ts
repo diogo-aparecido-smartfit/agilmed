@@ -27,3 +27,9 @@ export const states = [
   { label: "Sergipe", value: "SE" },
   { label: "Tocantins", value: "TO" },
 ];
+
+export const genders = [
+  { label: 'Masculino', value: 'male' },
+  { label: 'Feminino', value: 'female' },
+  { label: 'Não informar', value: 'not_informed' },
+]
