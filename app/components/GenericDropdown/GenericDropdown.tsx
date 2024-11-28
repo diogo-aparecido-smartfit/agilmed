@@ -4,6 +4,7 @@ import * as S from './styles'
 import { ArrowDown2, ArrowUp2 } from 'iconsax-react-native'
 import { TouchableOpacity, View } from 'react-native'
 import Text from '../Text/Text'
+import { Theme } from '@/config/theme'
 
 interface IData {
     label: string
@@ -46,7 +47,17 @@ const TextDropdown = ({
                                     {placeholder}
                                 </Text>
                             )}
-                            {isOpened ? <ArrowUp2 /> : <ArrowDown2 />}
+                            {isOpened ? (
+                                <ArrowUp2
+                                    size={16}
+                                    color={Theme.colors.inputColor}
+                                />
+                            ) : (
+                                <ArrowDown2
+                                    size={16}
+                                    color={Theme.colors.inputColor}
+                                />
+                            )}
                         </S.DropdownButton>
                     </TouchableOpacity>
                 )}

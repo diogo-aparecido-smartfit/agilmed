@@ -4,7 +4,8 @@ import { View, Text } from 'react-native'
 
 export const DropdownContainer = styled(View)`
   flex: 1;
-    margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 12px;
 `
 
 export const DropdownButton = styled(View)`
