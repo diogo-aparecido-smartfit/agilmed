@@ -18,6 +18,7 @@ export const InputBox = styled(TextInput)`
   text-align: center;
   font-size: 18px;
   border-radius: 16px;
+  padding: 0;
   font-size: 28px;
   font-family: ${Theme.fonts.semiBold};
 `;

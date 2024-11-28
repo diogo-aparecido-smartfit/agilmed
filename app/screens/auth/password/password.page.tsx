@@ -21,8 +21,6 @@ export default function PasswordPage() {
     } = usePasswordController()
     const params = useLocalSearchParams()
 
-    console.log(showPassword)
-
     return (
         <S.Container>
             <StatusBar style="dark" />

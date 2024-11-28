@@ -11,9 +11,8 @@ export const schema = yup.object().shape({
   city: yup.string().required("Campo 'Cidade' é obrigatório"),
   state: yup.string().required("Campo 'Estado' é obrigatório"),
   gender: yup.string().required("Campo 'Sexo' é obrigatório"),
-  blood_type: yup.string().required("Campo 'Tipo sanguíneo' é obrigatório"),
-  allergies: yup.string().required("Campo 'Alergias' é obrigatório"),
+  blood_type: yup.string(),
+  allergies: yup.string(),
   medical_history: yup
     .string()
-    .required("Campo 'Histórico médico' é obrigatório"),
 });
