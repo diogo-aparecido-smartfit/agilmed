@@ -4,8 +4,10 @@ import { schema } from "./verifyCode.schema";
 import { RootState } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyCodeRequest } from "@/store/slices/auth.slice";
+import { useEffect, useState } from "react";
 
 export function useVerifyCodeController() {
+  const [secondsLeft, setSecondsLeft] = useState<number>(60);
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state: RootState) => state.auth);
 
@@ -42,6 +44,15 @@ export function useVerifyCodeController() {
     );
   };
 
+  useEffect(() => {
+    if (secondsLeft > 0) {
+      const timer = setInterval(() => {
+        setSecondsLeft((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [secondsLeft]);
+
   return {
     handleSubmit,
     onSubmit,
@@ -49,5 +60,6 @@ export function useVerifyCodeController() {
     errors,
     control,
     formValues,
+    secondsLeft,
   };
 }
