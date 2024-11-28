@@ -11,8 +11,14 @@ import GenericDropdown from '@/components/GenericDropdown/GenericDropdown'
 import { genders, states } from '@/utils/constants'
 
 export default function RegisterPage() {
-    const { control, handleSubmit, onSubmit, isLoading, errors } =
-        useRegisterController()
+    const {
+        control,
+        handleSubmit,
+        onSubmit,
+        isLoading,
+        errors,
+        filledFormValues,
+    } = useRegisterController()
 
     return (
         <S.Container>
@@ -121,28 +127,6 @@ export default function RegisterPage() {
                             />
                         )}
                     />
-                    {/* <Controller
-            name="street"
-            control={control}
-            render={({ field: { onChange } }) => (
-              <Input
-                onChangeText={(_, rawText) => onChange(rawText)}
-                label="Endereço"
-                placeholder="Rua XYZ. 95"
-              />
-            )}
-          />
-          <Controller
-            name="region"
-            control={control}
-            render={({ field: { onChange } }) => (
-              <Input
-                onChangeText={(_, rawText) => onChange(rawText)}
-                label="Bairro"
-                placeholder="Digite seu Bairro"
-              />
-            )}
-          /> */}
                     <S.RowIputContainer>
                         <Controller
                             name="city"
@@ -222,7 +206,7 @@ export default function RegisterPage() {
                             <BasicInput
                                 onChangeText={(rawText) => onChange(rawText)}
                                 label="Histórico médico"
-                                placeholder="???"
+                                placeholder="..."
                             />
                         )}
                     />
@@ -232,6 +216,7 @@ export default function RegisterPage() {
                                 console.error(errors)
                             )()
                         }
+                        disabled={isLoading || !filledFormValues}
                         isLoading={isLoading}
                         text="Continuar"
                     />

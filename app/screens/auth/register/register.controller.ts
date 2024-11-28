@@ -14,6 +14,7 @@ export function useRegisterController() {
   const {
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -33,6 +34,8 @@ export function useRegisterController() {
     resolver: yupResolver(schema),
   });
 
+  const formValues = watch()
+
   const onSubmit = async (data: IRegisterUserData) => {
     const isoBirthdate = convertToISODate(data.birthdate);
 
@@ -44,11 +47,15 @@ export function useRegisterController() {
     dispatch(registerRequest(payload));
   };
 
+  const filledFormValues = Boolean(formValues.full_name) && Boolean(formValues.cpf) && Boolean(formValues.birthdate) && Boolean(formValues.phone) && Boolean(formValues.email) && Boolean(formValues.password) && Boolean(formValues.address) && Boolean(formValues.city) && Boolean(formValues.state) && Boolean(formValues.gender)
+
   return {
     handleSubmit,
     onSubmit,
     isLoading,
     errors,
     control,
+    formValues,
+    filledFormValues
   };
 }

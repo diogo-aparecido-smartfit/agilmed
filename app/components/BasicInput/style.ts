@@ -11,7 +11,7 @@ export const InputContainer = styled(View)`
 export const IconContainer = styled(TouchableOpacity)`
   position: absolute;
   right: 5%;
-  bottom: 28%;
+  bottom: 30%;
 `;
 
 export const InputLabel = styled(Text)`
