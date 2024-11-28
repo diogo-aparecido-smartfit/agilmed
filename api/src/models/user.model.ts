@@ -24,12 +24,11 @@ interface UserAttributes {
 }
 
 export interface UserCreationAttributes
-  extends Optional<UserAttributes, "id"> {}
+  extends Optional<UserAttributes, "id"> { }
 
 export class User
   extends Model<UserAttributes, UserCreationAttributes>
-  implements UserAttributes
-{
+  implements UserAttributes {
   public id!: number;
   public full_name!: string;
   public birthdate!: Date;
@@ -75,10 +74,6 @@ User.init(
     sequelize,
     modelName: "user",
     hooks: {
-      beforeCreate: async (user) => {
-        const saltRounds = 10;
-        user.password = await bcrypt.hash(user.password, saltRounds);
-      },
       beforeSave: async (user) => {
         const saltRounds = 10;
         user.password = await bcrypt.hash(user.password, saltRounds);

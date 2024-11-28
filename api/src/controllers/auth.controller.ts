@@ -59,6 +59,9 @@ export class AuthController {
         state,
         phone,
         gender,
+        allergies,
+        blood_type,
+        medical_history,
       } = req.body;
 
       const existingUser = await User.findOne({ where: { email } });
@@ -83,6 +86,9 @@ export class AuthController {
         phone,
         gender,
         verificationCode,
+        allergies,
+        blood_type,
+        medical_history,
       });
 
       await this.authService.sendVerificationEmail(
