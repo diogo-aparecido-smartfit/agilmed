@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export class AuthController {
   private authService: AuthService;
