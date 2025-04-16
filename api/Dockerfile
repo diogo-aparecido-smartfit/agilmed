@@ -3,10 +3,12 @@ FROM node:18
 WORKDIR /app
 
 COPY package*.json ./
-RUN yarn install
+RUN yarn install --production
 
 COPY . .
 
+RUN yarn build
+
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["node", "dist/app.js"]
