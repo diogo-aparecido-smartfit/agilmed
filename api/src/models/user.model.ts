@@ -85,6 +85,7 @@ interface UserAttributes {
   isVerified?: boolean;
   profile_picture_url?: string | null;
   chatbot_user_id?: string | null;
+  role: "doctor" | "patient";
 }
 
 export interface UserCreationAttributes
@@ -112,6 +113,7 @@ export class User
   public profile_picture_url?: string | null;
   public chatbot_user_id?: string | null;
   public isVerified!: boolean;
+  public role!: "doctor" | "patient";
 }
 
 User.init(
@@ -134,6 +136,10 @@ User.init(
     profile_picture_url: { type: DataTypes.STRING, allowNull: true },
     chatbot_user_id: { type: DataTypes.STRING, allowNull: true },
     isVerified: { type: DataTypes.BOOLEAN, defaultValue: false },
+    role: {
+      type: DataTypes.ENUM("doctor", "patient"),
+      allowNull: false,
+    },
   },
   {
     sequelize,
