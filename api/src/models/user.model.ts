@@ -85,7 +85,7 @@ interface UserAttributes {
   isVerified?: boolean;
   profile_picture_url?: string | null;
   chatbot_user_id?: string | null;
-  role: "doctor" | "patient";
+  role?: "doctor" | "patient";
 }
 
 export interface UserCreationAttributes

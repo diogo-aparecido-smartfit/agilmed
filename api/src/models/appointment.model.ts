@@ -1,17 +1,19 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/database";
 
-interface AppointmentAttributes {
+export interface AppointmentAttributes {
   id: number;
   doctor_id: number;
   patient_id: number;
   appointment_date: Date;
   reason: string;
   status: "pending" | "confirmed" | "cancelled";
+  created_at?: Date;
+  updated_at?: Date;
 }
 
-interface AppointmentCreationAttributes
-  extends Optional<AppointmentAttributes, "id"> {}
+export interface AppointmentCreationAttributes
+  extends Optional<AppointmentAttributes, "id" | "status"> {}
 
 export class Appointment
   extends Model<AppointmentAttributes, AppointmentCreationAttributes>
@@ -23,14 +25,17 @@ export class Appointment
   public appointment_date!: Date;
   public reason!: string;
   public status!: "pending" | "confirmed" | "cancelled";
+
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 }
 
 Appointment.init(
   {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
       primaryKey: true,
+      autoIncrement: true,
     },
     doctor_id: {
       type: DataTypes.INTEGER,
@@ -55,6 +60,8 @@ Appointment.init(
   },
   {
     sequelize,
-    modelName: "appointment",
+    modelName: "Appointment",
+    tableName: "appointments",
+    underscored: true,
   }
 );
