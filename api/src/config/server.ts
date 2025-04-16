@@ -5,6 +5,7 @@ import chatbotRouter from "../routes/chatbot.routes";
 import userRouter from "../routes/user.routes";
 import authRouter from "../routes/auth.routes";
 import { connectDB } from "./database";
+import { setupSwagger } from "./swagger";
 
 export class App {
   public app: Application;
@@ -32,6 +33,9 @@ export class App {
     this.app.use("/api/chatbot", chatbotRouter);
     this.app.use("/api/user", userRouter);
     this.app.use("/api/auth", authRouter);
+
+    setupSwagger(this.app);
+
     connectDB();
   }
 

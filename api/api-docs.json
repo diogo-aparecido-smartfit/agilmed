@@ -1,0 +1,322 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Usuários",
+    "description": "Documentação da API de gerenciamento de usuários",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "ID único do usuário" },
+          "full_name": {
+            "type": "string",
+            "description": "Nome completo do usuário"
+          },
+          "birthdate": {
+            "type": "string",
+            "format": "date",
+            "description": "Data de nascimento do usuário"
+          },
+          "cpf": { "type": "string", "description": "CPF do usuário" },
+          "address": { "type": "string", "description": "Endereço do usuário" },
+          "city": { "type": "string", "description": "Cidade do usuário" },
+          "state": { "type": "string", "description": "Estado do usuário" },
+          "phone": {
+            "type": "string",
+            "description": "Número de telefone do usuário"
+          },
+          "email": { "type": "string", "description": "E-mail do usuário" },
+          "password": { "type": "string", "description": "Senha do usuário" },
+          "gender": { "type": "string", "description": "Gênero do usuário" },
+          "blood_type": {
+            "type": "string",
+            "description": "Tipo sanguíneo do usuário"
+          },
+          "allergies": {
+            "type": "string",
+            "description": "Alergias do usuário"
+          },
+          "medical_history": {
+            "type": "string",
+            "description": "Histórico médico do usuário"
+          },
+          "verificationCode": {
+            "type": "string",
+            "description": "Código de verificação enviado ao usuário"
+          },
+          "isVerified": {
+            "type": "boolean",
+            "description": "Se o usuário foi verificado ou não"
+          },
+          "profile_picture_url": {
+            "type": "string",
+            "description": "URL da foto do perfil do usuário"
+          },
+          "chatbot_user_id": {
+            "type": "string",
+            "description": "ID do usuário no chatbot"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "summary": "Realiza login do usuário",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "description": "E-mail ou CPF do usuário"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Senha do usuário"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Usuário autenticado com sucesso" },
+          "401": { "description": "Credenciais inválidas" }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Registra um novo usuário",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "full_name": {
+                    "type": "string",
+                    "description": "Nome completo do usuário"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "E-mail do usuário"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Senha do usuário"
+                  },
+                  "birthdate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Data de nascimento"
+                  },
+                  "cpf": { "type": "string", "description": "CPF do usuário" },
+                  "address": {
+                    "type": "string",
+                    "description": "Endereço do usuário"
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "Cidade do usuário"
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "Estado do usuário"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Número de telefone do usuário"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "description": "Gênero do usuário"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuário registrado com sucesso" }
+        }
+      }
+    },
+    "/api/auth/verify": {
+      "post": {
+        "summary": "Verifica código de autenticação",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Código de verificação enviado ao usuário"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Código verificado com sucesso" }
+        }
+      }
+    },
+    "/api/auth/reset-password": {
+      "post": {
+        "summary": "Redefine a senha do usuário",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "E-mail do usuário para redefinir a senha"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Senha redefinida com sucesso" }
+        }
+      }
+    },
+    "/api/chatbot/message": {
+      "post": {
+        "summary": "Envia mensagem para o chatbot",
+        "tags": ["Chatbot"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "ID do usuário"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Mensagem a ser enviada ao chatbot"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Resposta do chatbot" } }
+      }
+    },
+    "/api/user": {
+      "post": {
+        "summary": "Cria um novo usuário",
+        "tags": ["Usuários"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/User" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retorna todos os usuários",
+        "tags": ["Usuários"],
+        "responses": { "200": { "description": "Lista de usuários" } }
+      }
+    },
+    "/api/user/{id}": {
+      "get": {
+        "summary": "Busca um usuário por ID",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Usuário encontrado" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      },
+      "patch": {
+        "summary": "Atualiza um usuário",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/User" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Usuário atualizado com sucesso" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Deleta um usuário",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Usuário deletado com sucesso" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      }
+    }
+  },
+  "tags": []
+}
