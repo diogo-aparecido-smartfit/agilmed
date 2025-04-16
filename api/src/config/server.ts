@@ -1,10 +1,8 @@
 import express, { Application } from "express";
 import morgan from "morgan";
 import bodyParser from "body-parser";
-import chatbotRouter from "../routes/chatbot.routes";
 import userRouter from "../routes/user.routes";
 import authRouter from "../routes/auth.routes";
-import docsRouter from "../routes/docs.routes";
 import { connectDB } from "./database";
 import { setupSwagger } from "./swagger";
 
@@ -31,10 +29,8 @@ export class App {
       })
     );
 
-    this.app.use("/api/chatbot", chatbotRouter);
     this.app.use("/api/user", userRouter);
     this.app.use("/api/auth", authRouter);
-    this.app.use("/", docsRouter); // Aqui estamos usando a rota que você criou
 
     setupSwagger(this.app);
 
