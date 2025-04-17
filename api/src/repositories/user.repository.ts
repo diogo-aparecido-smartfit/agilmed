@@ -28,8 +28,20 @@ export class UserRepository {
     await User.destroy({ where: { id } });
   }
 
-  async getAllUsers(): Promise<User[]> {
-    return await User.findAll();
+  async getAllUsers(filters?: any): Promise<User[]> {
+    const where: any = {};
+
+    if (filters.name) {
+      where.name = {
+        [Op.iLike]: `%${filters.name}%`,
+      };
+    }
+
+    if (filters.role) {
+      where.role = filters.role;
+    }
+
+    return await User.findAll({ where });
   }
 
   public async findByEmailOrCpf(identifier: string): Promise<User | null> {

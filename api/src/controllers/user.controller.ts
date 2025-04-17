@@ -67,7 +67,8 @@ export class UserController {
 
   public async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await this.userService.getAllUsers();
+      const filters = req.query;
+      const users = await this.userService.getAllUsers(filters);
       res.json(users);
     } catch (error) {
       res.status(500).json(error);

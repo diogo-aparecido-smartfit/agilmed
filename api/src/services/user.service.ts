@@ -56,8 +56,8 @@ export class UserService {
     await this.userRepository.deleteUser(id);
   }
 
-  async getAllUsers() {
-    return this.userRepository.getAllUsers();
+  async getAllUsers(filters?: any) {
+    return this.userRepository.getAllUsers(filters);
   }
 
   private async uploadProfileImageToSupabase(
