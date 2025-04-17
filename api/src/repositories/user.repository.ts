@@ -32,7 +32,7 @@ export class UserRepository {
     const where: any = {};
 
     if (filters.name) {
-      where.name = {
+      where.full_name = {
         [Op.iLike]: `%${filters.name}%`,
       };
     }
