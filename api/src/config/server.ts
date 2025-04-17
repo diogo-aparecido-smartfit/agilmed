@@ -34,7 +34,7 @@ export class App {
     this.app.use("/api/auth", authRouter);
     this.app.use("/api/appointment", appointmentRouter);
 
-    // setupSwagger(this.app);
+    setupSwagger(this.app);
 
     connectDB();
   }
