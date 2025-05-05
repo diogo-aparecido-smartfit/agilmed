@@ -40,14 +40,17 @@ Appointment.init(
     doctor_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: "doctor_id",
     },
     patient_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: "patient_id",
     },
     appointment_date: {
       type: DataTypes.DATE,
       allowNull: false,
+      field: "appointment_date",
     },
     reason: {
       type: DataTypes.STRING,

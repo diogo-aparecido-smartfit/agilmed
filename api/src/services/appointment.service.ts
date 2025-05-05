@@ -19,8 +19,8 @@ export class AppointmentService {
     return this.appointmentRepository.getAppointmentById(id);
   }
 
-  async getAllAppointments() {
-    return this.appointmentRepository.getAllAppointments();
+  async getAllAppointments(filters?: any) {
+    return this.appointmentRepository.getAllAppointments(filters);
   }
 
   async updateAppointment(id: number, data: Partial<Appointment>) {

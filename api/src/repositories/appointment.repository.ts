@@ -14,8 +14,18 @@ export class AppointmentRepository {
     return await Appointment.findByPk(id);
   }
 
-  async getAllAppointments(): Promise<Appointment[]> {
-    return await Appointment.findAll();
+  async getAllAppointments(filters?: any): Promise<Appointment[]> {
+    const where: any = {};
+
+    if (filters?.userId) {
+      where.patient_id = Number(filters.userId);
+    }
+
+    if (filters?.doctorId) {
+      where.doctor_id = Number(filters.doctorId);
+    }
+
+    return await Appointment.findAll({ where });
   }
 
   async updateAppointment(

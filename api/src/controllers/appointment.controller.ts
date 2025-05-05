@@ -23,7 +23,10 @@ export class AppointmentController {
 
   async getAllAppointments(req: Request, res: Response) {
     try {
-      const appointments = await this.appointmentService.getAllAppointments();
+      const filters = req.query;
+      const appointments = await this.appointmentService.getAllAppointments(
+        filters
+      );
       res.json(appointments);
     } catch (err) {
       res

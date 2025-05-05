@@ -49,3 +49,9 @@ jobs:
             --name ${{ secrets.AZURE_WEBAPP_NAME }} \
             --resource-group ${{ secrets.AZURE_RG }} \
             --docker-custom-image-name ${{ secrets.DOCKER_IMAGE }}
+
+      - name: Reiniciar a Web App
+        run: |
+          az webapp restart \
+            --name ${{ secrets.AZURE_WEBAPP_NAME }} \
+            --resource-group ${{ secrets.AZURE_RG }}
