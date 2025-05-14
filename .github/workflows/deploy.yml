@@ -39,7 +39,11 @@ jobs:
           az webapp config appsettings set \
             --name ${{ secrets.AZURE_WEBAPP_NAME }} \
             --resource-group ${{ secrets.AZURE_RG }} \
-            --settings DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --settings \
+                      DATABASE_URL=${{ secrets.DATABASE_URL }} \
+                      DATABASE_USER=${{ secrets.DATABASE_USER }} \
+                      DATABASE_DB=${{ secrets.DATABASE_DB }} \
+                      DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
                       SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
                       SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}
 

@@ -3,27 +3,35 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const sequelize = new Sequelize(process.env.DATABASE_URL as string, {
-  dialect: "postgres",
-  protocol: "postgres",
-  logging: true,
-  define: {
-    underscored: true,
-  },
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
+export const sequelize = new Sequelize(
+  process.env.DATABASE_DB as string,
+  process.env.DATABASE_USER as string,
+  process.env.DATABASE_PASSWORD as string,
+  {
+    host: process.env.DATABASE_URL as string,
+    dialect: "mssql",
+    logging: true,
+    define: {
+      underscored: true,
     },
-  },
-});
+    dialectOptions: {
+      options: {
+        encrypt: true,
+      },
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  }
+);
 
 export const connectDB = async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync({ alter: true });
-    console.log("Database connected successfully");
+    console.log("🚀 [DATABASE] Database connected successfully");
   } catch (error) {
-    console.error("Unable to connect to the database:", error);
+    console.error("🚨 [DATABASE] Unable to connect to the database:", error);
   }
 };
