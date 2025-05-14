@@ -3,12 +3,12 @@ import { BlobServiceClient } from "@azure/storage-blob";
 
 dotenv.config();
 
-const AZURE_STORAGE_CONNECTION_STRING = process.env
-  .AZURE_STORAGE_CONNECTION_STRING as string;
+const connStr = process.env.AZURE_STORAGE_CONNECTION_STRING;
+if (!connStr) {
+  throw new Error("AZURE_STORAGE_CONNECTION_STRING não definida");
+}
 
-const blobServiceClient = BlobServiceClient.fromConnectionString(
-  AZURE_STORAGE_CONNECTION_STRING
-);
+const blobServiceClient = BlobServiceClient.fromConnectionString(connStr);
 
 const containerName = "agilmed-bucket";
 
