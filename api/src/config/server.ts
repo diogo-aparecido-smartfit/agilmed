@@ -15,7 +15,7 @@ export class App {
     this.config();
   }
 
-  private config(): void {
+  private async config(): Promise<void> {
     this.app.use(bodyParser.json());
     this.app.use(
       morgan((tokens, req, res) => {
@@ -35,11 +35,10 @@ export class App {
     this.app.use("/api/appointment", appointmentRouter);
 
     setupSwagger(this.app);
-
-    connectDB();
   }
 
-  public start(): void {
+  public async start(): Promise<void> {
+    await connectDB();
     const PORT = Number(process.env.PORT) || 3000;
 
     this.app.listen(PORT, "0.0.0.0", () => {

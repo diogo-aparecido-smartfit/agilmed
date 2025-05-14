@@ -27,11 +27,14 @@ export const sequelize = new Sequelize(
 );
 
 export const connectDB = async () => {
+  console.log("🕐 [DATABASE] Connecting...");
   try {
     await sequelize.authenticate();
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log("🚀 [DATABASE] Database connected successfully");
+    return Promise.resolve();
   } catch (error) {
     console.error("🚨 [DATABASE] Unable to connect to the database:", error);
+    return Promise.reject();
   }
 };

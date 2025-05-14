@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase";
+import { containerClient } from "../config/azure";
 import { User, UserCreationAttributes } from "../models/user.model";
 import { UserRepository } from "../repositories/user.repository";
 import { formatFileName } from "../utils";
@@ -31,18 +31,10 @@ export class UserService {
       const user = await this.userRepository.getUserById(id);
 
       if (user?.profile_picture_url) {
-        const { error: deleteError } = await supabase.storage
-          .from("profile-images")
-          .remove([user.profile_picture_url]);
-
-        if (deleteError) {
-          throw new Error(
-            "Erro ao deletar a foto antiga: " + deleteError.message
-          );
-        }
+        await this.deleteProfileImageFromAzure(user.profile_picture_url);
       }
 
-      const profileImageUrl = await this.uploadProfileImageToSupabase(file);
+      const profileImageUrl = await this.uploadProfileImageToAzure(file);
 
       data.profile_picture_url = profileImageUrl;
 
@@ -60,7 +52,7 @@ export class UserService {
     return this.userRepository.getAllUsers(filters);
   }
 
-  private async uploadProfileImageToSupabase(
+  private async uploadProfileImageToAzure(
     file: Express.Multer.File
   ): Promise<string> {
     try {
@@ -68,24 +60,31 @@ export class UserService {
         file.originalname
       )}`;
 
-      const { data, error } = await supabase.storage
-        .from("profile-images")
-        .upload(fileName, file.buffer, {
-          contentType: file.mimetype,
-        });
+      const blobClient = containerClient.getBlockBlobClient(fileName);
 
-      if (error) {
-        throw new Error(
-          `Erro ao enviar a imagem para o Supabase: ${error.message}`
-        );
-      }
+      const uploadBlobResponse = await blobClient.uploadData(file.buffer, {
+        blobHTTPHeaders: {
+          blobContentType: file.mimetype,
+        },
+      });
 
-      const publicUrl = supabase.storage
-        .from("profile-images")
-        .getPublicUrl(data.path);
-      return publicUrl.data.publicUrl;
+      console.log(uploadBlobResponse);
+
+      const publicUrl = blobClient.url;
+      return publicUrl;
     } catch (error) {
       throw new Error(`Erro ao fazer upload da imagem: ${error}`);
+    }
+  }
+
+  private async deleteProfileImageFromAzure(
+    profileImageUrl: string
+  ): Promise<void> {
+    try {
+      const blobClient = containerClient.getBlobClient(profileImageUrl);
+      await blobClient.deleteIfExists();
+    } catch (error) {
+      console.error("Erro ao deletar a imagem do Azure:", error);
     }
   }
 }
