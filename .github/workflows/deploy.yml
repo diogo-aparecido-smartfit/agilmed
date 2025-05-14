@@ -47,7 +47,8 @@ jobs:
                       DATABASE_DB=${{ secrets.DATABASE_DB }} \
                       DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
                       SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
-                      SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}
+                      SUPABASE_KEY=${{ secrets.SUPABASE_KEY }} \
+                      AZURE_STORAGE_CONNECTION_STRING=${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
 
       - name: Atualizar container da Web App
         run: |
