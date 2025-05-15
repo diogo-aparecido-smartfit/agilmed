@@ -11,8 +11,10 @@ import { getFirstAndLastName } from '@/utils/utils'
 import { RootState } from '@/store'
 import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
+import { useHomeController } from './home.controller'
 
 export default function HomePage() {
+    const { units, loading, error } = useHomeController()
     const { user } = useSelector((state: RootState) => state.auth)
 
     const handleNavigateToProfile = useCallback(() => {
@@ -99,46 +101,25 @@ export default function HomePage() {
                 </S.FastActionContainer>
                 <S.NearDoctorsContainer>
                     <Text fontWeight="600">
-                        Unidades médicas próximas de você 📍
+                        {loading
+                            ? 'Carregando unidades médicas próximas de você 📍'
+                            : 'Unidades médicas próximas de você 📍'}
                     </Text>
                     {/* <Text fontSize="sm" color="description">
             Clique na unidade desejada para mais detalhes
           </Text> */}
-                    <NearDoctor
-                        name="Hospital Santa Maria"
-                        type="Ortopédico"
-                        distance="1.2 km"
-                        openAt="08:00"
-                        rating="4,2 (120 reviews)"
-                    />
-                    <NearDoctor
-                        name="Hospital Santa Maria"
-                        type="Ortopédico"
-                        distance="1.2 km"
-                        openAt="08:00"
-                        rating="4,2 (120 reviews)"
-                    />
-                    <NearDoctor
-                        name="Hospital Santa Maria"
-                        type="Ortopédico"
-                        distance="1.2 km"
-                        openAt="08:00"
-                        rating="4,2 (120 reviews)"
-                    />
-                    <NearDoctor
-                        name="Hospital Santa Maria"
-                        type="Ortopédico"
-                        distance="1.2 km"
-                        openAt="08:00"
-                        rating="4,2 (120 reviews)"
-                    />
-                    <NearDoctor
-                        name="Hospital Santa Maria"
-                        type="Ortopédico"
-                        distance="1.2 km"
-                        openAt="08:00"
-                        rating="4,2 (120 reviews)"
-                    />
+                    {units.map((unit) => (
+                        <NearDoctor
+                            key={unit.id}
+                            name={unit.name}
+                            type={unit.category || ''}
+                            distance={`${((unit?.dist || 0) / 1000).toFixed(
+                                1
+                            )} km`}
+                            openAt="08:00"
+                            rating="4,5 (200 reviews)"
+                        />
+                    ))}
                 </S.NearDoctorsContainer>
             </S.ContentContainer>
         </S.Container>
