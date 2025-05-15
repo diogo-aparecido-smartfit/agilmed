@@ -1,6 +1,8 @@
 import { Theme } from '@/config/theme'
 import styled from '@emotion/native'
 
+export const Button = styled.TouchableOpacity``
+
 export const Container = styled.View`
     flex-grow: 1;
     padding: 20px 16px;

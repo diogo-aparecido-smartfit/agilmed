@@ -5,15 +5,15 @@ import { router } from 'expo-router'
 import NextAppointment from './Components/NextAppointment/NextAppointment'
 import { Calendar1, Hospital, Link2, Sun } from 'iconsax-react-native'
 import FastAction from './Components/FastAction/FastAction'
-import NearDoctor from './Components/NearDoctor/NearDoctor'
 import Text from '@/components/Text/Text'
 import { getFirstAndLastName } from '@/utils/utils'
 import { RootState } from '@/store'
 import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import { useHomeController } from './home.controller'
-import { Platform } from 'react-native'
+import { Platform, View } from 'react-native'
 import { Theme } from '@/config/theme'
+import NearPlace from './Components/NearPlace/NearPlace'
 
 export default function HomePage() {
     const { units, loading, error } = useHomeController()
@@ -26,6 +26,7 @@ export default function HomePage() {
     return (
         <S.Container>
             <S.ContentContainer
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
                     gap: 24,
                     flexDirection: 'column',
@@ -120,16 +121,19 @@ export default function HomePage() {
                     />
                 </S.FastActionContainer>
                 <S.NearDoctorsContainer>
-                    <Text fontWeight="600">
-                        {loading
-                            ? 'Carregando unidades médicas próximas de você 📍'
-                            : 'Unidades médicas próximas de você 📍'}
-                    </Text>
-                    {/* <Text fontSize="sm" color="description">
-            Clique na unidade desejada para mais detalhes
-          </Text> */}
+                    <View>
+                        <Text fontWeight="600">
+                            {loading
+                                ? 'Carregando unidades médicas próximas de você 📍'
+                                : 'Unidades médicas próximas de você 📍'}
+                        </Text>
+                        <Text fontSize="sm" color="description">
+                            Clique na unidade desejada para mais detalhes
+                        </Text>
+                    </View>
                     {units.map((unit) => (
-                        <NearDoctor
+                        <NearPlace
+                            id={unit.id}
                             key={unit.id}
                             name={unit.name}
                             type={unit.category || ''}

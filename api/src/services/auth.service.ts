@@ -25,6 +25,10 @@ export class AuthService {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log("isPasswordValid: ", isPasswordValid);
+    console.log("password: ", password);
+    console.log("user.password: ", user.password);
+
     if (!isPasswordValid) {
       return null;
     }

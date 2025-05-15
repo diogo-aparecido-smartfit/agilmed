@@ -1,5 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+export interface PharmacyAPIResponse {
+    id: string
+    dist: number
+    poi: {
+        name: string
+        phone?: string
+        categories: string[]
+    }
+    address: {
+        freeformAddress: string
+    }
+    position: {
+        lat: number
+        lon: number
+    }
+}
+
 export interface Pharmacy {
     id: string
     name: string
@@ -9,20 +26,22 @@ export interface Pharmacy {
         lat: number
         lon: number
     }
-    dist?: number
-    category?: string
+    dist: number
+    category: string
 }
 
 interface PharmacyState {
     loading: boolean
     error: string | null
     list: Pharmacy[]
+    selectedPharmacy: Pharmacy | null
 }
 
 const initialState: PharmacyState = {
     loading: false,
     error: null,
     list: [],
+    selectedPharmacy: null,
 }
 
 const placesSlice = createSlice({
@@ -44,6 +63,12 @@ const placesSlice = createSlice({
             state.loading = false
             state.error = action.payload
         },
+        selectPharmacy(state, action: PayloadAction<Pharmacy>) {
+            state.selectedPharmacy = action.payload
+        },
+        clearSelectedPharmacy(state) {
+            state.selectedPharmacy = null
+        },
     },
 })
 
@@ -51,6 +76,8 @@ export const {
     fetchPharmaciesRequest,
     fetchPharmaciesSuccess,
     fetchPharmaciesFailure,
+    clearSelectedPharmacy,
+    selectPharmacy,
 } = placesSlice.actions
 
 export default placesSlice.reducer

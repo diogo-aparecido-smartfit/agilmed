@@ -41,6 +41,10 @@ export default function MainNavigator() {
                 name="(appointment)"
                 options={{ headerShown: false, headerTitle: 'Appointment' }}
             />
+            <Stack.Screen
+                name="(places)"
+                options={{ headerShown: false, headerTitle: 'Places' }}
+            />
             <Stack.Screen name="+not-found" />
         </Stack>
     )
