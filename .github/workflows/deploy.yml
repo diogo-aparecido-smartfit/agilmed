@@ -46,8 +46,8 @@ jobs:
                       DATABASE_USER=${{ secrets.DATABASE_USER }} \
                       DATABASE_DB=${{ secrets.DATABASE_DB }} \
                       DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-                      SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
-                      SUPABASE_KEY=${{ secrets.SUPABASE_KEY }} \
+                      SMTP_USER=${{ secrets.SMTP_USER }} \
+                      SMTP_PASS=${{ secrets.SMTP_PASS }} \
                       AZURE_STORAGE_CONNECTION_STRING="${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
 
       - name: Atualizar container da Web App
