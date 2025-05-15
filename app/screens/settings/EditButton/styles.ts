@@ -1,14 +1,15 @@
-import { Theme } from "@/config/theme";
-import styled from "styled-components/native";
+/** @jsxImportSource @emotion/react */
+import { Theme } from '@/config/theme'
+import { css } from '@emotion/native'
 
-export const Container = styled.TouchableOpacity`
-  width: 32px;
-  height: 32px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background-color: ${Theme.colors.mainColor};
-  position: absolute;
-  bottom: 0;
-  right: 0;
-`;
+export const containerStyle = css({
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 999,
+    backgroundColor: Theme.colors.mainColor,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+})

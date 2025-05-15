@@ -12,6 +12,7 @@ import { RootState } from '@/store'
 import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import { useHomeController } from './home.controller'
+import { Platform } from 'react-native'
 
 export default function HomePage() {
     const { units, loading, error } = useHomeController()
@@ -23,7 +24,15 @@ export default function HomePage() {
 
     return (
         <S.Container>
-            <S.ContentContainer>
+            <S.ContentContainer
+                contentContainerStyle={{
+                    gap: 24,
+                    flexDirection: 'column',
+                    paddingBottom: 40,
+                    paddingHorizontal: 24,
+                    paddingTop: Platform.OS === 'android' ? 50 : 90,
+                }}
+            >
                 <S.Header>
                     <S.WelcomeWrapper>
                         <S.Title>Olá</S.Title>
@@ -38,7 +47,14 @@ export default function HomePage() {
                 </S.Header>
                 <S.NextAppointmentsContainer>
                     <Text fontWeight="600">Agendamentos futuros 🚀</Text>
-                    <S.NextAppointmentsWrapper>
+                    <S.NextAppointmentsWrapper
+                        contentContainerStyle={{
+                            gap: 16,
+                            flexDirection: 'row',
+                            paddingHorizontal: 24,
+                            overflow: 'visible',
+                        }}
+                    >
                         <NextAppointment
                             date="Domingo, 12 Julho"
                             doctorName="Dr. Fulano Ciclano"

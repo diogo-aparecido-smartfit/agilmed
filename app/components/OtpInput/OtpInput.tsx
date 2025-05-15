@@ -53,7 +53,9 @@ const OTPInput: React.FC<OTPInputProps> = ({ length, onCodeFilled }) => {
                     maxLength={1}
                     placeholderTextColor={Theme.colors.lightDescription}
                     placeholder="0"
-                    ref={(input) => (inputs.current[index] = input)}
+                    ref={(input) => {
+                        inputs.current[index] = input
+                    }}
                     onFocus={(e) => {
                         e.target.setNativeProps({
                             style: { borderColor: Theme.colors.mainColor },

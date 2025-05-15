@@ -1,25 +1,24 @@
-import { Theme } from "@/config/theme";
-import styled from "styled-components/native";
+/** @jsxImportSource @emotion/react */
+import { Theme } from '@/config/theme'
+import { css } from '@emotion/native'
 
-export const Container = styled.View`
-  flex: 1;
-  background-color: ${Theme.colors.white};
-`;
+export const containerStyle = css({
+    flex: 1,
+    backgroundColor: Theme.colors.white,
+})
 
-export const ContentContainer = styled.ScrollView.attrs({
-  contentContainerStyle: {
+export const contentContainerStyle = css({
     flexGrow: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-})`
-  flex-direction: column;
-`;
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+})
 
-export const AppointmentList = styled.View`
-  width: 100%;
-  padding: 40px 24px;
-  flex-direction: column;
-  flex: 1;
-  gap: 24px;
-`;
+export const appointmentListStyle = css({
+    width: '100%',
+    paddingVertical: 40,
+    paddingHorizontal: 24,
+    flexDirection: 'column',
+    flex: 1,
+    gap: 24,
+})

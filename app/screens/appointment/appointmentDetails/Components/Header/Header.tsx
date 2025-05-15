@@ -1,15 +1,20 @@
-import { router } from "expo-router";
-import * as S from "./style";
-import { ArrowLeft } from "iconsax-react-native";
+/** @jsxImportSource @emotion/react */
+import { router } from 'expo-router'
+import * as S from './style'
+import { ArrowLeft } from 'iconsax-react-native'
+import { TouchableOpacity, View } from 'react-native'
 
 const Header = () => {
-  return (
-    <S.Container>
-      <S.BackButton onPress={() => router.back()}>
-        <ArrowLeft size={24} color="#FFF" />
-      </S.BackButton>
-    </S.Container>
-  );
-};
+    return (
+        <View css={S.containerStyle}>
+            <TouchableOpacity
+                onPress={() => router.back()}
+                css={S.backButtonStyle}
+            >
+                <ArrowLeft size={24} color="#FFF" />
+            </TouchableOpacity>
+        </View>
+    )
+}
 
-export default Header;
+export default Header

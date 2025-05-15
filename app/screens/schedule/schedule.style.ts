@@ -1,18 +1,25 @@
-import { Theme } from "@/config/theme";
-import styled from "styled-components/native";
+/** @jsxImportSource @emotion/react */
+import { Theme } from '@/config/theme'
+import { css } from '@emotion/native'
 
-export const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+export const containerStyle = css({
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+})
 
-export const Title = styled.Text`
-  color: ${Theme.colors.black};
-  font-size: 24px;
-  font-weight: 700;
-`;
+export const titleStyle = css({
+    color: Theme.colors.black,
+    fontSize: 24,
+    fontWeight: '700',
+})
 
-export const Button = styled.TouchableOpacity``;
+export const buttonStyle = css({
+    marginTop: 16,
+})
 
-export const ButtonText = styled.Text``;
+export const buttonTextStyle = css({
+    color: Theme.colors.black,
+    fontSize: 16,
+    fontWeight: '500',
+})

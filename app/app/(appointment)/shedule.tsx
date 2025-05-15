@@ -1,5 +1,5 @@
-import Text from "@/components/Text/Text";
+import Text from '@/components/Text/Text'
 
 export default function ScheduleScreen() {
-  return <Text>Hello World</Text>;
+    return <Text>Hello World</Text>
 }

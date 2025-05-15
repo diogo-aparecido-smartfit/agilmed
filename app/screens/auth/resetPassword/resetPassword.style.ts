@@ -1,17 +1,17 @@
-import { Theme } from "@/config/theme";
-import styled from "styled-components/native";
+import { Theme } from '@/config/theme'
+import styled from '@emotion/native'
 
 export const Container = styled.SafeAreaView`
-  flex: 1;
-  background-color: ${Theme.colors.white};
-`;
+    flex: 1;
+    background-color: ${Theme.colors.white};
+`
 
 export const ContentContainer = styled.ScrollView`
-  padding: 40px 24px;
-  flex-direction: column;
-`;
+    padding: 40px 24px;
+    flex-direction: column;
+`
 
 export const FormContainer = styled.View`
-  margin: 32px 0;
-  padding: 32px 12px;
-`;
+    margin: 32px 0;
+    padding: 32px 12px;
+`

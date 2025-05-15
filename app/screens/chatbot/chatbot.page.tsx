@@ -32,7 +32,7 @@ export default function ChatBotPage() {
     const hasMessages = messages.length > 0
 
     return (
-        <S.Container>
+        <S.Container behavior="padding">
             <StatusBar style="auto" />
             <S.HeaderContainer>
                 <TouchableOpacity onPress={() => router.back()}>
@@ -68,6 +68,10 @@ export default function ChatBotPage() {
                 </S.EmptyContainer>
             ) : (
                 <S.ChatContainer
+                    contentContainerStyle={{
+                        padding: 24,
+                        gap: 16,
+                    }}
                     onContentSizeChange={() =>
                         scrollViewRef.current?.scrollToEnd({ animated: true })
                     }
@@ -86,7 +90,15 @@ export default function ChatBotPage() {
                                     {item.payload.text}
                                 </MessageBubble>
                                 {item.payload.options && (
-                                    <S.OptionsRow>
+                                    <S.OptionsRow
+                                        horizontal={true}
+                                        contentContainerStyle={{
+                                            alignItems: 'center',
+                                            paddingHorizontal: 24,
+                                            gap: 8,
+                                        }}
+                                        showsHorizontalScrollIndicator={false}
+                                    >
                                         {item.payload.options.map(
                                             (option, index) => (
                                                 <OptionBubble
@@ -119,6 +131,7 @@ export default function ChatBotPage() {
             <S.FooterContainer>
                 <S.TextInputWrapper>
                     <S.TextInput
+                        placeholderTextColor={Theme.colors.inputColor}
                         value={message}
                         onChangeText={setMessage}
                         placeholder="Digite uma mensagem..."

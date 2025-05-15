@@ -1,11 +1,8 @@
-import styled from "styled-components/native";
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/native'
 
-export const Container = styled.ScrollView.attrs({
-  contentContainerStyle: {
+export const containerStyle = css({
+    flexDirection: 'row',
     gap: 12,
     paddingHorizontal: 24,
-  },
-  horizontal: true,
-  scrollEnabled: true,
-  showsHorizontalScrollIndicator: false,
-})``;
+})
