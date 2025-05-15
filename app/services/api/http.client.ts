@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const httpClient = axios.create({
-    baseURL: 'agilmed-api.azurewebsites.net/api',
+    baseURL: 'https://agilmed-api.azurewebsites.net/api',
     headers: {
         'Content-Type': 'application/json',
     },
