@@ -47,7 +47,7 @@ export default function ChatPage() {
                         {loading ? (
                             <ActivityIndicator color={Theme.colors.black} />
                         ) : (
-                            <Message color={Theme.colors.black} />
+                            <Message size={24} color={Theme.colors.black} />
                         )}
                     </S.ChatButton>
                 </S.ScheduleButton>

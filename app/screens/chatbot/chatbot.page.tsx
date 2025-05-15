@@ -36,7 +36,7 @@ export default function ChatBotPage() {
             <StatusBar style="auto" />
             <S.HeaderContainer>
                 <TouchableOpacity onPress={() => router.back()}>
-                    <ArrowLeft color={Theme.colors.black} />
+                    <ArrowLeft size={24} color={Theme.colors.black} />
                 </TouchableOpacity>
                 <S.BotInfoContainer>
                     <Avatar uri={Cpu} size={44} />
@@ -69,6 +69,7 @@ export default function ChatBotPage() {
             ) : (
                 <S.ChatContainer
                     contentContainerStyle={{
+                        flex: 1,
                         padding: 24,
                         gap: 16,
                     }}
@@ -145,7 +146,7 @@ export default function ChatBotPage() {
                     {loading ? (
                         <ActivityIndicator color="#FFF" />
                     ) : (
-                        <Send2 color="#FFF" />
+                        <Send2 size={16} color="#FFF" />
                     )}
                 </S.SendMessageButton>
             </S.FooterContainer>

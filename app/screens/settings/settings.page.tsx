@@ -1,27 +1,28 @@
-/** @jsxImportSource @emotion/react */
 import Avatar from '@/components/Avatar/Avatar'
 import * as S from './settings.style'
 import Button from '@/components/Button/Button'
 import Text from '@/components/Text/Text'
-import BasicInput from '@/components/BasicInput/BasicInput'
+import Input from '@/components/Input/Input'
 import EditButton from './EditButton/EditButton'
 import { StatusBar } from 'expo-status-bar'
 import { getFirstAndLastName } from '@/utils/utils'
+import BasicInput from '@/components/BasicInput/BasicInput'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import { logoffRequest } from '@/store/slices/auth.slice'
 import { router } from 'expo-router'
 import { useSettingsController } from './settings.controller'
 import { Controller } from 'react-hook-form'
-import { SafeAreaView, ScrollView, View } from 'react-native'
 
 export default function SettingsPage() {
     const {
         control,
+        error,
         formValues,
         handleSubmit,
         loading,
         onSubmit,
+        imageUploadError,
         imageUploadLoading,
         handleImageChange,
     } = useSettingsController()
@@ -34,32 +35,37 @@ export default function SettingsPage() {
     }
 
     return (
-        <SafeAreaView css={S.containerStyle}>
+        <S.Container>
             <StatusBar style="dark" />
-            <ScrollView
-                contentContainerStyle={S.contentContainerStyle}
+            <S.ContentContainer
+                contentContainerStyle={{
+                    flexGrow: 1,
+                    alignItems: 'center',
+                    paddingVertical: 40,
+                    paddingHorizontal: 24,
+                }}
                 automaticallyAdjustKeyboardInsets
             >
-                <View css={S.avatarContainerStyle}>
+                <S.AvatarContainer>
                     <Avatar
                         uri={user?.profile_picture_url ?? undefined}
                         isLoading={imageUploadLoading}
                         size={139}
                     />
                     <EditButton onChange={handleImageChange} />
-                </View>
-                <View css={S.personalInfoStyle}>
+                </S.AvatarContainer>
+                <S.PersonalInfo>
                     <Text color="black" fontSize="xl" fontWeight="600">
                         {getFirstAndLastName(user?.full_name ?? '')}
                     </Text>
                     <Text fontSize="sm" color="description">
                         {user?.city} - {user?.state}
                     </Text>
-                </View>
+                </S.PersonalInfo>
 
-                <View css={S.formContainerStyle}>
+                <S.FormContainer>
                     <Controller
-                        name="email"
+                        name="password"
                         control={control}
                         render={({ field: { onChange } }) => (
                             <BasicInput
@@ -112,8 +118,8 @@ export default function SettingsPage() {
                             />
                         )}
                     />
-                </View>
-                <View css={S.buttonWrapperStyle}>
+                </S.FormContainer>
+                <S.ButtonWrapper>
                     <Button
                         disabled={loading}
                         isLoading={loading}
@@ -129,8 +135,8 @@ export default function SettingsPage() {
                         text="Deslogar"
                         onPress={handleLogoff}
                     />
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+                </S.ButtonWrapper>
+            </S.ContentContainer>
+        </S.Container>
     )
 }

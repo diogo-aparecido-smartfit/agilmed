@@ -1,24 +1,19 @@
-/** @jsxImportSource @emotion/react */
 import { Theme } from '@/config/theme'
-import { css } from '@emotion/native'
+import styled from '@emotion/native'
 
-export const containerStyle = css({
-    flex: 1,
-    backgroundColor: Theme.colors.white,
-})
+export const Container = styled.View`
+    flex: 1;
+    background-color: ${Theme.colors.white};
+`
 
-export const contentContainerStyle = css({
-    flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-})
+export const ContentContainer = styled.ScrollView`
+    flex-direction: column;
+`
 
-export const appointmentListStyle = css({
-    width: '100%',
-    paddingVertical: 40,
-    paddingHorizontal: 24,
-    flexDirection: 'column',
-    flex: 1,
-    gap: 24,
-})
+export const AppointmentList = styled.View`
+    width: 100%;
+    padding: 40px 24px;
+    flex-direction: column;
+    flex: 1;
+    gap: 24px;
+`

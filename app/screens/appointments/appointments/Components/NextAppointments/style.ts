@@ -1,39 +1,37 @@
-/** @jsxImportSource @emotion/react */
 import { Theme } from '@/config/theme'
-import { css } from '@emotion/native'
+import styled from '@emotion/native'
 
-export const containerStyle = css({
-    width: '100%',
-    flexDirection: 'column',
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    gap: 20,
-})
+export const Container = styled.View`
+    width: 100%;
+    flex-direction: column;
+    padding: 20px 16px;
+    gap: 20px;
+`
 
-export const headerContainerStyle = css({
-    flexDirection: 'row',
-    gap: 10,
-})
+export const HeaderContainer = styled.View`
+    flex-direction: row;
+    gap: 10px;
+`
 
-export const dividerStyle = css({
-    height: 1,
-    width: '100%',
-    backgroundColor: Theme.colors.lightDescription,
-})
+export const Divider = styled.View`
+    height: 1px;
+    width: 100%;
+    background-color: ${Theme.colors.lightDescription};
+`
 
-export const doctorInfoWrapperStyle = css({
-    flexDirection: 'column',
-    gap: 8,
-})
+export const DoctorInfoWrapper = styled.View`
+    flex-direction: column;
+    gap: 8px;
+`
 
-export const schedulesWrapperStyle = css({
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-})
+export const SchedulesWrapper = styled.View`
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+`
 
-export const scheduleContainerStyle = css({
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-})
+export const ScheduleContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+`

@@ -38,6 +38,7 @@ export const ChatButton = styled.View`
 `
 
 export const ScheduleTextWrapper = styled.View`
+    flex: 1;
     flex-direction: column;
     gap: 4px;
 `

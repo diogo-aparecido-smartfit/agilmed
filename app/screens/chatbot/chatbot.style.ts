@@ -4,6 +4,7 @@ import styled from '@emotion/native'
 
 export const Container = styled.KeyboardAvoidingView`
     flex: 1;
+    flex-grow: 1;
     background-color: ${Theme.colors.white};
 `
 
@@ -34,7 +35,8 @@ export const SendMessageButton = styled.TouchableOpacity`
 `
 
 export const HeaderContainer = styled.View`
-    padding: 16px 24px;
+    display: flex;
+    padding: 24px;
     flex-direction: row;
     align-items: center;
 `

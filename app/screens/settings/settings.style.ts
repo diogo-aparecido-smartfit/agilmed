@@ -1,38 +1,33 @@
-/** @jsxImportSource @emotion/react */
 import { Theme } from '@/config/theme'
-import { css } from '@emotion/native'
+import styled from '@emotion/native'
 
-export const containerStyle = css({
-    flex: 1,
-    backgroundColor: Theme.colors.white,
-})
+export const Container = styled.SafeAreaView`
+    flex: 1;
+    background-color: ${Theme.colors.white};
+`
 
-export const contentContainerStyle = css({
-    flexGrow: 1,
-    alignItems: 'center',
-    paddingVertical: 40,
-    paddingHorizontal: 24,
-    flexDirection: 'column',
-})
+export const ContentContainer = styled.ScrollView`
+    flex-direction: column;
+`
 
-export const buttonWrapperStyle = css({
-    alignItems: 'center',
-    flexDirection: 'column',
-    flexGrow: 1,
-    alignSelf: 'stretch',
-    gap: 8,
-})
+export const ButtonWrapper = styled.View`
+    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    align-self: stretch;
+    gap: 8px;
+`
 
-export const avatarContainerStyle = css({})
+export const AvatarContainer = styled.View``
 
-export const personalInfoStyle = css({
-    marginTop: 18,
-    alignItems: 'center',
-    gap: 8,
-})
+export const PersonalInfo = styled.View`
+    margin-top: 18px;
+    align-items: center;
+    gap: 8px;
+`
 
-export const formContainerStyle = css({
-    width: '100%',
-    marginVertical: 32,
-    gap: 20,
-})
+export const FormContainer = styled.View`
+    width: 100%;
+    margin: 32px 0;
+    gap: 20px;
+`

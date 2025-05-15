@@ -1,15 +1,19 @@
-/** @jsxImportSource @emotion/react */
 import * as S from '@/screens/appointments/appointments/appointments.style'
 import NextAppointments from './Components/NextAppointments/NextAppointments'
 import Header from './Components/Header/Header'
-import { View, ScrollView } from 'react-native'
 
 export default function AppointmentsPage() {
     return (
-        <View css={S.containerStyle}>
-            <ScrollView contentContainerStyle={S.contentContainerStyle}>
+        <S.Container>
+            <S.ContentContainer
+                contentContainerStyle={{
+                    flexGrow: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
                 <Header />
-                <View css={S.appointmentListStyle}>
+                <S.AppointmentList>
                     <NextAppointments />
                     <NextAppointments />
                     <NextAppointments />
@@ -17,8 +21,8 @@ export default function AppointmentsPage() {
                     <NextAppointments />
                     <NextAppointments />
                     <NextAppointments />
-                </View>
-            </ScrollView>
-        </View>
+                </S.AppointmentList>
+            </S.ContentContainer>
+        </S.Container>
     )
 }

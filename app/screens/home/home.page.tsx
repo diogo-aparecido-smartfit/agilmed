@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import { useHomeController } from './home.controller'
 import { Platform } from 'react-native'
+import { Theme } from '@/config/theme'
 
 export default function HomePage() {
     const { units, loading, error } = useHomeController()
@@ -48,6 +49,9 @@ export default function HomePage() {
                 <S.NextAppointmentsContainer>
                     <Text fontWeight="600">Agendamentos futuros 🚀</Text>
                     <S.NextAppointmentsWrapper
+                        scrollEnabled
+                        showsHorizontalScrollIndicator={false}
+                        horizontal
                         contentContainerStyle={{
                             gap: 16,
                             flexDirection: 'row',

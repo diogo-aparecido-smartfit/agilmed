@@ -1,12 +1,11 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/native'
+import styled from '@emotion/native'
 
-export const containerStyle = css({
-    flex: 1,
-    position: 'absolute',
-    top: '4%',
-    padding: 24,
-    flexDirection: 'row',
-})
+export const Container = styled.View`
+    flex: 1;
+    position: absolute;
+    top: 4%;
+    padding: 24px;
+    flex-direction: row;
+`
 
-export const backButtonStyle = css({})
+export const BackButton = styled.TouchableOpacity``

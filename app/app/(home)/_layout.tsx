@@ -61,6 +61,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon focused={focused}>
                             <Home
+                                size={24}
                                 variant={focused ? 'Bold' : 'Outline'}
                                 color={color}
                             />
@@ -75,6 +76,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon focused={focused}>
                             <Calendar2
+                                size={24}
                                 variant={focused ? 'Bold' : 'Outline'}
                                 color={color}
                             />
@@ -90,6 +92,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon focused={focused}>
                             <Message
+                                size={24}
                                 variant={focused ? 'Bold' : 'Outline'}
                                 color={color}
                             />
@@ -105,6 +108,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon focused={focused}>
                             <Profile
+                                size={24}
                                 variant={focused ? 'Bold' : 'Outline'}
                                 color={color}
                             />

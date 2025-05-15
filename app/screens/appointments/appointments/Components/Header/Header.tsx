@@ -1,8 +1,6 @@
-/** @jsxImportSource @emotion/react */
 import Button from '@/components/Button/Button'
 import * as S from './style'
 import { useCallback } from 'react'
-import { ScrollView } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 
 const Header = () => {
@@ -16,10 +14,13 @@ const Header = () => {
     )
 
     return (
-        <ScrollView
-            css={S.containerStyle}
-            horizontal
-            scrollEnabled
+        <S.Container
+            contentContainerStyle={{
+                gap: 12,
+                paddingHorizontal: 24,
+            }}
+            horizontal={true}
+            scrollEnabled={true}
             showsHorizontalScrollIndicator={false}
         >
             <Button
@@ -39,7 +40,7 @@ const Header = () => {
                 isSecondary
                 text="Remarcados"
             />
-        </ScrollView>
+        </S.Container>
     )
 }
 
