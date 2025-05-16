@@ -109,13 +109,7 @@ export default function HomePage() {
                         text="Remédios"
                     />
                     <FastAction
-                        onPress={() =>
-                            showMessage({
-                                message:
-                                    'Desculpe, mas esta ação ainda não foi implementada.',
-                                type: 'warning',
-                            })
-                        }
+                        onPress={() => router.push('/(places)/places-list')}
                         Icon={Hospital}
                         text="Unidades"
                     />

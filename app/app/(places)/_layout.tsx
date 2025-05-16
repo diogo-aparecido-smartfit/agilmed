@@ -24,6 +24,17 @@ export default function StackLayout() {
                 }}
                 name="details/[id]"
             />
+            <Stack.Screen
+                options={{
+                    headerShown: true,
+                    headerBackVisible: false,
+                    contentStyle: {
+                        paddingTop: 0,
+                    },
+                    header: () => <LayoutHeader hasBackButton />,
+                }}
+                name="places-list"
+            />
         </Stack>
     )
 }
