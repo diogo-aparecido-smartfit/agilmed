@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import {
   Appointment,
   AppointmentCreationAttributes,
@@ -12,15 +13,35 @@ export class AppointmentService {
     this.appointmentRepository = new AppointmentRepository();
   }
 
-  async createAppointment(data: AppointmentCreationAttributes) {
+  async createAppointment(
+    data: AppointmentCreationAttributes & { doctor_name?: string }
+  ) {
     const patient = await User.findByPk(data.patient_id);
     if (!patient) throw new Error("Paciente não encontrado");
 
-    const doctor = await User.findByPk(data.doctor_id);
+    let doctor;
+
+    if (data.doctor_id) {
+      doctor = await User.findOne({
+        where: { id: data.doctor_id, role: "doctor" },
+      });
+    } else if (data.doctor_name) {
+      doctor = await User.findOne({
+        where: {
+          role: "doctor",
+          full_name: { [Op.like]: `%${data.doctor_name}%` },
+        },
+        order: [["full_name", "ASC"]],
+      });
+    } else {
+      throw new Error("É necessário informar o id ou nome do médico");
+    }
+
     if (!doctor) throw new Error("Médico não encontrado");
 
     const payload = {
       ...data,
+      doctor_id: doctor.id,
       patient_name: patient.full_name,
       doctor_name: doctor.full_name,
     };

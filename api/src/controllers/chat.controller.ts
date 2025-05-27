@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { ChatService } from "../services/chat.service";
-import { handleBotAction } from "../middlewares/bot-actions.middleware";
+import {
+  handleBotAction,
+  parseAndHandleBotAction,
+} from "../middlewares/bot-actions.middleware";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
 
 export class ChatController {
@@ -12,23 +15,31 @@ export class ChatController {
 
   async completions(req: AuthenticatedRequest, res: Response) {
     try {
+      console.log(
+        "[ChatController] completions - req.body:",
+        JSON.stringify(req.body, null, 2)
+      );
       const data = await this.chatService.completions(req.body);
       const botMessage = data.choices?.[0]?.message?.content;
 
-      let parsed;
-      try {
-        parsed = JSON.parse(botMessage);
-      } catch {
-        parsed = null;
-      }
+      console.log(
+        "[ChatController] completions - botMessage:",
+        JSON.stringify(botMessage, null, 2)
+      );
 
-      if (parsed && parsed.action && parsed.endpoint) {
-        const result = await handleBotAction(
-          parsed.action,
-          parsed.endpoint,
-          req.user
-        );
+      const { handled, result } = await parseAndHandleBotAction(
+        botMessage,
+        req.user
+      );
 
+      console.log(
+        "[ChatController] completions - handled:",
+        handled,
+        "result:",
+        result
+      );
+
+      if (handled) {
         const newBotResponse = await this.chatService.completions({
           history: [
             ...(req.body.history || []),
@@ -38,6 +49,10 @@ export class ChatController {
           userMessage: "Formate a resposta para o usuário.",
         });
 
+        console.log(
+          "[ChatController] completions - newBotResponse:",
+          JSON.stringify(newBotResponse, null, 2)
+        );
         res.json(newBotResponse);
         return;
       }

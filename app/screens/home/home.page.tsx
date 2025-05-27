@@ -84,6 +84,10 @@ export default function HomePage() {
                         ) : (
                             appointments.map((appointment) => (
                                 <NextAppointment
+                                    doctorImagePicture={
+                                        appointment.doctor_profile_picture_url ||
+                                        ''
+                                    }
                                     key={appointment.id}
                                     date={format(
                                         new Date(appointment.appointment_date),

@@ -6,6 +6,7 @@ import { router } from 'expo-router'
 
 interface NextAppointmentProps {
     doctorName: string
+    doctorImagePicture: string
     doctorType: string
     date: string
     startAt: string
@@ -18,6 +19,7 @@ const NextAppointment = ({
     doctorType,
     endAt,
     startAt,
+    doctorImagePicture,
 }: NextAppointmentProps) => {
     const handleNavigateToAppointment = useCallback(() => {
         router.push('/(appointment)/details/1')
@@ -26,7 +28,7 @@ const NextAppointment = ({
     return (
         <S.Container>
             <S.PrimaryContentWrapper>
-                <Avatar uri="https://loremflickr.com/320/240" />
+                <Avatar uri={doctorImagePicture} />
                 <S.DoctorInfoWrapper>
                     <S.Title>{doctorName}</S.Title>
                     <S.Subtitle>{doctorType}</S.Subtitle>

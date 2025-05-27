@@ -1,9 +1,11 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import store from '@/store'
+import { logoffRequest } from '@/store/slices/auth.slice'
 
 const httpClient = axios.create({
-    baseURL: 'https://agilmed-api.azurewebsites.net/api',
-    // baseURL: 'http://localhost:3000/api',
+    // baseURL: 'https://agilmed-api.azurewebsites.net/api',
+    baseURL: 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -28,6 +30,9 @@ httpClient.interceptors.response.use(
         return response
     },
     async (error) => {
+        if (error.response?.status === 401) {
+            store.dispatch(logoffRequest())
+        }
         console.error(
             '[HttpClient] Erro na requisição:',
             error.response?.data || error.message
