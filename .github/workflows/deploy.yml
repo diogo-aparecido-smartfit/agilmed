@@ -36,19 +36,24 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Gerar settings.json
+        run: |
+          echo '{
+            "DATABASE_URL": "${{ secrets.DATABASE_URL }}",
+            "DATABASE_USER": "${{ secrets.DATABASE_USER }}",
+            "DATABASE_DB": "${{ secrets.DATABASE_DB }}",
+            "DATABASE_PASSWORD": "${{ secrets.DATABASE_PASSWORD }}",
+            "SMTP_USER": "${{ secrets.SMTP_USER }}",
+            "SMTP_PASS": "${{ secrets.SMTP_PASS }}",
+            "AZURE_STORAGE_CONNECTION_STRING": "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
+          }' > settings.json
+
       - name: Configurar variáveis de ambiente
         run: |
           az webapp config appsettings set \
             --name ${{ secrets.AZURE_WEBAPP_NAME }} \
             --resource-group ${{ secrets.AZURE_RG }} \
-            --settings \
-                      DATABASE_URL=${{ secrets.DATABASE_URL }} \
-                      DATABASE_USER=${{ secrets.DATABASE_USER }} \
-                      DATABASE_DB=${{ secrets.DATABASE_DB }} \
-                      DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-                      SMTP_USER=${{ secrets.SMTP_USER }} \
-                      SMTP_PASS=${{ secrets.SMTP_PASS }} \
-                      AZURE_STORAGE_CONNECTION_STRING="${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}"
+            --settings @settings.json
 
       - name: Atualizar container da Web App
         run: |
