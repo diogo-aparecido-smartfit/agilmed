@@ -35,7 +35,7 @@ export class App {
     this.app.use("/api/places", placesRouter);
     this.app.use("/api/user", userRouter);
     this.app.use("/api/auth", authRouter);
-    this.app.use("/api/appointment", appointmentRouter);
+    this.app.use("/api/appointments", appointmentRouter);
     this.app.use("/api/chat", chatRouter);
 
     setupSwagger(this.app);

@@ -10,7 +10,7 @@ export const Container = styled.KeyboardAvoidingView`
 
 export const ChatContainer = styled.View`
     flex: 1;
-    padding: 24px;
+    padding: 0px 24px;
     gap: 16px;
 `
 

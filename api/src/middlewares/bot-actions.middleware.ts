@@ -2,7 +2,14 @@ import { UserRepository } from "../repositories/user.repository";
 import { AppointmentService } from "../services/appointment.service";
 import { PlacesService } from "../services/places.service";
 
-const getDoctors = async (endpoint: string) => {
+interface IJWTUser {
+  id: number;
+  full_name: string;
+  email: string;
+  role: string;
+}
+
+const getDoctors = async (endpoint: string, user?: IJWTUser) => {
   const userRepository = new UserRepository();
   const params = new URLSearchParams(endpoint.split("?")[1]);
   const role = params.get("role");
@@ -13,7 +20,7 @@ const getDoctors = async (endpoint: string) => {
   };
 };
 
-const getAppointments = async (endpoint: string, data?: any) => {
+const getAppointments = async (endpoint: string, user?: IJWTUser) => {
   const appointmentService = new AppointmentService();
   const params = new URLSearchParams(endpoint.split("?")[1]);
   const userId = params.get("userId");
@@ -24,7 +31,7 @@ const getAppointments = async (endpoint: string, data?: any) => {
   };
 };
 
-const getNearbyPlaces = async (endpoint: string, data?: any) => {
+const getNearbyPlaces = async (endpoint: string, user?: IJWTUser) => {
   const placesService = new PlacesService();
   const params = new URLSearchParams(endpoint.split("?")[1]);
   const lat = Number(params.get("lat"));
@@ -49,11 +56,11 @@ const actionsMap: Record<
 export async function handleBotAction(
   action: string,
   endpoint: string,
-  data?: any
+  user?: IJWTUser
 ) {
   console.log("action: ", action);
 
   const fn = actionsMap[action];
   if (!fn) throw new Error("Ação não suportada");
-  return fn(endpoint, data);
+  return fn(endpoint, user);
 }

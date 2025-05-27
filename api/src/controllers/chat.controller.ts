@@ -15,8 +15,6 @@ export class ChatController {
       const data = await this.chatService.completions(req.body);
       const botMessage = data.choices?.[0]?.message?.content;
 
-      console.log(JSON.stringify(req.user, null, 2));
-
       let parsed;
       try {
         parsed = JSON.parse(botMessage);
@@ -25,7 +23,11 @@ export class ChatController {
       }
 
       if (parsed && parsed.action && parsed.endpoint) {
-        const result = await handleBotAction(parsed.action, parsed.endpoint);
+        const result = await handleBotAction(
+          parsed.action,
+          parsed.endpoint,
+          req.user
+        );
 
         const newBotResponse = await this.chatService.completions({
           history: [

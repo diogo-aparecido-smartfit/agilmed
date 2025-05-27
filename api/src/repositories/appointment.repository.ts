@@ -40,6 +40,17 @@ export class AppointmentRepository {
     return updated ? appointment : null;
   }
 
+  async getAppointmentsByPatientId(patientId: number | string) {
+    if (!patientId || isNaN(Number(patientId))) {
+      throw new Error("ID de paciente inválido");
+    }
+
+    return Appointment.findAll({
+      where: { patient_id: patientId },
+      order: [["appointment_date", "ASC"]],
+    });
+  }
+
   async deleteAppointment(id: number): Promise<void> {
     await Appointment.destroy({ where: { id } });
   }

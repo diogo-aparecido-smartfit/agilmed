@@ -17,3 +17,11 @@ export const AppointmentList = styled.View`
     flex: 1;
     gap: 24px;
 `
+
+export const CenteredContainer = styled.View`
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+`

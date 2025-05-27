@@ -1,3 +1,5 @@
+import { ptBR } from 'date-fns/locale/pt-BR'
+import { format } from 'date-fns'
 import * as S from '@/screens/home/home.style'
 import { useCallback } from 'react'
 import Avatar from '@/components/Avatar/Avatar'
@@ -14,8 +16,15 @@ import { useHomeController } from './home.controller'
 import { Platform, View } from 'react-native'
 import { Theme } from '@/config/theme'
 import NearPlace from './Components/NearPlace/NearPlace'
+import { useAppointments } from '@/hooks/api/useAppointments'
 
 export default function HomePage() {
+    const {
+        appointments,
+        error: appointmentsError,
+        loading: loadingAppointments,
+        refetch,
+    } = useAppointments()
     const { units, loading, error } = useHomeController()
     const { user } = useSelector((state: RootState) => state.auth)
 
@@ -60,22 +69,34 @@ export default function HomePage() {
                             overflow: 'visible',
                         }}
                     >
-                        <NextAppointment
-                            date="Domingo, 12 Julho"
-                            doctorName="Dr. Fulano Ciclano"
-                            doctorType="Clínico Geral"
-                            endAt="12:00"
-                            startAt="11:00"
-                            key="1"
-                        />
-                        <NextAppointment
-                            date="Domingo, 12 Julho"
-                            doctorName="Dr. Fulano Ciclano"
-                            doctorType="Clínico Geral"
-                            endAt="12:00"
-                            startAt="11:00"
-                            key="2"
-                        />
+                        {appointments.length === 0 ? (
+                            <View style={{ flex: 1, maxWidth: '90%' }}>
+                                <Text color="description">
+                                    Você ainda não possui agendamentos futuros.
+                                </Text>
+                            </View>
+                        ) : (
+                            appointments.map((appointment) => (
+                                <NextAppointment
+                                    key={appointment.id}
+                                    date={format(
+                                        new Date(appointment.appointment_date),
+                                        "EEEE, dd 'de' MMMM",
+                                        { locale: ptBR }
+                                    )}
+                                    doctorName={`Dr. Fulano`}
+                                    doctorType="Clínico Geral"
+                                    startAt={format(
+                                        new Date(appointment.appointment_date),
+                                        'HH:mm'
+                                    )}
+                                    endAt={format(
+                                        new Date(appointment.appointment_date),
+                                        'HH:mm'
+                                    )}
+                                />
+                            ))
+                        )}
                     </S.NextAppointmentsWrapper>
                 </S.NextAppointmentsContainer>
                 <S.FastActionContainer>

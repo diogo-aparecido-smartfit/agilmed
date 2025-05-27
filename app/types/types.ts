@@ -81,3 +81,14 @@ export interface IVerifyCodePayload {
 }
 
 export type ICategoryType = keyof typeof categoryMap
+
+export interface IAppointment {
+    id: number
+    doctor_id: number
+    patient_id: number
+    appointment_date: string
+    reason: string
+    status: string
+    createdAt: string
+    updatedAt: string
+}

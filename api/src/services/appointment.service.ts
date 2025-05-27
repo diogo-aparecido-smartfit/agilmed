@@ -27,6 +27,10 @@ export class AppointmentService {
     return this.appointmentRepository.updateAppointment(id, data);
   }
 
+  async getAppointmentsForUser(userId: number) {
+    return this.appointmentRepository.getAppointmentsByPatientId(userId);
+  }
+
   async deleteAppointment(id: number) {
     return this.appointmentRepository.deleteAppointment(id);
   }

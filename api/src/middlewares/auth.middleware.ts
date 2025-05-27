@@ -17,6 +17,8 @@ export function authenticateJWT(
 ) {
   const authHeader = req.headers.authorization;
 
+  console.log(JSON.stringify(authHeader, null, 2));
+
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     res.status(401).json({ message: "Token não fornecido." });
     return;
@@ -39,5 +41,6 @@ export function authenticateJWT(
     next();
   } catch (error) {
     res.status(401).json({ message: "Token inválido ou expirado." });
+    return;
   }
 }

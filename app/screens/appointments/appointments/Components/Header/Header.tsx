@@ -3,7 +3,19 @@ import * as S from './style'
 import { useCallback } from 'react'
 import { showMessage } from 'react-native-flash-message'
 
-const Header = () => {
+interface HeaderProps {
+    statusFilter: string | null
+    setStatusFilter: (status: string | null) => void
+}
+
+const statusOptions = [
+    { label: 'Todos', value: null },
+    { label: 'Pendentes', value: 'pending' },
+    { label: 'Confirmados', value: 'confirmed' },
+    { label: 'Cancelados', value: 'cancelled' },
+]
+
+const Header = ({ statusFilter, setStatusFilter }: HeaderProps) => {
     const handleDisplayMessage = useCallback(
         () =>
             showMessage({
@@ -16,6 +28,7 @@ const Header = () => {
     return (
         <S.Container
             contentContainerStyle={{
+                flex: 1,
                 gap: 12,
                 paddingHorizontal: 24,
             }}
@@ -23,23 +36,15 @@ const Header = () => {
             scrollEnabled={true}
             showsHorizontalScrollIndicator={false}
         >
-            <Button
-                onPress={handleDisplayMessage}
-                width="auto"
-                isSecondary
-                text="Cancelados"
-            />
-            <Button
-                onPress={handleDisplayMessage}
-                width="auto"
-                text="Próximos agendamentos"
-            />
-            <Button
-                onPress={handleDisplayMessage}
-                width="auto"
-                isSecondary
-                text="Remarcados"
-            />
+            {statusOptions.map((option) => (
+                <Button
+                    key={option.label}
+                    onPress={() => setStatusFilter(option.value)}
+                    width="auto"
+                    isSecondary={statusFilter !== option.value}
+                    text={option.label}
+                />
+            ))}
         </S.Container>
     )
 }

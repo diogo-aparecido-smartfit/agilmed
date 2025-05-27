@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AppointmentService } from "../services/appointment.service";
+import { AuthenticatedRequest } from "../middlewares/auth.middleware";
 
 export class AppointmentController {
   private appointmentService: AppointmentService;
@@ -54,6 +55,28 @@ export class AppointmentController {
 
     if (updated) res.json(updated);
     else res.status(404).json({ message: "Agendamento não encontrado" });
+  }
+
+  async getMyAppointments(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId = req?.user?.id;
+      console.log(JSON.stringify(req.user, null, 2));
+
+      if (!userId || isNaN(Number(userId))) {
+        res.status(401).json({ message: "Não autenticado" });
+        return;
+      }
+
+      const appointments = await this.appointmentService.getAppointmentsForUser(
+        userId
+      );
+
+      res.json(appointments);
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "Erro ao buscar agendamentos", error: err });
+    }
   }
 
   async deleteAppointment(req: Request, res: Response) {
