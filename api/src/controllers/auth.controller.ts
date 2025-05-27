@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
 import { User } from "../models/user.model";
-import bcrypt from "bcryptjs";
 
 export class AuthController {
   private authService: AuthService;
@@ -72,7 +71,6 @@ export class AuthController {
         return;
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
       const verificationCode = this.authService.generateVerificationToken();
 
       const user = await this.userService.createUser({
@@ -80,7 +78,7 @@ export class AuthController {
         birthdate,
         cpf,
         email,
-        password: hashedPassword,
+        password,
         address,
         city,
         state,
@@ -171,8 +169,12 @@ export class AuthController {
 
       await findedUser.save();
 
-      // https://webhook.botpress.cloud/1594e517-14f6-4cb1-83ab-bb31c166a1a3
-      const token = this.authService.generateJwtToken(findedUser.id);
+      const token = this.authService.generateJwtToken(
+        findedUser.id,
+        findedUser.full_name,
+        findedUser.email,
+        findedUser.role
+      );
 
       const { password, ...user } = findedUser.dataValues;
 

@@ -145,8 +145,12 @@ User.init(
     modelName: "user",
     hooks: {
       beforeSave: async (user) => {
-        const saltRounds = 10;
-        user.password = await bcrypt.hash(user.password, saltRounds);
+        if (user.changed("password")) {
+          if (!user.password.startsWith("$2")) {
+            const saltRounds = 10;
+            user.password = await bcrypt.hash(user.password, saltRounds);
+          }
+        }
       },
     },
   }

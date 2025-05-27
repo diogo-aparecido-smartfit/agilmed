@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { ChatController } from "../controllers/chat.controller";
+import { authenticateJWT } from "../middlewares/auth.middleware";
 
-const chatRouter = Router();
+const router = Router();
 const chatController = new ChatController();
 
-chatRouter.post(
-  "/completions",
-  chatController.completions.bind(chatController)
-);
+router.post("/completions", authenticateJWT, (req, res) => {
+  chatController.completions(req, res);
+});
 
-export default chatRouter;
+export default router;

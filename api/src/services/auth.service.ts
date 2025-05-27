@@ -24,16 +24,23 @@ export class AuthService {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     console.log("isPasswordValid: ", isPasswordValid);
-    console.log("password: ", password);
+    console.log("password: ", `"${password}"`);
     console.log("user.password: ", user.password);
 
     if (!isPasswordValid) {
       return null;
     }
 
-    const token = jwt.sign({ id: user.id, email: user.email }, this.jwtSecret, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      {
+        id: user.id,
+        full_name: user.full_name,
+        email: user.email,
+        role: user.role,
+      },
+      this.jwtSecret,
+      { expiresIn: "1h" }
+    );
 
     return token;
   }
@@ -82,7 +89,23 @@ export class AuthService {
     }
   }
 
-  public generateJwtToken(userId: number | string): string {
+  public generateJwtToken(
+    userId: number | string,
+    full_name: string,
+    email: string,
+    role: string
+  ): string {
+    const token = jwt.sign(
+      {
+        id: userId,
+        full_name: full_name,
+        email: email,
+        role: role,
+      },
+      this.jwtSecret,
+      { expiresIn: "1h" }
+    );
+
     return jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: "1h" });
   }
 
