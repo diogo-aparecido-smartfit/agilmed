@@ -18,7 +18,7 @@ function AppointmentsEmpty() {
     return (
         <S.CenteredContainer>
             <Text fontSize="lg" color="description">
-                Você ainda não possui agendamentos.
+                Sem resultados
             </Text>
         </S.CenteredContainer>
     )

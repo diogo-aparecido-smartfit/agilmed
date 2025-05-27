@@ -8,6 +8,8 @@ export interface AppointmentAttributes {
   appointment_date: Date;
   reason: string;
   status: "pending" | "confirmed" | "cancelled";
+  patient_name: string;
+  doctor_name: string;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -23,6 +25,8 @@ export class Appointment
   public doctor_id!: number;
   public patient_id!: number;
   public appointment_date!: Date;
+  public patient_name!: string;
+  public doctor_name!: string;
   public reason!: string;
   public status!: "pending" | "confirmed" | "cancelled";
 
@@ -59,6 +63,14 @@ Appointment.init(
     status: {
       type: DataTypes.ENUM("pending", "confirmed", "cancelled"),
       defaultValue: "pending",
+    },
+    patient_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    doctor_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {

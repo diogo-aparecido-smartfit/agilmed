@@ -87,6 +87,8 @@ export interface IAppointment {
     doctor_id: number
     patient_id: number
     appointment_date: string
+    doctor_name: string
+    patient_name: string
     reason: string
     status: string
     createdAt: string

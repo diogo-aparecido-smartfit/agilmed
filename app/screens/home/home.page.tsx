@@ -13,7 +13,7 @@ import { RootState } from '@/store'
 import { useSelector } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
 import { useHomeController } from './home.controller'
-import { Platform, View } from 'react-native'
+import { Platform, RefreshControl, View } from 'react-native'
 import { Theme } from '@/config/theme'
 import NearPlace from './Components/NearPlace/NearPlace'
 import { useAppointments } from '@/hooks/api/useAppointments'
@@ -35,6 +35,12 @@ export default function HomePage() {
     return (
         <S.Container>
             <S.ContentContainer
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loadingAppointments || loading}
+                        onRefresh={refetch}
+                    />
+                }
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
                     gap: 24,
@@ -84,7 +90,7 @@ export default function HomePage() {
                                         "EEEE, dd 'de' MMMM",
                                         { locale: ptBR }
                                     )}
-                                    doctorName={`Dr. Fulano`}
+                                    doctorName={appointment.doctor_name}
                                     doctorType="Clínico Geral"
                                     startAt={format(
                                         new Date(appointment.appointment_date),

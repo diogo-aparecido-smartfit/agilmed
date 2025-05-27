@@ -15,10 +15,17 @@ export class AppointmentController {
         req.body
       );
       res.status(201).json(appointment);
-    } catch (err) {
-      res
-        .status(500)
-        .json({ message: "Erro ao criar agendamento", error: err });
+    } catch (err: any) {
+      if (
+        err.message === "Paciente não encontrado" ||
+        err.message === "Médico não encontrado"
+      ) {
+        res.status(400).json({ message: err.message });
+      } else {
+        res
+          .status(500)
+          .json({ message: "Erro ao criar agendamento", error: err });
+      }
     }
   }
 

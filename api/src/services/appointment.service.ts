@@ -2,6 +2,7 @@ import {
   Appointment,
   AppointmentCreationAttributes,
 } from "../models/appointment.model";
+import { User } from "../models/user.model";
 import { AppointmentRepository } from "../repositories/appointment.repository";
 
 export class AppointmentService {
@@ -12,7 +13,19 @@ export class AppointmentService {
   }
 
   async createAppointment(data: AppointmentCreationAttributes) {
-    return this.appointmentRepository.createAppointment(data);
+    const patient = await User.findByPk(data.patient_id);
+    if (!patient) throw new Error("Paciente não encontrado");
+
+    const doctor = await User.findByPk(data.doctor_id);
+    if (!doctor) throw new Error("Médico não encontrado");
+
+    const payload = {
+      ...data,
+      patient_name: patient.full_name,
+      doctor_name: doctor.full_name,
+    };
+
+    return this.appointmentRepository.createAppointment(payload);
   }
 
   async getAppointmentById(id: number) {
