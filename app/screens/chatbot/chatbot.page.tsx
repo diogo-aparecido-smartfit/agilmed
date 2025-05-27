@@ -26,7 +26,7 @@ export default function ChatBotPage() {
         loading,
         userId,
         messages,
-        loadingMessages,
+        waitingResponse,
     } = useChatbotController()
 
     const hasMessages = messages.length > 0
@@ -42,7 +42,7 @@ export default function ChatBotPage() {
                     <Avatar uri={Cpu} size={44} />
                     <S.BotInfoWrapper>
                         <Text fontSize="sm" fontWeight="700">
-                            Jordan
+                            Amélia
                         </Text>
                         <S.StatusWrapper>
                             <S.ActivePointer />
@@ -67,63 +67,30 @@ export default function ChatBotPage() {
                     </Text>
                 </S.EmptyContainer>
             ) : (
-                <S.ChatContainer
-                    contentContainerStyle={{
-                        flex: 1,
-                        padding: 24,
-                        gap: 16,
-                    }}
-                    onContentSizeChange={() =>
-                        scrollViewRef.current?.scrollToEnd({ animated: true })
-                    }
-                    ref={scrollViewRef}
-                >
+                <S.ChatContainer>
                     <FlatList
+                        onContentSizeChange={() =>
+                            scrollViewRef.current?.scrollToEnd({
+                                animated: true,
+                            })
+                        }
+                        ref={scrollViewRef}
                         data={messages}
-                        scrollEnabled={false}
+                        scrollEnabled={true}
+                        showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => (
                             <S.MessageContainer key={item.id}>
                                 <MessageBubble
-                                    isReceived={
-                                        item.userId !== userId?.toString()
-                                    }
+                                    isReceived={item.role !== 'user'}
                                 >
-                                    {item.payload.text}
+                                    {item.content}
                                 </MessageBubble>
-                                {item.payload.options && (
-                                    <S.OptionsRow
-                                        horizontal={true}
-                                        contentContainerStyle={{
-                                            alignItems: 'center',
-                                            paddingHorizontal: 24,
-                                            gap: 8,
-                                        }}
-                                        showsHorizontalScrollIndicator={false}
-                                    >
-                                        {item.payload.options.map(
-                                            (option, index) => (
-                                                <OptionBubble
-                                                    onPress={() =>
-                                                        handleSelectOption(
-                                                            option.label
-                                                        )
-                                                    }
-                                                    key={index}
-                                                >
-                                                    {option.label}
-                                                </OptionBubble>
-                                            )
-                                        )}
-                                    </S.OptionsRow>
-                                )}
                             </S.MessageContainer>
                         )}
                         keyExtractor={(item) => item.id}
                         ListFooterComponent={() =>
-                            loadingMessages ? (
-                                <MessageBubble isLoading isReceived={true}>
-                                    Carregando...
-                                </MessageBubble>
+                            waitingResponse ? (
+                                <MessageBubble isLoading isReceived={true} />
                             ) : null
                         }
                     />
@@ -139,7 +106,10 @@ export default function ChatBotPage() {
                         multiline={true}
                     />
                     {/* <S.MicrophoneButton>
-                        <Microphone2 color={Theme.colors.inputColor} />
+                        <Microphone2
+                            size={24}
+                            color={Theme.colors.inputColor}
+                        />
                     </S.MicrophoneButton> */}
                 </S.TextInputWrapper>
                 <S.SendMessageButton disabled={loading} onPress={onSendMessage}>

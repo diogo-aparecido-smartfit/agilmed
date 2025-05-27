@@ -7,7 +7,7 @@ import { useChatlistController } from './chat-list.controller'
 import { ActivityIndicator } from 'react-native'
 
 export default function ChatPage() {
-    const { handleCreateConversation, loading } = useChatlistController()
+    const { handleStartConversation } = useChatlistController()
 
     return (
         <S.Container>
@@ -27,10 +27,7 @@ export default function ChatPage() {
                         assistente pessoal virtual.
                     </Text>
                 </S.NavigationButton>
-                <S.ScheduleButton
-                    disabled={loading}
-                    onPress={handleCreateConversation}
-                >
+                <S.ScheduleButton onPress={handleStartConversation}>
                     <S.ScheduleTextWrapper>
                         <Text color="white" fontWeight="700">
                             Vamos conversar?
@@ -44,11 +41,7 @@ export default function ChatPage() {
                         </Text>
                     </S.ScheduleTextWrapper>
                     <S.ChatButton>
-                        {loading ? (
-                            <ActivityIndicator color={Theme.colors.black} />
-                        ) : (
-                            <Message size={24} color={Theme.colors.black} />
-                        )}
+                        <Message size={24} color={Theme.colors.black} />
                     </S.ChatButton>
                 </S.ScheduleButton>
             </S.ContentContainer>

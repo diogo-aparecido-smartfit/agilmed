@@ -1,24 +1,11 @@
-import { RootState } from "@/store";
-import { createConversationRequest } from "@/store/slices/chat.slice";
-import { useDispatch, useSelector } from "react-redux";
+import { router } from 'expo-router'
 
 export const useChatlistController = () => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.auth);
-  const { loading, error, conversationId } = useSelector(
-    (state: RootState) => state.chat
-  );
-
-  const handleCreateConversation = () => {
-    if (user?.chatbot_user_id) {
-      dispatch(createConversationRequest());
+    const handleStartConversation = () => {
+        router.push('/(home)/(chat)/chat')
     }
-  };
 
-  return {
-    loading,
-    error,
-    conversationId,
-    handleCreateConversation,
-  };
-};
+    return {
+        handleStartConversation,
+    }
+}

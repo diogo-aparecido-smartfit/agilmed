@@ -1,162 +1,92 @@
-import {
-    call,
-    delay,
-    Effect,
-    put,
-    select,
-    take,
-    takeLatest,
-} from 'redux-saga/effects'
+import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { PayloadAction } from '@reduxjs/toolkit'
 import {
-    createConversationRequest,
-    createConversationSuccess,
-    createConversationFailure,
-    listMessagesRequest,
-    createMessageFailure,
-    listMessagesSuccess,
-    listMessagesFailure,
-    Message,
     sendUserMessageSuccess,
+    sendUserMessageFailure,
+    receiveBotMessageSuccess,
+    Message,
     sendUserMessageRequest,
 } from '../slices/chat.slice'
 import { Post } from '@/services/api/chat.methods'
-import { showMessage } from 'react-native-flash-message'
-import { router } from 'expo-router'
 import { RootState } from '..'
-import { createMessage, listMessages } from '@/services/chat/chat.services'
+import { OPENROUTER_API_KEY, SYSTEM_PROMPT } from '@/utils/constants'
+import uuid from 'react-native-uuid'
+import { showMessage } from 'react-native-flash-message'
 
-interface CreateConversationResponse {
-    conversation: {
-        id: string
-        createdAt: string
-        updatedAt: string
-    }
+interface OpenRouterResponse {
+    choices: { message: { role: 'assistant'; content: string } }[]
 }
 
-const selectConversationId = (state: RootState) => state.chat.conversationId
 const selectMessages = (state: RootState) => state.chat.messages
-const selectChatbotUserId = (state: RootState) =>
-    state.auth.user?.chatbot_user_id
 
-function* handleCreateConversation(): Generator<Effect> {
+function* handleSendMessage(action: PayloadAction<{ text: string }>) {
     try {
-        const getConversationId = yield select(selectConversationId)
-        const conversationId = <string>getConversationId
+        console.log('[Saga] handleSendMessage - action:', action)
+        const messages: Message[] = yield select(selectMessages)
+        console.log('[Saga] Current messages:', messages)
 
-        const getChatbotUserId = yield select(selectChatbotUserId)
-        const chatbotUserId = <string>getChatbotUserId
+        // Prepare history with only role and content
+        const history = messages.map(({ role, content }) => ({ role, content }))
+        console.log('[Saga] History for OpenRouter:', history)
 
-        if (conversationId) {
-            yield put(
-                createConversationSuccess({ conversationId: conversationId })
-            )
-            router.push('/(home)/(chat)/chat')
-            return
+        // New user message with id and timestamp
+        const userMessage: Message = {
+            id: String(uuid.v4()),
+            role: 'user',
+            content: action.payload.text,
+            createdAt: new Date().toISOString(),
         }
+        console.log('[Saga] User message to dispatch:', userMessage)
 
-        const data = yield call(
+        const body = {
+            model: 'gpt-4o-mini',
+            messages: [
+                { role: 'system', content: SYSTEM_PROMPT },
+                ...history,
+                { role: 'user', content: action.payload.text },
+            ],
+        }
+        console.log('[Saga] Request body for OpenRouter:', body)
+
+        yield put(sendUserMessageSuccess(userMessage))
+        console.log('[Saga] Dispatched sendUserMessageSuccess')
+
+        const response: OpenRouterResponse = yield call(
             Post,
-            '/conversations',
-            {},
+            '/chat/completions',
+            body,
             {
-                'x-user-key': chatbotUserId,
+                Authorization: `Bearer ${OPENROUTER_API_KEY}`,
             }
         )
+        console.log('[Saga] OpenRouter response:', response)
 
-        const response = <CreateConversationResponse>data
+        const assistantRaw = response.choices[0].message
+        console.log('[Saga] Assistant raw message:', assistantRaw)
 
-        yield put(
-            createConversationSuccess({
-                conversationId: response.conversation.id,
-            })
-        )
-        showMessage({
-            message: 'Nova conversa iniciada com sucesso.',
-            type: 'success',
-        })
-        router.push('/(home)/(chat)/chat')
-    } catch (error: any) {
-        showMessage({
-            message: 'Erro ao iniciar nova conversa.',
-            type: 'default',
-        })
-        yield put(
-            createConversationFailure(
-                error.message || 'Failed to create conversation'
-            )
-        )
-    }
-}
-
-function* handleCreateMessage(
-    action: PayloadAction<{ text: string }>
-): Generator<Effect> {
-    try {
-        const getConversationId = yield select(selectConversationId)
-        const conversationId = <string>getConversationId
-        const { text } = action.payload
-
-        const getChatbotUserId = yield select(selectChatbotUserId)
-        const chatbotUserId = <string>getChatbotUserId
-
-        const data = yield call(
-            createMessage,
-            conversationId,
-            text,
-            chatbotUserId
-        )
-        const response = <{ message: Message }>data
-
-        yield put(sendUserMessageSuccess(response.message))
-    } catch (error) {
-        console.error(error)
-        yield put(createMessageFailure('Failed to create message'))
-        showMessage({
-            message:
-                'Não foi possível enviar a mensagem, por favor, tente novamente mais tarde.',
-            type: 'danger',
-        })
-    }
-}
-
-function* handleListMessages(): Generator<Effect> {
-    try {
-        const getConversationId = yield select(selectConversationId)
-        const conversationId = <string>getConversationId
-
-        const getMessages = yield select(selectMessages)
-        const messages = <string>getMessages
-
-        const getChatbotUserId = yield select(selectChatbotUserId)
-        const chatbotUserId = <string>getChatbotUserId
-
-        yield delay(3000)
-
-        const data = yield call(listMessages, conversationId, chatbotUserId)
-
-        const response = <{ messages: Message[] }>data
-
-        if (response.messages.length === messages.length) {
-            yield delay(500)
-            yield put(listMessagesRequest())
-            return
+        // Create assistant message with id and timestamp
+        const assistantMessage: Message = {
+            id: String(uuid.v4()),
+            role: assistantRaw.role,
+            content: assistantRaw.content,
+            createdAt: new Date().toISOString(),
         }
+        console.log('[Saga] Assistant message to dispatch:', assistantMessage)
 
-        yield put(listMessagesSuccess(response.messages.reverse()))
-    } catch (error) {
-        console.error(error)
-        yield put(listMessagesFailure('Failed to list messages'))
+        yield put(receiveBotMessageSuccess(assistantMessage))
+        console.log('[Saga] Dispatched receiveBotMessageSuccess')
+    } catch (error: any) {
+        console.log('[Saga] Error in handleSendMessage:', error)
         showMessage({
-            message:
-                'Não foi possível carregar o histórico de mensagens, por favor, tente novamente mais tarde.',
+            message: 'Não foi possível enviar a mensagem',
             type: 'danger',
         })
+        yield put(
+            sendUserMessageFailure(error.message || 'Failed to send message')
+        )
     }
 }
 
 export default function* chatSaga() {
-    yield takeLatest(createConversationRequest.type, handleCreateConversation)
-    yield takeLatest(sendUserMessageRequest.type, handleCreateMessage)
-    yield takeLatest(listMessagesRequest.type, handleListMessages)
+    yield takeLatest(sendUserMessageRequest.type, handleSendMessage)
 }

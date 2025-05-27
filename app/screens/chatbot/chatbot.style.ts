@@ -8,8 +8,10 @@ export const Container = styled.KeyboardAvoidingView`
     background-color: ${Theme.colors.white};
 `
 
-export const ChatContainer = styled(ScrollView)`
+export const ChatContainer = styled.View`
     flex: 1;
+    padding: 24px;
+    gap: 16px;
 `
 
 export const MessageContainer = styled.View`

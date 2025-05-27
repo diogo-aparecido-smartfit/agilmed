@@ -175,6 +175,11 @@ export class AuthController {
           name: findedUser.full_name,
         });
 
+        console.log(
+          "--------------------------------------- chatbot ----------------------------"
+        );
+        console.log(JSON.stringify(response, null, 2));
+
         findedUser.chatbot_user_id = response.key;
       }
 

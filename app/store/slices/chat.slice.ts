@@ -1,116 +1,63 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-export interface MessagePayload {
-    type: string
-    text?: string
-    options?: Array<{ label: string; value: string }>
-}
-
 export interface Message {
     id: string
+    role: 'user' | 'assistant' | 'system'
+    content: string
     createdAt: string
-    conversationId: string
-    userId: string
-    payload: MessagePayload
 }
 
 export interface ChatState {
     loading: boolean
-    loadingMessages: boolean
     error: string | null
-    conversationId: string | null
     messages: Message[]
+    waitingResponse: boolean
 }
 
 const initialState: ChatState = {
     loading: false,
-    loadingMessages: false,
     error: null,
-    conversationId: null,
     messages: [],
+    waitingResponse: false,
 }
 
 const chatSlice = createSlice({
     name: 'chat',
     initialState,
     reducers: {
-        createConversationRequest(state) {
-            state.loading = true
-            state.error = null
-        },
-        createConversationSuccess(
-            state,
-            action: PayloadAction<{ conversationId: string }>
-        ) {
-            state.loading = false
-            state.conversationId = action.payload.conversationId
-        },
-        createConversationFailure(state, action: PayloadAction<string>) {
-            state.loading = false
-            state.error = action.payload
-        },
         sendUserMessageRequest: (
             state,
             action: PayloadAction<{ text: string }>
         ) => {
             state.loading = true
+            state.error = null
         },
         sendUserMessageSuccess: (state, action: PayloadAction<Message>) => {
-            const exists = state.messages.find(
-                (msg) => msg.id === action.payload.id
-            )
-
-            if (!exists) {
+            if (!state.messages.find((m) => m.id === action.payload.id)) {
                 state.messages.push(action.payload)
             }
-
             state.loading = false
-            state.loadingMessages = true
+            state.waitingResponse = true
         },
-        receiveBotMessageRequest: (state) => {
-            state.loadingMessages = true
+        sendUserMessageFailure: (state, action: PayloadAction<string>) => {
+            state.loading = false
+            state.waitingResponse = false
+            state.error = action.payload
         },
         receiveBotMessageSuccess: (state, action: PayloadAction<Message>) => {
-            const exists = state.messages.find(
-                (msg) => msg.id === action.payload.id
-            )
-
-            if (!exists) {
+            if (!state.messages.find((m) => m.id === action.payload.id)) {
                 state.messages.push(action.payload)
             }
-
-            state.loadingMessages = false
-        },
-        createMessageFailure: (state, action: PayloadAction<string>) => {
-            state.loading = false
-            state.error = action.payload
-        },
-        listMessagesRequest: (state) => {
-            state.loadingMessages = true
-        },
-        listMessagesSuccess: (state, action: PayloadAction<Message[]>) => {
-            state.loadingMessages = false
-            state.messages = action.payload
-        },
-        listMessagesFailure: (state, action: PayloadAction<string>) => {
-            state.loadingMessages = false
-            state.error = action.payload
+            state.waitingResponse = false
         },
     },
 })
 
 export const {
-    createConversationRequest,
-    createConversationSuccess,
-    createConversationFailure,
-    createMessageFailure,
-    listMessagesRequest,
-    listMessagesSuccess,
-    listMessagesFailure,
-    receiveBotMessageRequest,
-    receiveBotMessageSuccess,
     sendUserMessageRequest,
     sendUserMessageSuccess,
+    sendUserMessageFailure,
+    receiveBotMessageSuccess,
 } = chatSlice.actions
 
 export default chatSlice.reducer

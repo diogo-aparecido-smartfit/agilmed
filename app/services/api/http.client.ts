@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const httpClient = axios.create({
-    baseURL: 'https://agilmed-api.azurewebsites.net/api',
-    // baseURL: 'http://localhost:3000/api',
+    // baseURL: 'https://agilmed-api.azurewebsites.net/api',
+    baseURL: 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -13,7 +13,6 @@ httpClient.interceptors.request.use((config) => {
         method: config.method,
         url: config.url,
         headers: config.headers,
-        data: config.data,
     })
     const token = ''
     if (token) {
