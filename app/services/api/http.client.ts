@@ -2,8 +2,8 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const httpClient = axios.create({
-    // baseURL: 'https://agilmed-api.azurewebsites.net/api',
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'https://agilmed-api.azurewebsites.net/api',
+    // baseURL: 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
