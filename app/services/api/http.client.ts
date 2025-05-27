@@ -4,8 +4,8 @@ import store from '@/store'
 import { logoffRequest } from '@/store/slices/auth.slice'
 
 const httpClient = axios.create({
-    // baseURL: 'https://agilmed-api.azurewebsites.net/api',
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'https://agilmed-api.azurewebsites.net/api',
+    // baseURL: 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
