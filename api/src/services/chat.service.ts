@@ -6,16 +6,18 @@ export class ChatService {
     history,
     userMessage,
   }: {
-    history: any[];
+    history?: any[];
     userMessage: string;
   }) {
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+
+    const safeHistory = Array.isArray(history) ? history : [];
 
     const body = {
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
-        ...history,
+        ...safeHistory,
         { role: "user", content: userMessage },
       ],
     };
