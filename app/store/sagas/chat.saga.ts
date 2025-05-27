@@ -7,11 +7,10 @@ import {
     Message,
     sendUserMessageRequest,
 } from '../slices/chat.slice'
-import { Post } from '@/services/api/chat.methods'
 import { RootState } from '..'
-import { OPENROUTER_API_KEY, SYSTEM_PROMPT } from '@/utils/constants'
 import uuid from 'react-native-uuid'
 import { showMessage } from 'react-native-flash-message'
+import { Post } from '@/services/api/api.methods'
 
 interface OpenRouterResponse {
     choices: { message: { role: 'assistant'; content: string } }[]
@@ -39,12 +38,8 @@ function* handleSendMessage(action: PayloadAction<{ text: string }>) {
         console.log('[Saga] User message to dispatch:', userMessage)
 
         const body = {
-            model: 'gpt-4o-mini',
-            messages: [
-                { role: 'system', content: SYSTEM_PROMPT },
-                ...history,
-                { role: 'user', content: action.payload.text },
-            ],
+            history,
+            userMessage: action.payload.text,
         }
         console.log('[Saga] Request body for OpenRouter:', body)
 
@@ -54,10 +49,7 @@ function* handleSendMessage(action: PayloadAction<{ text: string }>) {
         const response: OpenRouterResponse = yield call(
             Post,
             '/chat/completions',
-            body,
-            {
-                Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-            }
+            body
         )
         console.log('[Saga] OpenRouter response:', response)
 

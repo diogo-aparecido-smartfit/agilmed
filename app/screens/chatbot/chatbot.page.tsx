@@ -1,17 +1,11 @@
-import { ArrowLeft, Cpu, Microphone2, Send2 } from 'iconsax-react-native'
+import { ArrowLeft, Cpu, Send2 } from 'iconsax-react-native'
 import * as S from './chatbot.style'
-import {
-    ActivityIndicator,
-    FlatList,
-    TouchableOpacity,
-    View,
-} from 'react-native'
+import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native'
 import { Theme } from '@/config/theme'
 import { router } from 'expo-router'
 import Avatar from '@/components/Avatar/Avatar'
 import Text from '@/components/Text/Text'
 import MessageBubble from './Components/MessageBubble/MessageBubble'
-import OptionBubble from './Components/OptionBubble/OptionBubble'
 import useChatbotController from './chatbot.controller'
 import { StatusBar } from 'expo-status-bar'
 

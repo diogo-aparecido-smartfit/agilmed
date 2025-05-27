@@ -7,6 +7,7 @@ import { connectDB } from "./database";
 import { setupSwagger } from "./swagger";
 import appointmentRouter from "../routes/appointment.routes";
 import placesRouter from "../routes/places.routes";
+import chatRouter from "../routes/chat.routes";
 
 export class App {
   public app: Application;
@@ -35,6 +36,7 @@ export class App {
     this.app.use("/api/user", userRouter);
     this.app.use("/api/auth", authRouter);
     this.app.use("/api/appointment", appointmentRouter);
+    this.app.use("/api/chat", chatRouter);
 
     setupSwagger(this.app);
   }

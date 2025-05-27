@@ -111,7 +111,6 @@ export class User
   public medical_history?: string;
   public verificationCode?: string | null;
   public profile_picture_url?: string | null;
-  public chatbot_user_id?: string | null;
   public isVerified!: boolean;
   public role!: "doctor" | "patient";
 }

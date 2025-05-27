@@ -1,10 +1,8 @@
-import axios from "axios";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { UserRepository } from "../repositories/user.repository";
 import { resetPasswordTemplate, signUpTemplate } from "../utils/email.template";
-import { ICreateUserPayload, ICreateUserResponse } from "../types/chat.types";
 
 export class AuthService {
   private userRepository: UserRepository;
@@ -93,26 +91,6 @@ export class AuthService {
       return jwt.verify(token, process.env.JWT_SECRET!);
     } catch (error) {
       throw new Error("Token inválido ou expirado");
-    }
-  }
-
-  public async createChatbotProfile({
-    id,
-    name,
-  }: ICreateUserPayload): Promise<ICreateUserResponse> {
-    try {
-      const { data } = await axios.post(
-        `${process.env.CHATBOT_URL as string}/users`,
-        {
-          id,
-          name,
-        }
-      );
-
-      return data;
-    } catch (error) {
-      console.error(error);
-      throw new Error("Não foi possível criar o perfil no Botpress.");
     }
   }
 }

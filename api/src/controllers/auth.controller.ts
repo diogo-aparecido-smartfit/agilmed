@@ -169,22 +169,9 @@ export class AuthController {
       findedUser.isVerified = true;
       findedUser.verificationCode = null;
 
-      if (!typed_password && !password_confirm) {
-        const response = await this.authService.createChatbotProfile({
-          id: findedUser.id.toString(),
-          name: findedUser.full_name,
-        });
-
-        console.log(
-          "--------------------------------------- chatbot ----------------------------"
-        );
-        console.log(JSON.stringify(response, null, 2));
-
-        findedUser.chatbot_user_id = response.key;
-      }
-
       await findedUser.save();
 
+      // https://webhook.botpress.cloud/1594e517-14f6-4cb1-83ab-bb31c166a1a3
       const token = this.authService.generateJwtToken(findedUser.id);
 
       const { password, ...user } = findedUser.dataValues;
