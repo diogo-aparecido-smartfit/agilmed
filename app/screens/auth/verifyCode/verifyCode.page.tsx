@@ -6,6 +6,8 @@ import { router, useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useVerifyCodeController } from './verifyCode.controller'
 import { Controller } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 
 export default function VerifyCodePage() {
     const {
@@ -16,8 +18,10 @@ export default function VerifyCodePage() {
         formValues,
         secondsLeft,
     } = useVerifyCodeController()
+    const { user } = useSelector((state: RootState) => state.auth)
     const params = useLocalSearchParams()
 
+    const userEmail = params.email || user?.email
     const isResetPassword: boolean = params.resetPassword === 'true'
 
     return (
@@ -38,7 +42,7 @@ export default function VerifyCodePage() {
                         textAlign="center"
                     >
                         Nós enviamos um código de confirmação para o email{'\n'}
-                        <Text textAlign="center">{params.email}</Text>
+                        <Text textAlign="center">{userEmail}</Text>
                     </Text>
                 </S.TextContainer>
                 <S.CodeContainer>

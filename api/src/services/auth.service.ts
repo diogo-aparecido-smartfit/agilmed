@@ -95,7 +95,7 @@ export class AuthService {
     email: string,
     role: string
   ): string {
-    const token = jwt.sign(
+    return jwt.sign(
       {
         id: userId,
         full_name: full_name,
@@ -105,8 +105,6 @@ export class AuthService {
       this.jwtSecret,
       { expiresIn: "1h" }
     );
-
-    return jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: "1h" });
   }
 
   public verifyJwtToken(token: string): string | object {

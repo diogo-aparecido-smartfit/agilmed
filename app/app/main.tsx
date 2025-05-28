@@ -45,6 +45,10 @@ export default function MainNavigator() {
                 name="(places)"
                 options={{ headerShown: false, headerTitle: 'Places' }}
             />
+            <Stack.Screen
+                name="(verifyCode)"
+                options={{ headerShown: false, headerTitle: 'VerifyCode' }}
+            />
             <Stack.Screen name="+not-found" />
         </Stack>
     )

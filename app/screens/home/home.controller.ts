@@ -1,10 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { RootState } from '@/store'
 import { useCurrentLocation } from '@/hooks/useCurrentLocation'
 import { fetchPharmaciesRequest } from '@/store/slices/places.slice'
+import BottomSheet from '@gorhom/bottom-sheet'
 
 export function useHomeController() {
+    const bottomSheetRef = useRef<BottomSheet>(null)
+    const snapPoints = useMemo(() => ['50%'], [])
     const dispatch = useDispatch()
     const { location } = useCurrentLocation()
 
@@ -23,9 +26,16 @@ export function useHomeController() {
         }
     }, [location])
 
+    const handleOpenVerifyCode = useCallback(() => {
+        bottomSheetRef.current?.expand()
+    }, [])
+
     return {
         units,
         loading,
         error,
+        snapPoints,
+        bottomSheetRef,
+        handleOpenVerifyCode,
     }
 }

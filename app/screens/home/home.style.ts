@@ -8,7 +8,22 @@ export const Container = styled.View`
     background-color: ${Theme.colors.white};
 `
 
+export const VerifyEmailBanner = styled.View`
+    flex-direction: row;
+    align-items: center;
+    padding: 12px;
+    background-color: #e6f0ff;
+    border-radius: 8px;
+    border: 1px solid #b3d4ff;
+    margin-top: 8px;
+`
+
 export const Header = styled.View`
+    flex-direction: column;
+    gap: 16px;
+`
+
+export const HeaderContent = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -28,6 +43,20 @@ export const Username = styled(Text)`
     font-family: ${Theme.fonts.bold};
     font-size: 20px;
     line-height: 24px;
+`
+
+export const AlertTitle = styled.Text`
+    color: '#3178C6';
+    font-family: ${Theme.fonts.regular};
+    font-size: 14px;
+`
+
+export const AlertTextButton = styled.TouchableOpacity``
+
+export const AlertText = styled.Text`
+    color: ${Theme.colors.mainColor};
+    font-family: ${Theme.fonts.regular};
+    font-size: 14px;
 `
 
 export const Title = styled.Text`

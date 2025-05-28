@@ -59,7 +59,13 @@ function* loginSaga(action: LoginAction): Generator<Effect> {
 
 function* registerSaga(action: RegisterAction): Generator<Effect> {
     try {
-        const response = yield call(createUser, action.payload)
+        const data = yield call(createUser, action.payload)
+        const response = <{ token: string; user: IUserData }>data
+
+        console.log(
+            JSON.stringify('--------------- resposta --------------------')
+        )
+        console.log(JSON.stringify(response, null, 2))
 
         showMessage({
             message:
@@ -67,11 +73,21 @@ function* registerSaga(action: RegisterAction): Generator<Effect> {
             type: 'info',
         })
 
-        yield put(registerSuccess())
-        router.push({
-            pathname: '/(auth)/verifyCode',
-            params: { email: action.payload.email },
-        })
+        yield call(
+            [AsyncStorage, AsyncStorage.setItem],
+            'token',
+            response.token
+        )
+        yield call(
+            [AsyncStorage, AsyncStorage.setItem],
+            'user',
+            JSON.stringify(response.user)
+        )
+
+        yield put(
+            registerSuccess({ token: response.token, user: response.user })
+        )
+        router.push('/(home)')
     } catch (error) {
         console.error(error)
         showMessage({

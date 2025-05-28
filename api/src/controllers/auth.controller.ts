@@ -91,15 +91,24 @@ export class AuthController {
         role: role || "patient",
       });
 
-      await this.authService.sendVerificationEmail(
+      this.authService.sendVerificationEmail(
         email,
         verificationCode,
         user.full_name.split(" ")[0]
       );
 
+      const token = this.authService.generateJwtToken(
+        user.id,
+        user.full_name,
+        user.email,
+        user.role
+      );
+
+      const { password: userPassword, ...userData } = user.dataValues;
+
       res.status(201).json({
-        message:
-          "Usuário criado com sucesso. Verifique seu e-mail para confirmar a conta.",
+        token,
+        user: userData,
       });
     } catch (error) {
       console.error("Erro ao registrar usuário:", error);

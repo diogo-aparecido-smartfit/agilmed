@@ -28,6 +28,7 @@ import {
 } from '@expo-google-fonts/poppins'
 import { ThemeProvider } from '@emotion/react'
 
+import { PortalProvider } from '@gorhom/portal'
 import { Theme } from '@/config/theme'
 import { QueryProvider } from '@/providers/query.provider'
 import { Provider } from 'react-redux'
@@ -85,13 +86,15 @@ export default function RootLayout() {
     return (
         <Provider store={store}>
             <GestureHandlerRootView>
-                <FlashMessage position="top" />
-                <QueryProvider>
-                    <ThemeProvider theme={Theme}>
-                        <Main />
-                        <StatusBar style="auto" />
-                    </ThemeProvider>
-                </QueryProvider>
+                <PortalProvider>
+                    <FlashMessage position="top" />
+                    <QueryProvider>
+                        <ThemeProvider theme={Theme}>
+                            <Main />
+                            <StatusBar style="auto" />
+                        </ThemeProvider>
+                    </QueryProvider>
+                </PortalProvider>
             </GestureHandlerRootView>
         </Provider>
     )

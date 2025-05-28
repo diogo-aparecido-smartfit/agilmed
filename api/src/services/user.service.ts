@@ -1,4 +1,5 @@
 import { containerClient } from "../config/azure";
+import { sequelize } from "../config/database";
 import { User, UserCreationAttributes } from "../models/user.model";
 import { UserRepository } from "../repositories/user.repository";
 import { formatFileName } from "../utils";

@@ -67,7 +67,6 @@ export class AppointmentController {
   async getMyAppointments(req: AuthenticatedRequest, res: Response) {
     try {
       const userId = req?.user?.id;
-      console.log(JSON.stringify(req.user, null, 2));
 
       if (!userId || isNaN(Number(userId))) {
         res.status(401).json({ message: "Não autenticado" });
