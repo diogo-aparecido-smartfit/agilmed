@@ -1,23 +1,24 @@
 import axios from "axios";
 import { SYSTEM_PROMPT } from "../utils/bot.prompt";
+import { getMessageHistory, addMessageToHistory } from "../config/redis";
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 export class ChatService {
   async completions({
-    history,
+    userId,
     userMessage,
   }: {
-    history?: any[];
+    userId: number;
     userMessage: string;
   }) {
-    const safeHistory = Array.isArray(history) ? history : [];
+    const history = await getMessageHistory(userId);
 
     const body = {
       model: "meta-llama/llama-3.3-8b-instruct:free",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
-        ...safeHistory,
+        ...history,
         { role: "user", content: userMessage },
       ],
     };
@@ -35,7 +36,15 @@ export class ChatService {
     const secondKey = process.env.SECOND_OPENROUTER_API_KEY;
 
     try {
+      await addMessageToHistory(userId, { role: "user", content: userMessage });
+
       const response = await tryWithKey(firstKey!);
+
+      const botMessage = response.data.choices?.[0]?.message;
+      if (botMessage) {
+        await addMessageToHistory(userId, botMessage);
+      }
+
       return response.data;
     } catch (error: any) {
       const code =
@@ -43,6 +52,10 @@ export class ChatService {
       if (code === 429 && secondKey) {
         try {
           const response = await tryWithKey(secondKey);
+          const botMessage = response.data.choices?.[0]?.message;
+          if (botMessage) {
+            await addMessageToHistory(userId, botMessage);
+          }
           return response.data;
         } catch (err) {
           throw err;

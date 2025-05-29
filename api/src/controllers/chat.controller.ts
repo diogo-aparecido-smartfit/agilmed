@@ -19,7 +19,20 @@ export class ChatController {
         "[ChatController] completions - req.body:",
         JSON.stringify(req.body, null, 2)
       );
-      const data = await this.chatService.completions(req.body);
+      const userId = req.user?.id;
+
+      if (!userId) {
+        res.status(400).json({
+          message: "O id do usuário é obrigatório",
+        });
+        return;
+      }
+
+      const data = await this.chatService.completions({
+        userId,
+        userMessage: req.body.userMessage,
+      });
+
       const botMessage = data.choices?.[0]?.message?.content;
 
       console.log(
@@ -41,11 +54,7 @@ export class ChatController {
 
       if (handled) {
         const newBotResponse = await this.chatService.completions({
-          history: [
-            ...(req.body.history || []),
-            { role: "assistant", content: botMessage },
-            { role: "user", content: JSON.stringify(result) },
-          ],
+          userId,
           userMessage: "Formate a resposta para o usuário.",
         });
 

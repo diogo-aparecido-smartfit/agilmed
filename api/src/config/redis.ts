@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Configuração do Redis com base nas variáveis de ambiente
 const redisConfig = {
   host: process.env.REDIS_HOST || "localhost",
   port: parseInt(process.env.REDIS_PORT || "6379"),
@@ -11,10 +10,8 @@ const redisConfig = {
   tls: process.env.REDIS_TLS === "true" ? {} : undefined,
 };
 
-// Cliente do Redis
 export const redisClient = new Redis(redisConfig);
 
-// Testar conexão
 redisClient.on("connect", () => {
   console.log("🟢 Redis connected successfully");
 });
@@ -23,7 +20,6 @@ redisClient.on("error", (err) => {
   console.error("🔴 Redis connection error:", err);
 });
 
-// Função para armazenar o contexto da conversa
 export async function storeConversationContext(
   userId: string,
   data: any
@@ -37,16 +33,34 @@ export async function storeConversationContext(
     JSON.stringify(data),
     "EX",
     60 * 60 * 24
-  ); // Expira em 24h
+  );
   console.log(`✅ Contexto salvo para usuário ${userId}`);
 }
-// Função para recuperar o contexto da conversa
+
 export async function getConversationContext(userId: string): Promise<any> {
   const data = await redisClient.get(`chat:context:${userId}`);
   return data ? JSON.parse(data) : null;
 }
 
-// Função para limpar o contexto da conversa
 export async function clearConversationContext(userId: string): Promise<void> {
   await redisClient.del(`chat:context:${userId}`);
+}
+
+export async function addMessageToHistory(
+  userId: number,
+  message: any
+): Promise<void> {
+  console.log(`🔵 Salvando mensagem para usuário ${userId}:`);
+  await redisClient.lpush(`chat:history:${userId}`, JSON.stringify(message));
+  await redisClient.ltrim(`chat:history:${userId}`, 0, 49);
+}
+
+export async function getMessageHistory(userId: number): Promise<any[]> {
+  console.log(`🔵 Pegando mensagens ${userId}:`);
+  const items = await redisClient.lrange(`chat:history:${userId}`, 0, 49);
+  return items.map((item) => JSON.parse(item));
+}
+
+export async function clearMessageHistory(userId: number): Promise<void> {
+  await redisClient.del(`chat:history:${userId}`);
 }
