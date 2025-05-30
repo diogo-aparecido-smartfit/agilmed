@@ -22,6 +22,7 @@ import { OnboardingNavigation } from '@/components/OnboardingNavigation/Onboardi
 import { EmailScreen } from './email-screen/email-screen.page'
 import { IntroScreen } from './intro-screen/intro-screen.page'
 import { PasswordScreen } from './password-screen/password-screen.page'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const TOTAL_STEPS = 4
 
@@ -38,10 +39,21 @@ export default function OnboardingScreen() {
     }, [dispatch])
 
     useEffect(() => {
-        if (hasSeenOnboarding) {
-            router.replace('/(home)')
+        const checkOnboardingStatus = async () => {
+            try {
+                const storedStatus = await AsyncStorage.getItem(
+                    '@agilmed:hasSeenOnboarding'
+                )
+                if (storedStatus === 'true') {
+                    router.replace('/(home)')
+                }
+            } catch (e) {
+                console.error('Failed to check onboarding status:', e)
+            }
         }
-    }, [hasSeenOnboarding])
+
+        checkOnboardingStatus()
+    }, [])
 
     useEffect(() => {
         switch (currentStep) {

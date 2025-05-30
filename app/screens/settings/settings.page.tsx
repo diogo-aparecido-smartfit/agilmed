@@ -25,6 +25,7 @@ export default function SettingsPage() {
         imageUploadError,
         imageUploadLoading,
         handleImageChange,
+        handleClearAllData,
     } = useSettingsController()
     const { user } = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
@@ -134,6 +135,12 @@ export default function SettingsPage() {
                         borderRadius={12}
                         text="Deslogar"
                         onPress={handleLogoff}
+                    />
+                    <Button
+                        variant="destructive"
+                        borderRadius={12}
+                        text="Limpar todos os dados"
+                        onPress={handleClearAllData}
                     />
                 </S.ButtonWrapper>
             </S.ContentContainer>

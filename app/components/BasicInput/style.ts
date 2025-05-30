@@ -6,12 +6,13 @@ export const InputContainer = styled(View)`
     flex: 1;
     flex-direction: column;
     margin-bottom: 12px;
+    position: relative;
 `
 
 export const IconContainer = styled(TouchableOpacity)`
     position: absolute;
     right: 5%;
-    bottom: 30%;
+    top: 50%;
 `
 
 export const InputLabel = styled(Text)`

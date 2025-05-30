@@ -83,6 +83,12 @@ export default function MainNavigator() {
         setShowSplash(false)
     }
 
+    console.log('Navigation state:', {
+        hasSeenOnboarding,
+        isAuthenticated,
+        type: typeof hasSeenOnboarding,
+    })
+
     if (isLoading || showSplash) {
         return (
             <SafeAreaProvider>
@@ -99,7 +105,7 @@ export default function MainNavigator() {
                 headerShown: false,
             }}
         >
-            <Stack.Protected guard={isAuthenticated}>
+            <Stack.Protected guard={isAuthenticated === true}>
                 <Stack.Screen
                     name="(home)"
                     options={{ headerShown: false, headerTitle: 'Home' }}
@@ -117,13 +123,13 @@ export default function MainNavigator() {
                     options={{ headerShown: false, headerTitle: 'VerifyCode' }}
                 />
             </Stack.Protected>
-            <Stack.Protected guard={hasSeenOnboarding !== false}>
+            <Stack.Protected guard={hasSeenOnboarding === true}>
                 <Stack.Screen
                     name="(auth)"
                     options={{ headerShown: false, headerTitle: 'Auth' }}
                 />
             </Stack.Protected>
-            <Stack.Protected guard={hasSeenOnboarding !== true}>
+            <Stack.Protected guard={hasSeenOnboarding === false}>
                 <Stack.Screen
                     name="(onboarding)"
                     options={{ headerShown: false, headerTitle: 'Onboarding' }}

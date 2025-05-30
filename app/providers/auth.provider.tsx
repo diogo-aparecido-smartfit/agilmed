@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    useCallback,
+    createRef,
+} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch } from 'react-redux'
 import { loginSuccess } from '@/store/slices/auth.slice'
@@ -9,12 +16,15 @@ type AuthState = {
     hasSeenOnboarding: boolean | null
     userToken: string | null
     userData: any | null
-    isAuthenticated: boolean // Novo estado para verificar se o usuário está logado
+    isAuthenticated: boolean
 }
 
 type AuthContextType = AuthState & {
     checkAuthState: () => Promise<void>
+    forceRemount: () => void
 }
+
+export const authRef = createRef<{ checkAuthState: () => Promise<void> }>()
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
@@ -22,16 +32,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const dispatch = useDispatch()
+    const [remountKey, setRemountKey] = useState(0)
     const [state, setState] = useState<AuthState>({
         isLoading: true,
         hasSeenOnboarding: null,
         userToken: null,
         userData: null,
-        isAuthenticated: false, // Inicialmente não autenticado
+        isAuthenticated: false,
     })
+
+    const forceRemount = useCallback(() => {
+        setRemountKey((prev) => prev + 1)
+    }, [])
 
     const checkAuthState = async () => {
         try {
+            console.log('checkAuthState executado')
             setState((prev) => ({ ...prev, isLoading: true }))
 
             const hasSeenOnboardingValue = await AsyncStorage.getItem(
@@ -43,7 +59,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             const userDataString = await AsyncStorage.getItem('user')
             const userData = userDataString ? JSON.parse(userDataString) : null
 
-            // Determinar se o usuário está autenticado
             const isAuthenticated = !!(userToken && userData)
 
             if (isAuthenticated) {
@@ -57,7 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                 hasSeenOnboarding,
                 userToken,
                 userData,
-                isAuthenticated, // Atualizar estado de autenticação
+                isAuthenticated,
             })
         } catch (error) {
             console.error('Erro ao verificar estado de autenticação:', error)
@@ -66,18 +81,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                 hasSeenOnboarding: false,
                 userToken: null,
                 userData: null,
-                isAuthenticated: false, // Não autenticado em caso de erro
+                isAuthenticated: false,
             })
         }
     }
+
+    useEffect(() => {
+        authRef.current = { checkAuthState }
+    }, [checkAuthState])
 
     useEffect(() => {
         checkAuthState()
     }, [])
 
     return (
-        <AuthContext.Provider value={{ ...state, checkAuthState }}>
-            {children}
+        <AuthContext.Provider
+            value={{ ...state, checkAuthState, forceRemount }}
+        >
+            <React.Fragment key={remountKey}>{children}</React.Fragment>
         </AuthContext.Provider>
     )
 }

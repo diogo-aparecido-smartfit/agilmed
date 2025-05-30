@@ -20,6 +20,7 @@ export const Theme = {
         white: '#fff',
         black: '#000',
         yellow: '#FEB052',
+        warning: '#F9A825',
     },
     fonts: {
         thin: 'Poppins_100Thin',

@@ -72,23 +72,13 @@ export function PasswordScreen() {
                                     onChangeText={onChange}
                                     value={value}
                                     error={errors.password?.message}
+                                    icon={{
+                                        Icon: showPassword ? EyeSlash : Eye,
+                                        onPress: togglePasswordVisibility,
+                                        size: 18,
+                                        color: Theme.colors.lightGray,
+                                    }}
                                 />
-                                <TouchableOpacity
-                                    style={styles.eyeIcon}
-                                    onPress={togglePasswordVisibility}
-                                >
-                                    {showPassword ? (
-                                        <EyeSlash
-                                            size={20}
-                                            color={Theme.colors.description}
-                                        />
-                                    ) : (
-                                        <Eye
-                                            size={20}
-                                            color={Theme.colors.description}
-                                        />
-                                    )}
-                                </TouchableOpacity>
                             </View>
                         )}
                     />
@@ -126,7 +116,7 @@ const styles = StyleSheet.create({
     eyeIcon: {
         position: 'absolute',
         right: 15,
-        top: 50,
+        top: 38,
         zIndex: 1,
     },
 })

@@ -29,10 +29,12 @@ export function OnboardingNavigation({
     isLoading = false,
 }: OnboardingNavigationProps) {
     const progress = useDerivedValue(() => {
-        return withTiming((currentStep - 1) / totalSteps, {
+        return withTiming(currentStep / totalSteps, {
             duration: 300,
         })
     }, [currentStep, totalSteps])
+
+    console.log(progress)
 
     const animatedCircleStyle = useAnimatedStyle(() => {
         return {
@@ -72,10 +74,7 @@ export function OnboardingNavigation({
                 <NavButton
                     onPress={onNext}
                     disabled={isNextDisabled || isLoading}
-                    style={[
-                        styles.nextButton,
-                        { backgroundColor: buttonBackgroundColor },
-                    ]}
+                    style={[{ backgroundColor: buttonBackgroundColor }]}
                 >
                     {isLoading ? (
                         <LoadingIndicator
@@ -170,8 +169,5 @@ const styles = StyleSheet.create({
     emptyButton: {
         width: 60,
         height: 60,
-    },
-    nextButton: {
-        // Removemos a cor fixa daqui para usar a dinâmica
     },
 })

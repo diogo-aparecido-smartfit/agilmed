@@ -13,6 +13,7 @@ import { loginSuccess } from '../slices/auth.slice'
 import { generateRandomCPF } from '@/utils/utils'
 import { showMessage } from 'react-native-flash-message'
 import { router } from 'expo-router'
+import { authRef } from '@/providers/auth.provider'
 
 function* checkOnboardingStatusSaga(): Generator<Effect> {
     try {
@@ -74,7 +75,15 @@ function* completeOnboardingSaga(): Generator<Effect> {
             type: 'success',
         })
 
-        router.replace('/(home)')
+        yield put({ type: 'auth/checkAuthState' })
+
+        if (authRef.current) {
+            yield call([authRef.current, authRef.current.checkAuthState])
+        }
+
+        setTimeout(() => {
+            router.replace('/(home)')
+        }, 300)
     } catch (error) {
         console.error('Erro ao completar onboarding:', error)
 

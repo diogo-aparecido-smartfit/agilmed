@@ -2,6 +2,8 @@ import { Theme } from '@/config/theme'
 import * as S from './style'
 import { ActivityIndicator, TouchableOpacityProps } from 'react-native'
 
+type ButtonVariant = 'primary' | 'destructive' | 'warning'
+
 interface ButtonProps extends TouchableOpacityProps {
     isLoading?: boolean
     text: string
@@ -10,6 +12,7 @@ interface ButtonProps extends TouchableOpacityProps {
     isSecondary?: boolean
     borderRadius?: number
     width?: string
+    variant?: ButtonVariant
 }
 
 const Button = ({
@@ -19,6 +22,7 @@ const Button = ({
     outlined,
     borderRadius,
     isSecondary,
+    variant = 'primary',
     onPress,
     ...props
 }: ButtonProps) => {
@@ -31,6 +35,7 @@ const Button = ({
                 outlined={outlined}
                 borderRadius={borderRadius}
                 isSecondary={isSecondary}
+                variant={variant}
                 onPress={onPress}
                 {...props}
             >
@@ -40,6 +45,10 @@ const Button = ({
                             ? Theme.colors.mainColor
                             : !outlined
                             ? Theme.colors.white
+                            : variant === 'destructive'
+                            ? Theme.colors.error
+                            : variant === 'warning'
+                            ? Theme.colors.warning
                             : Theme.colors.mainColor
                     }
                 />
@@ -53,10 +62,15 @@ const Button = ({
                 outlined={outlined}
                 borderRadius={borderRadius}
                 isSecondary={isSecondary}
+                variant={variant}
                 onPress={onPress}
                 {...props}
             >
-                <S.ButtonText isSecondary={isSecondary} outlined={outlined}>
+                <S.ButtonText
+                    isSecondary={isSecondary}
+                    outlined={outlined}
+                    variant={variant}
+                >
                     {text}
                 </S.ButtonText>
             </S.ButtonContainer>
