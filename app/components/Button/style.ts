@@ -14,8 +14,15 @@ export const ButtonContainer = styled(TouchableOpacity)<ButtonProps>`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: ${({ backgroundColor, outlined, isSecondary }) =>
-        isSecondary
+    background-color: ${({
+        backgroundColor,
+        outlined,
+        isSecondary,
+        disabled,
+    }) =>
+        disabled
+            ? Theme.colors.lightDescription
+            : isSecondary
             ? Theme.colors.fillColor
             : !outlined
             ? backgroundColor ?? Theme.colors.mainColor

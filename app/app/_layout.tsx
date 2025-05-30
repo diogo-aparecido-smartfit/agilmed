@@ -1,7 +1,7 @@
 import FlashMessage from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFonts } from 'expo-font'
-import { router, Stack } from 'expo-router'
+import { router } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
@@ -35,6 +35,7 @@ import { Provider } from 'react-redux'
 import Main from './main'
 import store from '@/store'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { checkOnboardingStatus } from '@/store/slices/onboarding.slice'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -75,7 +76,7 @@ export default function RootLayout() {
         const token = AsyncStorage.getItem('token')
 
         if (!token) {
-            router.replace('/(auth)/login')
+            router.replace('/onboarding')
         }
     }, [])
 
@@ -91,7 +92,6 @@ export default function RootLayout() {
                     <QueryProvider>
                         <ThemeProvider theme={Theme}>
                             <Main />
-                            <StatusBar style="auto" />
                         </ThemeProvider>
                     </QueryProvider>
                 </PortalProvider>

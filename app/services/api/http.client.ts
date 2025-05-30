@@ -2,8 +2,6 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import store from '@/store'
 import { logoffRequest } from '@/store/slices/auth.slice'
-import { router } from 'expo-router'
-import { showMessage } from 'react-native-flash-message'
 
 const httpClient = axios.create({
     baseURL: 'https://agilmed-api.azurewebsites.net/api',
@@ -34,11 +32,6 @@ httpClient.interceptors.response.use(
     async (error) => {
         if (error.response?.status === 401) {
             store.dispatch(logoffRequest())
-            router.replace('/(auth)/login')
-            showMessage({
-                message: 'Sessão expirada, faça login novamente.',
-                type: 'warning',
-            })
         }
         console.error(
             '[HttpClient] Erro na requisição:',

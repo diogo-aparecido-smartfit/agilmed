@@ -1,60 +1,68 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { isValid, format, parse } from 'date-fns'
 
-export const convertToISODate = (dateStr: string) => {
-  // Extrai o dia, mês e ano da string DDMMYYYY
-  const day = dateStr.substring(0, 2); // Pegando os 2 primeiros caracteres (dia)
-  const month = dateStr.substring(2, 4); // Pegando os 2 caracteres do meio (mês)
-  const year = dateStr.substring(4, 8); // Pegando os 4 últimos caracteres (ano)
+export function convertToISODate(dateString: string) {
+    const parsedDate = parse(dateString, 'dd/MM/yyyy', new Date())
 
-  // Monta a data no formato YYYY-MM-DD
-  const formattedDate = `${year}-${month}-${day}`;
+    if (isValid(parsedDate)) {
+        return format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    }
 
-  // Converte para um objeto Date e retorna a data no formato ISO
-  const isoDate = new Date(formattedDate).toISOString();
-
-  return isoDate;
-};
+    return ''
+}
 
 export function getFirstAndLastName(fullName: string): string {
-  if (!fullName || typeof fullName !== "string") {
-    return "";
-  }
+    if (!fullName || typeof fullName !== 'string') {
+        return ''
+    }
 
-  const nameParts = fullName.trim().split(" ");
+    const nameParts = fullName.trim().split(' ')
 
-  if (nameParts.length === 1) {
-    return nameParts[0];
-  }
+    if (nameParts.length === 1) {
+        return nameParts[0]
+    }
 
-  return `${nameParts[0]} ${nameParts[1]}`;
+    return `${nameParts[0]} ${nameParts[1]}`
 }
 
 export const normalizeHeaders = (
-  headers?: HeadersInit
+    headers?: HeadersInit
 ): Record<string, string> | undefined => {
-  if (!headers) return undefined;
+    if (!headers) return undefined
 
-  if (headers instanceof Headers) {
-    const result: Record<string, string> = {};
-    headers.forEach((value: string, key: string | number) => {
-      result[key] = value;
-    });
-    return result;
-  }
+    if (headers instanceof Headers) {
+        const result: Record<string, string> = {}
+        headers.forEach((value: string, key: string | number) => {
+            result[key] = value
+        })
+        return result
+    }
 
-  if (Array.isArray(headers)) {
-    return headers.reduce((acc, [key, value]) => {
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>);
-  }
+    if (Array.isArray(headers)) {
+        return headers.reduce((acc, [key, value]) => {
+            acc[key] = value
+            return acc
+        }, {} as Record<string, string>)
+    }
 
-  return headers as Record<string, string>;
-};
+    return headers as Record<string, string>
+}
 
 export const clearStorage = () => {
-  return Promise.all([
-    AsyncStorage.removeItem("token"),
-    AsyncStorage.removeItem("user"),
-  ]);
-};
+    return Promise.all([
+        AsyncStorage.removeItem('token'),
+        AsyncStorage.removeItem('user'),
+    ])
+}
+
+export function generateRandomCPF() {
+    const generateRandomDigits = (length: number) => {
+        let result = ''
+        for (let i = 0; i < length; i++) {
+            result += Math.floor(Math.random() * 10).toString()
+        }
+        return result
+    }
+
+    return generateRandomDigits(11)
+}

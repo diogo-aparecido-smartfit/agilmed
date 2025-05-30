@@ -11,6 +11,7 @@ interface AuthState {
     user: IUserData | null
     isLoading: boolean
     error?: string
+    codeVerificationSuccess: boolean
 }
 
 const initialState: AuthState = {
@@ -18,6 +19,7 @@ const initialState: AuthState = {
     user: null,
     isLoading: false,
     error: undefined,
+    codeVerificationSuccess: false,
 }
 
 const authSlice = createSlice({
@@ -80,6 +82,7 @@ const authSlice = createSlice({
         ) => {
             state.isLoading = true
             state.error = undefined
+            state.codeVerificationSuccess = false
         },
         verifyCodeSuccess: (
             state,
@@ -88,10 +91,15 @@ const authSlice = createSlice({
             state.token = action.payload.token
             state.user = action.payload.user
             state.isLoading = false
+            state.codeVerificationSuccess = true
         },
         verifyCodeFailure: (state, action: PayloadAction<string>) => {
             state.isLoading = false
             state.error = action.payload
+            state.codeVerificationSuccess = false
+        },
+        resetCodeVerification: (state) => {
+            state.codeVerificationSuccess = false
         },
         logoffRequest(state) {
             state.token = null
@@ -121,6 +129,7 @@ export const {
     verifyCodeSuccess,
     logoffRequest,
     updateUser,
+    resetCodeVerification,
 } = authSlice.actions
 
 export default authSlice.reducer

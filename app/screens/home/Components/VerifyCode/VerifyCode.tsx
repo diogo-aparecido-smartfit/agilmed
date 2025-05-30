@@ -5,11 +5,21 @@ import Button from '@/components/Button/Button'
 import { router, useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { Controller } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import { useVerifyCodeController } from '@/screens/auth/verifyCode/verifyCode.controller'
+import BottomSheet from '@gorhom/bottom-sheet'
+import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types'
+import { resetCodeVerification } from '@/store/slices/auth.slice'
+import { useCallback, useEffect } from 'react'
+import { GestureResponderEvent } from 'react-native'
 
-export function VerifyCode() {
+interface VerifyCodeProps {
+    bottomSheetRef: React.RefObject<BottomSheetMethods | null>
+}
+
+export function VerifyCode({ bottomSheetRef }: VerifyCodeProps) {
+    const dispatch = useDispatch()
     const {
         handleSubmit,
         onSubmit,
@@ -18,11 +28,29 @@ export function VerifyCode() {
         formValues,
         secondsLeft,
     } = useVerifyCodeController()
-    const { user } = useSelector((state: RootState) => state.auth)
-    const params = useLocalSearchParams()
+    const { user, codeVerificationSuccess } = useSelector(
+        (state: RootState) => state.auth
+    )
 
-    const userEmail = params.email || user?.email
-    const isResetPassword: boolean = params.resetPassword === 'true'
+    const userEmail = user?.email || ''
+
+    useEffect(() => {
+        if (codeVerificationSuccess) {
+            console.log('caiu aqui dentro')
+            bottomSheetRef.current?.close()
+            dispatch(resetCodeVerification())
+        }
+    }, [codeVerificationSuccess, bottomSheetRef])
+
+    const handleVerifyCode = useCallback(async (e: GestureResponderEvent) => {
+        console.log(formValues.code)
+        await handleSubmit(() =>
+            onSubmit({
+                code: formValues.code,
+                document: userEmail,
+            })
+        )()
+    }, [])
 
     return (
         <S.ContentContainer>
@@ -54,36 +82,13 @@ export function VerifyCode() {
                 </Text>
                 <Button
                     disabled={formValues.code.length !== 4}
-                    onPress={() =>
-                        handleSubmit(() =>
-                            onSubmit({
-                                code: formValues.code,
-                                document: params.email as string,
-                                typed_password: isResetPassword
-                                    ? (params.password as string)
-                                    : undefined,
-                            })
-                        )()
-                    }
+                    onPress={(e) => {
+                        e?.preventDefault?.()
+                        handleVerifyCode(e)
+                    }}
                     isLoading={isLoading}
                     text="Verificar"
                 />
-                {isResetPassword && (
-                    <S.RememberedPassword
-                        onPress={() => router.replace('/(auth)/login')}
-                    >
-                        <Text
-                            fontSize="base"
-                            color="description"
-                            textAlign="center"
-                        >
-                            Lembrou sua senha?{' '}
-                            <Text fontWeight="700" color="black">
-                                Entre agora mesmo
-                            </Text>
-                        </Text>
-                    </S.RememberedPassword>
-                )}
             </S.CodeContainer>
         </S.ContentContainer>
     )

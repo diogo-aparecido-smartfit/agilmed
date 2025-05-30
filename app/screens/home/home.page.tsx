@@ -68,9 +68,11 @@ export default function HomePage() {
                         />
                     )}
                 >
-                    <BottomSheetView>
-                        <VerifyCode />
-                    </BottomSheetView>
+                    {!user?.isVerified && (
+                        <BottomSheetView>
+                            <VerifyCode bottomSheetRef={bottomSheetRef} />
+                        </BottomSheetView>
+                    )}
                 </BottomSheet>
             </Portal>
             <S.Container>

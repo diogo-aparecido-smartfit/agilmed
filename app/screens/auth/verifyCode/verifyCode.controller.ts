@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 export function useVerifyCodeController() {
     const [secondsLeft, setSecondsLeft] = useState<number>(60)
     const dispatch = useDispatch()
-    const { isLoading } = useSelector((state: RootState) => state.auth)
+    const { isLoading, error } = useSelector((state: RootState) => state.auth)
 
     const {
         handleSubmit,
@@ -34,8 +34,6 @@ export function useVerifyCodeController() {
         code: string
         typed_password?: string
     }) => {
-        console.log('code: ', code)
-
         dispatch(
             verifyCodeRequest({
                 code: code,

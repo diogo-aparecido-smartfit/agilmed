@@ -62,11 +62,6 @@ function* registerSaga(action: RegisterAction): Generator<Effect> {
         const data = yield call(createUser, action.payload)
         const response = <{ token: string; user: IUserData }>data
 
-        console.log(
-            JSON.stringify('--------------- resposta --------------------')
-        )
-        console.log(JSON.stringify(response, null, 2))
-
         showMessage({
             message:
                 'Código de confirmação enviado. Por favor, verifique seu email.',
@@ -152,6 +147,11 @@ function* verifyCodeSaga(action: VerifyCodeAction): Generator<Effect> {
         yield put(
             verifyCodeSuccess({ token: response.token, user: response.user })
         )
+
+        showMessage({
+            message: 'Código confirmado com sucesso.',
+            type: 'success',
+        })
 
         router.replace('/(home)')
     } catch (error) {
