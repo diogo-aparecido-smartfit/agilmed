@@ -91,8 +91,8 @@ export class LangChainService {
 
       const toolResults = await Promise.all(
         response.tool_calls.map(async (toolCall: any) => {
-          const toolName = toolCall.function.name;
-          const args = JSON.parse(toolCall.function.arguments);
+          const toolName = toolCall.name;
+          const args = toolCall.args;
 
           const result = await this.toolService.executeTool(toolName, args);
 

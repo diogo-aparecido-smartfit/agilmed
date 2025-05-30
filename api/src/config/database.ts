@@ -1,3 +1,4 @@
+import { setupAssociations } from "../models/associations";
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 
@@ -44,6 +45,7 @@ export const connectDB = async () => {
   console.log("🕐 [DATABASE] Connecting...");
   try {
     await sequelize.authenticate();
+    setupAssociations();
     await sequelize.sync();
     console.log("🚀 [DATABASE] Database connected successfully");
     return Promise.resolve();
