@@ -3,16 +3,19 @@ import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
 import { PatientService } from "../services/patient.service";
 import { User } from "../models/user.model";
+import { DoctorService } from "../services/doctor.service";
 
 export class AuthController {
   private authService: AuthService;
   private userService: UserService;
   private patientService: PatientService;
+  private doctorService: DoctorService;
 
   constructor() {
     this.authService = new AuthService();
     this.userService = new UserService();
     this.patientService = new PatientService();
+    this.doctorService = new DoctorService();
   }
 
   public async authenticate(req: Request, res: Response): Promise<void> {
@@ -32,26 +35,14 @@ export class AuthController {
         return;
       }
 
-      // Buscar usuário pelo email
-      let findedUser = await this.userService.getUserByEmailOrCpf(identifier);
+      let user = await this.userService.getUserByEmailOrCpf(identifier);
 
-      // Se não encontrou pelo email, tenta buscar por CPF
-      if (!findedUser) {
-        // Neste ponto sabemos que a autenticação funcionou,
-        // então o usuário deve existir, mas podemos ter buscado por CPF
-        const decoded = this.authService.verifyJwtToken(token) as any;
-        findedUser = await this.userService.getUserById(decoded.id);
-      }
-
-      if (!findedUser) {
+      if (!user) {
         res.status(401).json({ message: "Credenciais inválidas." });
         return;
       }
 
-      // Obter informações completas do usuário (incluindo dados especializados)
-      const completeUserInfo = await this.authService.getUserCompleteInfo(
-        findedUser
-      );
+      const completeUserInfo = await this.authService.getUserCompleteInfo(user);
 
       res.json({ token, user: completeUserInfo });
     } catch (error) {
@@ -59,7 +50,6 @@ export class AuthController {
       res.status(500).json({ message: "Erro interno do servidor." });
     }
   }
-
   public async register(req: Request, res: Response): Promise<void> {
     try {
       const {
@@ -77,11 +67,21 @@ export class AuthController {
         allergies,
         medical_history,
         role,
+        specialty,
+        crm,
+        bio,
+        available_hours,
       } = req.body;
 
-      const existingUser = await User.findOne({ where: { email } });
-      if (existingUser) {
+      const existingEmail = await User.findOne({ where: { email } });
+      if (existingEmail) {
         res.status(400).json({ message: "Email já cadastrado." });
+        return;
+      }
+
+      const existingCpf = await User.findOne({ where: { cpf } });
+      if (existingCpf) {
+        res.status(400).json({ message: "CPF já cadastrado." });
         return;
       }
 
@@ -137,19 +137,30 @@ export class AuthController {
             patient,
           },
         });
-      } else {
-        // Para outros tipos de usuários (como admin) que não têm tabelas específicas
-        // ou para quando implementar o registro de médicos
-        const user = await this.userService.createUser(userData);
+      } else if (role === "doctor" && this.doctorService) {
+        const doctorData = {
+          birthdate,
+          address,
+          city,
+          state,
+          gender,
+          specialty,
+          crm,
+          bio,
+          available_hours,
+        };
 
-        // Enviar e-mail de verificação
+        const { user, doctor } = await this.doctorService.createDoctor({
+          ...userData,
+          ...doctorData,
+        });
+
         await this.authService.sendVerificationEmail(
           email,
           verificationCode,
           user.full_name.split(" ")[0]
         );
 
-        // Gerar token
         const token = this.authService.generateJwtToken(
           user.id,
           user.full_name,
@@ -157,11 +168,35 @@ export class AuthController {
           user.role
         );
 
-        // Remover senha
+        const { password: userPassword, ...userWithoutPassword } =
+          user.dataValues;
+
+        res.status(201).json({
+          token,
+          user: {
+            ...userWithoutPassword,
+            doctor,
+          },
+        });
+      } else {
+        const user = await this.userService.createUser(userData);
+
+        await this.authService.sendVerificationEmail(
+          email,
+          verificationCode,
+          user.full_name.split(" ")[0]
+        );
+
+        const token = this.authService.generateJwtToken(
+          user.id,
+          user.full_name,
+          user.email,
+          user.role
+        );
+
         const { password: userPassword, ...userWithoutPassword } =
           user.toJSON();
 
-        // Retornar resposta
         res.status(201).json({
           token,
           user: userWithoutPassword,
@@ -184,10 +219,13 @@ export class AuthController {
         return;
       }
 
-      // Buscar usuário pelo email
       let existingUser = await this.userService.getUserByEmailOrCpf(document);
 
-      // Se não encontrou, buscar por CPF nas tabelas especializadas
+      if (!existingUser) {
+        res.status(400).json({ message: "Usuário não encontrado!" });
+        return;
+      }
+
       if (!existingUser) {
         // Buscar paciente pelo CPF
         const patientByCpf = await this.patientService.getPatientByCpf(
@@ -260,7 +298,6 @@ export class AuthController {
         findedUser.role
       );
 
-      // Obter informações completas do usuário
       const completeUserInfo = await this.authService.getUserCompleteInfo(
         findedUser
       );

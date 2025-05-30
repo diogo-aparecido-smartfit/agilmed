@@ -53,7 +53,7 @@ export class UserRepository {
   public async findByEmailOrCpf(identifier: string): Promise<User | null> {
     return User.findOne({
       where: {
-        [Op.or]: [{ email: identifier }],
+        [Op.or]: [{ email: identifier }, { cpf: identifier }],
       },
     });
   }

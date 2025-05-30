@@ -24,58 +24,43 @@ export class AuthService {
     identifier: string,
     password: string
   ): Promise<string | null> {
-    const user = await this.userRepository.findByEmailOrCpf(identifier);
+    try {
+      console.log(`Tentando autenticar com identificador: ${identifier}`);
 
-    if (!user) {
-      const patientByCpf = await this.patientRepository.getPatientByCpf(
-        identifier
-      );
-      const doctorByCpf = await this.doctorRepository.getDoctorByCpf(
-        identifier
-      );
+      // Buscar usuário diretamente pelo email ou CPF na tabela users
+      const user = await this.userRepository.findByEmailOrCpf(identifier);
 
-      let userByRole = null;
-      if (patientByCpf) {
-        userByRole = await this.userRepository.getUserById(
-          patientByCpf.user_id
+      if (!user) {
+        console.log(
+          `Usuário não encontrado para o identificador: ${identifier}`
         );
-      } else if (doctorByCpf) {
-        userByRole = await this.userRepository.getUserById(doctorByCpf.user_id);
-      }
-
-      if (!userByRole) {
         return null;
       }
 
-      const isPasswordValid = await bcrypt.compare(
-        password,
-        userByRole.password
-      );
+      console.log(`Usuário encontrado: ${user.full_name} (ID: ${user.id})`);
+
+      // Verificar senha
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
       if (!isPasswordValid) {
+        console.log("Senha inválida");
         return null;
       }
 
-      return this.generateJwtToken(
-        userByRole.id,
-        userByRole.full_name,
-        userByRole.email,
-        userByRole.role
-      );
-    }
+      console.log("Autenticação bem-sucedida, gerando token");
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
+      // Gerar token JWT
+      return this.generateJwtToken(
+        user.id,
+        user.full_name,
+        user.email,
+        user.role
+      );
+    } catch (error) {
+      console.error("Erro durante autenticação:", error);
       return null;
     }
-
-    return this.generateJwtToken(
-      user.id,
-      user.full_name,
-      user.email,
-      user.role
-    );
   }
-
   public generateVerificationToken(): string {
     return Math.floor(1000 + Math.random() * 9000).toString();
   }
