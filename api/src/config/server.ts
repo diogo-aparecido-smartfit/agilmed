@@ -8,6 +8,8 @@ import { setupSwagger } from "./swagger";
 import appointmentRouter from "../routes/appointment.routes";
 import placesRouter from "../routes/places.routes";
 import chatRouter from "../routes/chat.routes";
+import patientRouter from "../routes/patient.routes";
+import doctorRouter from "../routes/doctor.routes";
 
 export class App {
   public app: Application;
@@ -34,6 +36,8 @@ export class App {
 
     this.app.use("/api/places", placesRouter);
     this.app.use("/api/user", userRouter);
+    this.app.use("/api/patients", patientRouter);
+    this.app.use("/api/doctors", doctorRouter);
     this.app.use("/api/auth", authRouter);
     this.app.use("/api/appointments", appointmentRouter);
     this.app.use("/api/chat", chatRouter);
