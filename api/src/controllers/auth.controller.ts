@@ -231,7 +231,7 @@ export class AuthController {
       existingUser.verificationCode = verificationCode;
       await existingUser.save();
 
-      await this.authService.sendVerificationEmail(
+      this.authService.sendVerificationEmail(
         existingUser.email,
         verificationCode,
         existingUser.full_name.split(" ")[0],

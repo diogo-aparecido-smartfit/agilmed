@@ -65,16 +65,32 @@ export class PatientRepository {
 
   async getAllPatients(filters?: any): Promise<Patient[]> {
     const where: any = {};
+    const userWhere: any = {};
 
     if (filters?.name) {
-      where["$user.full_name$"] = {
-        [Op.iLike]: `%${filters.name}%`,
+      userWhere.full_name = {
+        [Op.like]: `%${filters.name}%`,
       };
+    }
+
+    if (filters?.cpf) {
+      userWhere.cpf = filters.cpf;
+    }
+
+    const includeOptions: any = {
+      model: User,
+      as: "user",
+    };
+
+    if (Object.keys(userWhere).length > 0) {
+      includeOptions.where = userWhere;
     }
 
     return Patient.findAll({
       where,
-      include: [{ model: User, as: "user" }],
+      include: [includeOptions],
+      nest: true,
+      raw: false,
     });
   }
 

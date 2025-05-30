@@ -5,13 +5,11 @@ import { authenticateJWT } from "../middlewares/auth.middleware";
 const patientRouter = Router();
 const patientController = new PatientController();
 
-// Rotas públicas
 patientRouter.post(
   "/",
   patientController.createPatient.bind(patientController)
 );
 
-// Rotas protegidas
 patientRouter.get(
   "/",
   authenticateJWT,

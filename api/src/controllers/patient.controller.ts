@@ -88,13 +88,13 @@ export class PatientController {
       const patients = await this.patientService.getAllPatients(filters);
 
       const sanitizedPatients = patients.map((patient) => {
-        if (patient.user) {
-          const { password, ...userWithoutPassword } = patient.user.dataValues;
-          patient = Object.assign({}, patient, {
-            user: userWithoutPassword,
-          }) as Patient;
+        const patientData = patient.get({ plain: true });
+
+        if ((patientData as any).user && (patientData as any).user.password) {
+          delete (patientData as any).user.password;
         }
-        return patient;
+
+        return patientData;
       });
 
       res.json(sanitizedPatients);

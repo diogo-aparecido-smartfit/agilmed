@@ -40,7 +40,7 @@ export class App {
     this.app.use("/api/doctors", doctorRouter);
     this.app.use("/api/auth", authRouter);
     this.app.use("/api/appointments", appointmentRouter);
-    this.app.use("/api/chat", chatRouter);
+    this.app.use("/api/bot", chatRouter);
 
     setupSwagger(this.app);
   }

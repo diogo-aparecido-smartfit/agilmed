@@ -1,7 +1,7 @@
 import User from "./user.model";
 import Patient from "./patient.model";
 import Doctor from "./doctor.model";
-import { Appointment } from "./appointment.model";
+import Appointment from "./appointment.model";
 
 export function setupAssociations() {
   User.hasOne(Patient, { foreignKey: "user_id", as: "patient" });

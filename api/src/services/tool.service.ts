@@ -122,8 +122,6 @@ export class ToolService {
         patient_id,
         appointment_date,
         reason,
-        patient_name: "",
-        doctor_name: "",
       });
 
       return {

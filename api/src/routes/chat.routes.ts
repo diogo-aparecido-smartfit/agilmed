@@ -6,8 +6,8 @@ import { debugMiddleware } from "../middlewares/debug.middleware";
 const router = Router();
 const chatController = new ChatController();
 
-router.use("/completions", debugMiddleware);
-router.post("/completions", authenticateJWT, (req, res) => {
+router.use("/message", debugMiddleware);
+router.post("/message", authenticateJWT, (req, res) => {
   chatController.completions(req, res);
 });
 
