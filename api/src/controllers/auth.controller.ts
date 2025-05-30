@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
+import { PatientService } from "../services/patient.service";
 import { User } from "../models/user.model";
 
 export class AuthController {
   private authService: AuthService;
   private userService: UserService;
+  private patientService: PatientService;
 
   constructor() {
     this.authService = new AuthService();
     this.userService = new UserService();
+    this.patientService = new PatientService();
   }
 
   public async authenticate(req: Request, res: Response): Promise<void> {
@@ -29,16 +32,28 @@ export class AuthController {
         return;
       }
 
-      const findedUser = await this.userService.getUserByEmailOrCpf(identifier);
+      // Buscar usuário pelo email
+      let findedUser = await this.userService.getUserByEmailOrCpf(identifier);
+
+      // Se não encontrou pelo email, tenta buscar por CPF
+      if (!findedUser) {
+        // Neste ponto sabemos que a autenticação funcionou,
+        // então o usuário deve existir, mas podemos ter buscado por CPF
+        const decoded = this.authService.verifyJwtToken(token) as any;
+        findedUser = await this.userService.getUserById(decoded.id);
+      }
 
       if (!findedUser) {
         res.status(401).json({ message: "Credenciais inválidas." });
         return;
       }
 
-      const { password: userPassword, ...user } = findedUser.dataValues;
+      // Obter informações completas do usuário (incluindo dados especializados)
+      const completeUserInfo = await this.authService.getUserCompleteInfo(
+        findedUser
+      );
 
-      res.json({ token, user });
+      res.json({ token, user: completeUserInfo });
     } catch (error) {
       console.error("Erro na autenticação:", error);
       res.status(500).json({ message: "Erro interno do servidor." });
@@ -49,67 +64,119 @@ export class AuthController {
     try {
       const {
         full_name,
-        birthdate,
-        cpf,
         email,
         password,
+        phone,
+        birthdate,
+        cpf,
         address,
         city,
         state,
-        phone,
         gender,
-        allergies,
         blood_type,
+        allergies,
         medical_history,
         role,
       } = req.body;
 
+      // Verificar se o email já está cadastrado
       const existingUser = await User.findOne({ where: { email } });
-
       if (existingUser) {
         res.status(400).json({ message: "Email já cadastrado." });
         return;
       }
 
+      // Gerar código de verificação
       const verificationCode = this.authService.generateVerificationToken();
 
-      const user = await this.userService.createUser({
+      // Dados do usuário base
+      const userData = {
         full_name,
-        birthdate,
-        cpf,
         email,
         password,
-        address,
-        city,
-        state,
         phone,
-        gender,
         verificationCode,
-        allergies,
-        blood_type,
-        medical_history,
         role: role || "patient",
-      });
+      };
 
-      this.authService.sendVerificationEmail(
-        email,
-        verificationCode,
-        user.full_name.split(" ")[0]
-      );
+      // Dados específicos do paciente (se for paciente)
+      if (!role || role === "patient") {
+        // Dados do paciente
+        const patientData = {
+          birthdate,
+          cpf,
+          address,
+          city,
+          state,
+          gender,
+          blood_type,
+          allergies,
+          medical_history,
+        };
 
-      const token = this.authService.generateJwtToken(
-        user.id,
-        user.full_name,
-        user.email,
-        user.role
-      );
+        // Criar paciente
+        const { user, patient } = await this.patientService.createPatient({
+          ...userData,
+          ...patientData,
+        });
 
-      const { password: userPassword, ...userData } = user.dataValues;
+        // Enviar e-mail de verificação
+        await this.authService.sendVerificationEmail(
+          email,
+          verificationCode,
+          user.full_name.split(" ")[0]
+        );
 
-      res.status(201).json({
-        token,
-        user: userData,
-      });
+        // Gerar token
+        const token = this.authService.generateJwtToken(
+          user.id,
+          user.full_name,
+          user.email,
+          user.role
+        );
+
+        // Remover senha
+        const { password: userPassword, ...userWithoutPassword } =
+          user.dataValues;
+
+        // Retornar resposta
+        res.status(201).json({
+          token,
+          user: {
+            ...userWithoutPassword,
+            patient,
+          },
+        });
+      } else {
+        // Para outros tipos de usuários (como admin) que não têm tabelas específicas
+        // ou para quando implementar o registro de médicos
+        const user = await this.userService.createUser(userData);
+
+        // Enviar e-mail de verificação
+        await this.authService.sendVerificationEmail(
+          email,
+          verificationCode,
+          user.full_name.split(" ")[0]
+        );
+
+        // Gerar token
+        const token = this.authService.generateJwtToken(
+          user.id,
+          user.full_name,
+          user.email,
+          user.role
+        );
+
+        // Remover senha
+        const { password: userPassword, ...userWithoutPassword } =
+          user.toJSON();
+
+        // Retornar resposta
+        res.status(201).json({
+          token,
+          user: userWithoutPassword,
+        });
+      }
     } catch (error) {
       console.error("Erro ao registrar usuário:", error);
       res
@@ -122,22 +189,40 @@ export class AuthController {
     try {
       const { document, typed_password, password_confirm } = req.body;
 
-      const existingUser = await this.userService.getUserByEmailOrCpf(document);
+      if (typed_password !== password_confirm) {
+        res.status(400).json({ message: "As senhas não são iguais!" });
+        return;
+      }
+
+      // Buscar usuário pelo email
+      let existingUser = await this.userService.getUserByEmailOrCpf(document);
+
+      // Se não encontrou, buscar por CPF nas tabelas especializadas
+      if (!existingUser) {
+        // Buscar paciente pelo CPF
+        const patientByCpf = await this.patientService.getPatientByCpf(
+          document
+        );
+        if (patientByCpf && patientByCpf.user) {
+          existingUser = patientByCpf.user;
+        }
+
+        // Ou verificar se for implementado, buscar médico pelo CPF
+        // const doctorByCpf = await this.doctorService.getDoctorByCpf(document);
+        // if (doctorByCpf && doctorByCpf.user) {
+        //   existingUser = doctorByCpf.user;
+        // }
+      }
 
       if (!existingUser) {
         res.status(400).json({ message: "Usuário não encontrado!" });
         return;
       }
 
-      if (typed_password !== password_confirm) {
-        res.status(400).json({ message: "As senhas não são iguais!" });
-        return;
-      }
-
       const verificationCode = this.authService.generateVerificationToken();
 
       existingUser.verificationCode = verificationCode;
-      existingUser.save();
+      await existingUser.save();
 
       await this.authService.sendVerificationEmail(
         existingUser.email,
@@ -153,7 +238,7 @@ export class AuthController {
     } catch (error) {
       console.error("Erro ao resetar senha do usuário:", error);
       res.status(500).json({
-        error: "Erro ao resetar senha do usuário usuário. Tente novamente.",
+        error: "Erro ao resetar senha do usuário. Tente novamente.",
       });
     }
   }
@@ -185,11 +270,18 @@ export class AuthController {
         findedUser.role
       );
 
-      const { password, ...user } = findedUser.dataValues;
+      // Obter informações completas do usuário
+      const completeUserInfo = await this.authService.getUserCompleteInfo(
+        findedUser
+      );
 
       res
         .status(200)
-        .json({ message: "Verificação bem-sucedida.", token, user });
+        .json({
+          message: "Verificação bem-sucedida.",
+          token,
+          user: completeUserInfo,
+        });
       return;
     } catch (error) {
       res.status(500).json({ message: "Erro ao verificar código." });

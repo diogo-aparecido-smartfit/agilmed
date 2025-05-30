@@ -70,6 +70,4 @@ Patient.init(
   }
 );
 
-Patient.belongsTo(User, { foreignKey: "user_id", as: "user" });
-
 export default Patient;

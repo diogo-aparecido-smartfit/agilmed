@@ -1,11 +1,14 @@
 import { PatientRepository } from "../repositories/patient.repository";
-import bcrypt from "bcryptjs";
+import { UserRepository } from "../repositories/user.repository";
+import { removeEmptyFields } from "../utils";
 
 export class PatientService {
   private patientRepository: PatientRepository;
+  private userRepository: UserRepository;
 
   constructor() {
     this.patientRepository = new PatientRepository();
+    this.userRepository = new UserRepository();
   }
 
   async createPatient(data: any) {
@@ -50,21 +53,21 @@ export class PatientService {
     ) {
       const patient = await this.patientRepository.getPatientById(id);
 
-      if (patient && patient.user) {
-        const userData = {
+      if (patient && patient.user_id) {
+        const userData = removeEmptyFields({
           full_name: data.full_name,
           email: data.email,
           phone: data.phone,
           profile_picture_url: data.profile_picture_url,
-        };
+        });
 
-        // Aqui você precisaria de um userRepository
-        // await userRepository.updateUser(patient.user_id, userData);
+        if (Object.keys(userData).length > 0) {
+          await this.userRepository.updateUser(patient.user_id, userData);
+        }
       }
     }
 
-    // Atualizar dados específicos do paciente
-    const patientData = {
+    const patientData = removeEmptyFields({
       birthdate: data.birthdate,
       cpf: data.cpf,
       address: data.address,
@@ -74,9 +77,13 @@ export class PatientService {
       blood_type: data.blood_type,
       allergies: data.allergies,
       medical_history: data.medical_history,
-    };
+    });
 
-    return this.patientRepository.updatePatient(id, patientData);
+    if (Object.keys(patientData).length > 0) {
+      return this.patientRepository.updatePatient(id, patientData);
+    }
+
+    return this.patientRepository.getPatientById(id);
   }
 
   async getAllPatients(filters?: any) {
@@ -85,5 +92,9 @@ export class PatientService {
 
   async deletePatient(id: number) {
     return this.patientRepository.deletePatient(id);
+  }
+
+  async getPatientByCpf(cpf: string) {
+    return this.patientRepository.getPatientByCpf(cpf);
   }
 }

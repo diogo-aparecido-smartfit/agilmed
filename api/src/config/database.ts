@@ -1,4 +1,3 @@
-import { setupAssociations } from "../models/associations";
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 
@@ -11,6 +10,7 @@ export const sequelize = new Sequelize(
   {
     host: process.env.DATABASE_URL as string,
     dialect: "mssql",
+    // logging: process.env.NODE_ENV === "development",
     logging: true,
     define: {
       underscored: true,
@@ -18,6 +18,7 @@ export const sequelize = new Sequelize(
     dialectOptions: {
       options: {
         encrypt: true,
+        requestTimeout: 30000,
       },
       ssl: {
         require: true,
@@ -45,12 +46,21 @@ export const connectDB = async () => {
   console.log("🕐 [DATABASE] Connecting...");
   try {
     await sequelize.authenticate();
+    console.log("✅ [DATABASE] Connection established successfully");
+
+    const { setupAssociations } = await import("../models/associations");
     setupAssociations();
-    await sequelize.sync();
-    console.log("🚀 [DATABASE] Database connected successfully");
+    console.log("✅ [DATABASE] Model associations configured successfully");
+
+    // if (process.env.NODE_ENV === "development") {
+    //   await sequelize.sync({ alter: true });
+    //   console.log("✅ [DATABASE] Models synchronized with database");
+    // }
+
+    console.log("🚀 [DATABASE] Database ready");
     return Promise.resolve();
   } catch (error) {
     console.error("🚨 [DATABASE] Unable to connect to the database:", error);
-    return Promise.reject();
+    return Promise.reject(error);
   }
 };

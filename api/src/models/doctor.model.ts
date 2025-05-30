@@ -73,6 +73,4 @@ Doctor.init(
   }
 );
 
-Doctor.belongsTo(User, { foreignKey: "user_id", as: "user" });
-
 export default Doctor;

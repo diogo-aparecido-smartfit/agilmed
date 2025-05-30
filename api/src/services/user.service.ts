@@ -1,5 +1,4 @@
 import { containerClient } from "../config/azure";
-import { sequelize } from "../config/database";
 import { User, UserCreationAttributes } from "../models/user.model";
 import { UserRepository } from "../repositories/user.repository";
 import { formatFileName } from "../utils";
@@ -28,29 +27,54 @@ export class UserService {
     data: Partial<User>,
     file?: Express.Multer.File
   ) {
-    if (file) {
+    try {
+      if (file) {
+        const user = await this.userRepository.getUserById(id);
+
+        if (user?.profile_picture_url) {
+          await this.deleteProfileImageFromAzure(user.profile_picture_url);
+        }
+
+        const profileImageUrl = await this.uploadProfileImageToAzure(file);
+        data.profile_picture_url = profileImageUrl;
+      }
+
+      const updatedUser = await this.userRepository.updateUser(id, data);
+
+      if (updatedUser) {
+        const { password, ...userWithoutPassword } = updatedUser.toJSON();
+        return userWithoutPassword;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Erro ao atualizar usuário:", error);
+      throw error;
+    }
+  }
+
+  async deleteUser(id: number) {
+    try {
       const user = await this.userRepository.getUserById(id);
 
       if (user?.profile_picture_url) {
         await this.deleteProfileImageFromAzure(user.profile_picture_url);
       }
 
-      const profileImageUrl = await this.uploadProfileImageToAzure(file);
-
-      data.profile_picture_url = profileImageUrl;
-
-      console.log(JSON.stringify(data));
+      return await this.userRepository.deleteUser(id);
+    } catch (error) {
+      console.error("Erro ao excluir usuário:", error);
+      throw error;
     }
-
-    return this.userRepository.updateUser(id, data);
-  }
-
-  async deleteUser(id: number) {
-    await this.userRepository.deleteUser(id);
   }
 
   async getAllUsers(filters?: any) {
-    return this.userRepository.getAllUsers(filters);
+    const users = await this.userRepository.getAllUsers(filters);
+
+    return users.map((user) => {
+      const { password, ...userWithoutPassword } = user.toJSON();
+      return userWithoutPassword;
+    });
   }
 
   private async uploadProfileImageToAzure(
@@ -63,17 +87,15 @@ export class UserService {
 
       const blobClient = containerClient.getBlockBlobClient(fileName);
 
-      const uploadBlobResponse = await blobClient.uploadData(file.buffer, {
+      await blobClient.uploadData(file.buffer, {
         blobHTTPHeaders: {
           blobContentType: file.mimetype,
         },
       });
 
-      console.log(uploadBlobResponse);
-
-      const publicUrl = blobClient.url;
-      return publicUrl;
+      return blobClient.url;
     } catch (error) {
+      console.error("Erro ao fazer upload da imagem:", error);
       throw new Error(`Erro ao fazer upload da imagem: ${error}`);
     }
   }
@@ -82,10 +104,18 @@ export class UserService {
     profileImageUrl: string
   ): Promise<void> {
     try {
-      const blobClient = containerClient.getBlobClient(profileImageUrl);
-      await blobClient.deleteIfExists();
+      // Extrair o nome do arquivo da URL
+      const urlParts = profileImageUrl.split("/");
+      const fileName = urlParts[urlParts.length - 1];
+
+      // Deletar o arquivo
+      const blobClient = containerClient.getBlockBlobClient(fileName);
+      await blobClient.delete();
+
+      console.log(`Imagem ${fileName} deletada com sucesso`);
     } catch (error) {
-      console.error("Erro ao deletar a imagem do Azure:", error);
+      console.error("Erro ao deletar imagem:", error);
+      // Não lançar erro aqui para não interromper a exclusão do usuário
     }
   }
 }

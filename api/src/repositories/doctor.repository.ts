@@ -108,4 +108,11 @@ export class DoctorRepository {
       }
     }
   }
+
+  async getDoctorByCpf(cpf: string): Promise<Doctor | null> {
+    return Doctor.findOne({
+      where: { cpf },
+      include: [{ model: User, as: "user" }],
+    });
+  }
 }

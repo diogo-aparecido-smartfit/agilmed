@@ -17,8 +17,6 @@ export function authenticateJWT(
 ) {
   const authHeader = req.headers.authorization;
 
-  console.log(JSON.stringify(authHeader, null, 2));
-
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     res.status(401).json({ message: "Token não fornecido." });
     return;
@@ -43,4 +41,52 @@ export function authenticateJWT(
     res.status(401).json({ message: "Token inválido ou expirado." });
     return;
   }
+}
+
+export function isDoctor(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  if (req.user?.role !== "doctor") {
+    return res
+      .status(403)
+      .json({
+        message:
+          "Acesso não autorizado. Apenas médicos podem acessar este recurso.",
+      });
+  }
+  next();
+}
+
+export function isPatient(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  if (req.user?.role !== "patient") {
+    return res
+      .status(403)
+      .json({
+        message:
+          "Acesso não autorizado. Apenas pacientes podem acessar este recurso.",
+      });
+  }
+  next();
+}
+
+export function isAdmin(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
+  if (req.user?.role !== "admin") {
+    return res
+      .status(403)
+      .json({
+        message:
+          "Acesso não autorizado. Apenas administradores podem acessar este recurso.",
+      });
+  }
+  next();
 }

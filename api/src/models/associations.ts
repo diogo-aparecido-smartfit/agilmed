@@ -18,6 +18,8 @@ export function setupAssociations() {
     as: "appointments",
   });
   Appointment.belongsTo(Patient, { foreignKey: "patient_id", as: "patient" });
+
+  console.log("✅ Model associations configured successfully");
 }
 
 export { User, Patient, Doctor, Appointment };

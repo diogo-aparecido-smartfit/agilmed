@@ -2,14 +2,21 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { UserRepository } from "../repositories/user.repository";
+import { PatientRepository } from "../repositories/patient.repository";
+import { DoctorRepository } from "../repositories/doctor.repository";
 import { resetPasswordTemplate, signUpTemplate } from "../utils/email.template";
+import { User } from "../models/user.model";
 
 export class AuthService {
   private userRepository: UserRepository;
+  private patientRepository: PatientRepository;
+  private doctorRepository: DoctorRepository;
   private jwtSecret: string;
 
   constructor() {
     this.userRepository = new UserRepository();
+    this.patientRepository = new PatientRepository();
+    this.doctorRepository = new DoctorRepository();
     this.jwtSecret = process.env.JWT_SECRET || "your_default_secret";
   }
 
@@ -18,31 +25,55 @@ export class AuthService {
     password: string
   ): Promise<string | null> {
     const user = await this.userRepository.findByEmailOrCpf(identifier);
+
     if (!user) {
-      return null;
+      const patientByCpf = await this.patientRepository.getPatientByCpf(
+        identifier
+      );
+      const doctorByCpf = await this.doctorRepository.getDoctorByCpf(
+        identifier
+      );
+
+      let userByRole = null;
+      if (patientByCpf) {
+        userByRole = await this.userRepository.getUserById(
+          patientByCpf.user_id
+        );
+      } else if (doctorByCpf) {
+        userByRole = await this.userRepository.getUserById(doctorByCpf.user_id);
+      }
+
+      if (!userByRole) {
+        return null;
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        userByRole.password
+      );
+      if (!isPasswordValid) {
+        return null;
+      }
+
+      return this.generateJwtToken(
+        userByRole.id,
+        userByRole.full_name,
+        userByRole.email,
+        userByRole.role
+      );
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log("isPasswordValid: ", isPasswordValid);
-    console.log("password: ", `"${password}"`);
-    console.log("user.password: ", user.password);
-
     if (!isPasswordValid) {
       return null;
     }
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        full_name: user.full_name,
-        email: user.email,
-        role: user.role,
-      },
-      this.jwtSecret,
-      { expiresIn: "1h" }
+    return this.generateJwtToken(
+      user.id,
+      user.full_name,
+      user.email,
+      user.role
     );
-
-    return token;
   }
 
   public generateVerificationToken(): string {
@@ -113,5 +144,31 @@ export class AuthService {
     } catch (error) {
       throw new Error("Token inválido ou expirado");
     }
+  }
+
+  public async getUserCompleteInfo(user: User) {
+    const { password, ...userData } = user.toJSON();
+
+    if (user.role === "patient") {
+      const patientData = await this.patientRepository.getPatientByUserId(
+        user.id
+      );
+      if (patientData) {
+        return {
+          ...userData,
+          patient: patientData,
+        };
+      }
+    } else if (user.role === "doctor") {
+      const doctorData = await this.doctorRepository.getDoctorByUserId(user.id);
+      if (doctorData) {
+        return {
+          ...userData,
+          doctor: doctorData,
+        };
+      }
+    }
+
+    return userData;
   }
 }

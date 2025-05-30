@@ -37,3 +37,49 @@ export function formatAppointmentDate(dateStr: string): string {
   // Não conseguiu converter
   return dateStr;
 }
+
+/**
+ * Remove propriedades nulas ou indefinidas de um objeto
+ * @param obj Objeto a ser limpo
+ * @returns Objeto sem propriedades nulas ou indefinidas
+ */
+export function removeEmptyFields<T extends Record<string, any>>(
+  obj: T
+): Partial<T> {
+  const result: Partial<T> = {};
+
+  Object.keys(obj).forEach((key) => {
+    if (obj[key as keyof T] !== undefined && obj[key as keyof T] !== null) {
+      result[key as keyof T] = obj[key as keyof T];
+    }
+  });
+
+  return result;
+}
+
+/**
+ * Verifica se um objeto está vazio (sem propriedades)
+ */
+export function isEmptyObject(obj: Record<string, any>): boolean {
+  return obj && Object.keys(obj).length === 0;
+}
+
+/**
+ * Mescla dois objetos, sobrescrevendo propriedades do objeto base com
+ * valores do objeto de origem se eles não forem nulos ou indefinidos
+ */
+export function mergeObjects<T extends Record<string, any>>(
+  base: T,
+  source: Partial<T>
+): T {
+  const result = { ...base };
+
+  Object.keys(source).forEach((key) => {
+    const value = source[key as keyof T];
+    if (value !== undefined && value !== null) {
+      result[key as keyof T] = value;
+    }
+  });
+
+  return result;
+}

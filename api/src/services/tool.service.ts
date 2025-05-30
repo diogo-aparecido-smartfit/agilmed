@@ -1,6 +1,6 @@
-import { DoctorService } from "./doctor.services";
 import { PlacesService } from "./places.service";
 import { AppointmentService } from "./appointment.service";
+import { DoctorService } from "./doctor.service";
 
 /**
  * Serviço para execução das ferramentas de IA

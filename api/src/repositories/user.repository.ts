@@ -16,29 +16,35 @@ export class UserRepository {
       returning: true,
     });
 
-    // Verifica se algum usuário foi afetado
     if (affectedCount > 0) {
-      return affectedRows[0]; // Retorna o primeiro (e único) usuário atualizado
+      return await this.getUserById(id);
     }
 
-    return null; // Retorna null caso o usuário não tenha sido encontrado
+    return null;
   }
 
-  async deleteUser(id: number): Promise<void> {
-    await User.destroy({ where: { id } });
+  async deleteUser(id: number): Promise<boolean> {
+    const deleted = await User.destroy({ where: { id } });
+    return deleted > 0;
   }
 
   async getAllUsers(filters?: any): Promise<User[]> {
     const where: any = {};
 
-    if (filters.name) {
+    if (filters?.name) {
       where.full_name = {
         [Op.iLike]: `%${filters.name}%`,
       };
     }
 
-    if (filters.role) {
+    if (filters?.role) {
       where.role = filters.role;
+    }
+
+    if (filters?.email) {
+      where.email = {
+        [Op.iLike]: `%${filters.email}%`,
+      };
     }
 
     return await User.findAll({ where });
@@ -47,7 +53,7 @@ export class UserRepository {
   public async findByEmailOrCpf(identifier: string): Promise<User | null> {
     return User.findOne({
       where: {
-        [Op.or]: [{ email: identifier }, { cpf: identifier }],
+        [Op.or]: [{ email: identifier }],
       },
     });
   }

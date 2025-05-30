@@ -13,17 +13,38 @@ export class UserController {
     try {
       const data = req.body;
       const user = await this.userService.createUser(data);
-      res.status(201).json(user);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json(error);
+
+      const { password, ...userWithoutPassword } = user.toJSON();
+
+      res.status(201).json(userWithoutPassword);
+    } catch (error: any) {
+      console.error("Erro ao criar usuário:", error);
+      res.status(500).json({
+        message: "Erro ao criar usuário",
+        error: error.message,
+      });
     }
   }
 
   public async getUserById(req: Request, res: Response): Promise<void> {
-    const user = await this.userService.getUserById(Number(req.params.id));
-    if (user) res.json(user);
-    else res.status(404).json({ message: "User not found" });
+    try {
+      const user = await this.userService.getUserById(Number(req.params.id));
+
+      if (!user) {
+        res.status(404).json({ message: "Usuário não encontrado" });
+        return;
+      }
+
+      const { password, ...userWithoutPassword } = user.toJSON();
+
+      res.json(userWithoutPassword);
+    } catch (error: any) {
+      console.error("Erro ao buscar usuário:", error);
+      res.status(500).json({
+        message: "Erro ao buscar usuário",
+        error: error.message,
+      });
+    }
   }
 
   public async updateUser(req: Request, res: Response): Promise<void> {
@@ -50,10 +71,10 @@ export class UserController {
         }
 
         res.status(404).json({ message: "Usuário não encontrado" });
-      } catch (error) {
+      } catch (error: any) {
         res.status(500).json({
           message: "Erro ao atualizar usuário",
-          error: error,
+          error: error.message,
         });
         console.error(error);
       }
@@ -61,8 +82,21 @@ export class UserController {
   }
 
   public async deleteUser(req: Request, res: Response): Promise<void> {
-    await this.userService.deleteUser(Number(req.params.id));
-    res.status(204).send();
+    try {
+      const success = await this.userService.deleteUser(Number(req.params.id));
+
+      if (success) {
+        res.status(204).send();
+      } else {
+        res.status(404).json({ message: "Usuário não encontrado" });
+      }
+    } catch (error: any) {
+      console.error("Erro ao deletar usuário:", error);
+      res.status(500).json({
+        message: "Erro ao deletar usuário",
+        error: error.message,
+      });
+    }
   }
 
   public async getAllUsers(req: Request, res: Response): Promise<void> {
@@ -70,8 +104,12 @@ export class UserController {
       const filters = req.query;
       const users = await this.userService.getAllUsers(filters);
       res.json(users);
-    } catch (error) {
-      res.status(500).json(error);
+    } catch (error: any) {
+      console.error("Erro ao listar usuários:", error);
+      res.status(500).json({
+        message: "Erro ao listar usuários",
+        error: error.message,
+      });
     }
   }
 }
