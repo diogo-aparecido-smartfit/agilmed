@@ -1,3 +1,4 @@
+import Lottie from 'lottie-react-native'
 import { RootState } from '@/store'
 import { Message, sendUserMessageRequest } from '@/store/slices/chat.slice'
 import { useState, useEffect, useCallback, useRef } from 'react'
@@ -5,6 +6,7 @@ import { FlatList, ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 const useChatbotController = () => {
+    const lottieRef = useRef<Lottie>(null)
     const dispatch = useDispatch()
     const { user } = useSelector((state: RootState) => state.auth)
     const { messages, loading, waitingResponse } = useSelector(
@@ -15,6 +17,10 @@ const useChatbotController = () => {
     const [message, setMessage] = useState('')
 
     useEffect(() => {
+        if (lottieRef.current) {
+            lottieRef.current.play()
+        }
+
         const shortToday = new Date().toLocaleString('pt', {
             weekday: 'short',
             hour: 'numeric',
@@ -52,6 +58,7 @@ const useChatbotController = () => {
         loading,
         waitingResponse,
         userId: user?.id,
+        lottieRef,
     }
 }
 

@@ -1,3 +1,4 @@
+import Lottie from 'lottie-react-native'
 import { ArrowLeft, Cpu, Send2 } from 'iconsax-react-native'
 import * as S from './chatbot.style'
 import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native'
@@ -21,6 +22,7 @@ export default function ChatBotPage() {
         userId,
         messages,
         waitingResponse,
+        lottieRef,
     } = useChatbotController()
 
     const hasMessages = messages.length > 0
@@ -53,9 +55,14 @@ export default function ChatBotPage() {
             </S.HeaderContainer>
             {!hasMessages ? (
                 <S.EmptyContainer>
-                    <Text fontSize="4xl" color="mainColor" fontWeight="700">
-                        AgilMed
-                    </Text>
+                    <Lottie
+                        ref={lottieRef}
+                        source={require('@/assets/lottie/ghost-animation.json')}
+                        autoPlay
+                        loop={true}
+                        style={{ width: 200, height: 200, marginBottom: 20 }}
+                        resizeMode="cover"
+                    />
                     <Text fontSize="xs" color="description" fontWeight="500">
                         Digite uma mensagem para iniciar a conversa
                     </Text>

@@ -50,9 +50,11 @@ export async function addMessageToHistory(
   userId: number,
   message: any
 ): Promise<void> {
-  console.log(`🔵 Salvando mensagem para usuário ${userId}:`);
-  await redisClient.lpush(`chat:history:${userId}`, JSON.stringify(message));
-  await redisClient.ltrim(`chat:history:${userId}`, 0, 49);
+  const key = `chat:history:${userId}`;
+  await redisClient.lpush(key, JSON.stringify(message));
+
+  await redisClient.ltrim(key, 0, 49);
+  await redisClient.expire(key, 300);
 }
 
 export async function getMessageHistory(userId: number): Promise<any[]> {
