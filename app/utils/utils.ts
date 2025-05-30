@@ -1,5 +1,10 @@
+import store from '@/store'
+import { logoffRequest } from '@/store/slices/auth.slice'
+import { resetOnboarding } from '@/store/slices/onboarding.slice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { isValid, format, parse } from 'date-fns'
+import { router } from 'expo-router'
+import { showMessage } from 'react-native-flash-message'
 
 export function convertToISODate(dateString: string) {
     const parsedDate = parse(dateString, 'dd/MM/yyyy', new Date())
@@ -65,4 +70,33 @@ export function generateRandomCPF() {
     }
 
     return generateRandomDigits(11)
+}
+
+/**
+ * Limpa todos os dados do aplicativo (AsyncStorage e estados) e força um reload
+ */
+export const resetAppData = async () => {
+    try {
+        await AsyncStorage.clear()
+
+        store.dispatch(resetOnboarding())
+        store.dispatch(logoffRequest())
+
+        showMessage({
+            message: 'Todos os dados foram apagados com sucesso',
+            type: 'success',
+        })
+
+        router.replace('/')
+
+        setTimeout(() => {
+            router.replace('/onboarding')
+        }, 300)
+    } catch (error) {
+        console.error('Erro ao resetar aplicativo:', error)
+        showMessage({
+            message: 'Erro ao limpar dados do aplicativo',
+            type: 'danger',
+        })
+    }
 }

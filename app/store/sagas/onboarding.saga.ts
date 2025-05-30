@@ -5,6 +5,7 @@ import {
     completeOnboarding,
     completeOnboardingFailure,
     completeOnboardingSuccess,
+    resetOnboarding,
     setOnboardingStatus,
 } from '../slices/onboarding.slice'
 import { RootState } from '@/store'
@@ -96,7 +97,31 @@ function* completeOnboardingSaga(): Generator<Effect> {
     }
 }
 
+function* resetOnboardingSaga(): Generator<Effect> {
+    try {
+        yield call(AsyncStorage.removeItem, '@agilmed:hasSeenOnboarding')
+        yield call(AsyncStorage.removeItem, '@agilmed:onboardingData')
+
+        showMessage({
+            message: 'Dados de onboarding resetados com sucesso',
+            type: 'success',
+        })
+
+        if (authRef.current) {
+            yield call([authRef.current, authRef.current.checkAuthState])
+        }
+    } catch (error) {
+        console.error('Erro ao resetar onboarding:', error)
+
+        showMessage({
+            message: 'Erro ao resetar dados de onboarding',
+            type: 'danger',
+        })
+    }
+}
+
 export function* onboardingSaga() {
     yield takeLatest(checkOnboardingStatus.type, checkOnboardingStatusSaga)
     yield takeLatest(completeOnboarding.type, completeOnboardingSaga)
+    yield takeLatest(resetOnboarding.type, resetOnboardingSaga)
 }

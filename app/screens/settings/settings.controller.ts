@@ -14,6 +14,7 @@ import { resetOnboarding } from '@/store/slices/onboarding.slice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
 import { Alert } from 'react-native'
+import { resetAppData } from '@/utils/utils'
 
 export const useSettingsController = () => {
     const dispatch = useDispatch()
@@ -67,24 +68,7 @@ export const useSettingsController = () => {
                 {
                     text: 'Limpar tudo',
                     style: 'destructive',
-                    onPress: async () => {
-                        try {
-                            await AsyncStorage.clear()
-
-                            dispatch(resetOnboarding())
-                            dispatch(logoffRequest())
-
-                            setTimeout(() => {
-                                router.replace('/onboarding')
-                            }, 1000)
-                        } catch (error) {
-                            console.error('Erro ao limpar dados:', error)
-                            Alert.alert(
-                                'Erro',
-                                'Não foi possível limpar os dados do app.'
-                            )
-                        }
-                    },
+                    onPress: async () => resetAppData(),
                 },
             ]
         )

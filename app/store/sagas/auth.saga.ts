@@ -26,6 +26,7 @@ import {
     VerifyCodeAction,
 } from '../actions/actions'
 import { clearStorage } from '@/utils/utils'
+import { authRef } from '@/providers/auth.provider'
 
 function* loginSaga(action: LoginAction): Generator<Effect> {
     try {
@@ -44,7 +45,14 @@ function* loginSaga(action: LoginAction): Generator<Effect> {
         )
 
         yield put(loginSuccess({ token: response.token, user: response.user }))
-        router.push('/(home)')
+
+        if (authRef.current) {
+            yield call([authRef.current, authRef.current.checkAuthState])
+        }
+
+        setTimeout(() => {
+            router.replace('/(home)')
+        }, 300)
     } catch (error: any) {
         const errorMessage =
             error?.response?.data?.message ||
