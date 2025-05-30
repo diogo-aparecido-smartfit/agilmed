@@ -105,8 +105,7 @@ export class PatientRepository {
 
   async getPatientByCpf(cpf: string): Promise<Patient | null> {
     return Patient.findOne({
-      where: { cpf },
-      include: [{ model: User, as: "user" }],
+      include: [{ model: User, as: "user", where: { cpf } }],
     });
   }
 }

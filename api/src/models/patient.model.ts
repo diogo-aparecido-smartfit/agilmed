@@ -6,7 +6,6 @@ interface PatientAttributes {
   id: number;
   user_id: number;
   birthdate: Date;
-  cpf: string;
   address: string;
   city: string;
   state: string;
@@ -28,7 +27,6 @@ export class Patient
   public id!: number;
   public user_id!: number;
   public birthdate!: Date;
-  public cpf!: string;
   public address!: string;
   public city!: string;
   public state!: string;
@@ -53,7 +51,6 @@ Patient.init(
       onDelete: "CASCADE",
     },
     birthdate: { type: DataTypes.DATE, allowNull: false },
-    cpf: { type: DataTypes.STRING, allowNull: false, unique: true },
     address: { type: DataTypes.STRING, allowNull: false },
     city: { type: DataTypes.STRING, allowNull: false },
     state: { type: DataTypes.STRING, allowNull: false },

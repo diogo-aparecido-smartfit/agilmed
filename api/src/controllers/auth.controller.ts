@@ -79,32 +79,27 @@ export class AuthController {
         role,
       } = req.body;
 
-      // Verificar se o email já está cadastrado
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         res.status(400).json({ message: "Email já cadastrado." });
         return;
       }
 
-      // Gerar código de verificação
       const verificationCode = this.authService.generateVerificationToken();
 
-      // Dados do usuário base
       const userData = {
         full_name,
         email,
+        cpf,
         password,
         phone,
         verificationCode,
         role: role || "patient",
       };
 
-      // Dados específicos do paciente (se for paciente)
       if (!role || role === "patient") {
-        // Dados do paciente
         const patientData = {
           birthdate,
-          cpf,
           address,
           city,
           state,
@@ -114,20 +109,17 @@ export class AuthController {
           medical_history,
         };
 
-        // Criar paciente
         const { user, patient } = await this.patientService.createPatient({
           ...userData,
           ...patientData,
         });
 
-        // Enviar e-mail de verificação
         await this.authService.sendVerificationEmail(
           email,
           verificationCode,
           user.full_name.split(" ")[0]
         );
 
-        // Gerar token
         const token = this.authService.generateJwtToken(
           user.id,
           user.full_name,
@@ -135,11 +127,9 @@ export class AuthController {
           user.role
         );
 
-        // Remover senha
         const { password: userPassword, ...userWithoutPassword } =
           user.dataValues;
 
-        // Retornar resposta
         res.status(201).json({
           token,
           user: {
@@ -275,13 +265,11 @@ export class AuthController {
         findedUser
       );
 
-      res
-        .status(200)
-        .json({
-          message: "Verificação bem-sucedida.",
-          token,
-          user: completeUserInfo,
-        });
+      res.status(200).json({
+        message: "Verificação bem-sucedida.",
+        token,
+        user: completeUserInfo,
+      });
       return;
     } catch (error) {
       res.status(500).json({ message: "Erro ao verificar código." });

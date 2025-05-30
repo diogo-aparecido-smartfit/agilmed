@@ -8,7 +8,6 @@ interface DoctorAttributes {
   specialty: string;
   crm: string;
   birthdate: Date;
-  cpf: string;
   address: string;
   city: string;
   state: string;
@@ -31,7 +30,6 @@ export class Doctor
   public specialty!: string;
   public crm!: string;
   public birthdate!: Date;
-  public cpf!: string;
   public address!: string;
   public city!: string;
   public state!: string;
@@ -57,7 +55,6 @@ Doctor.init(
     specialty: { type: DataTypes.STRING, allowNull: false },
     crm: { type: DataTypes.STRING, allowNull: false, unique: true },
     birthdate: { type: DataTypes.DATE, allowNull: false },
-    cpf: { type: DataTypes.STRING, allowNull: false, unique: true },
     address: { type: DataTypes.STRING, allowNull: false },
     city: { type: DataTypes.STRING, allowNull: false },
     state: { type: DataTypes.STRING, allowNull: false },

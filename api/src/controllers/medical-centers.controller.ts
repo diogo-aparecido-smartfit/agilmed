@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { PlacesService } from "../services/places.service";
+import { MedicalCentersService } from "../services/medical-centers.service";
 
-export class PlacesController {
-  private placesService: PlacesService;
+export class MedicalCentersController {
+  private medicalCentersService: MedicalCentersService;
 
   constructor() {
-    this.placesService = new PlacesService();
+    this.medicalCentersService = new MedicalCentersService();
   }
 
   async getNearbyPlaces(req: Request, res: Response) {
@@ -13,10 +13,22 @@ export class PlacesController {
       const { lat, lon, query } = req.query;
 
       if (!lat || !lon || !query) {
+        const results = await this.medicalCentersService.findNearbyPlaces(
+          Number(-18.912249556811037),
+          Number(-48.2741967117477),
+          String("pharmacy")
+        );
+
+        if (results) {
+          res.json(results);
+          return;
+        }
+
         res.status(400).json({ message: "lat, lon e query são obrigatórios" });
+        return;
       }
 
-      const results = await this.placesService.findNearbyPlaces(
+      const results = await this.medicalCentersService.findNearbyPlaces(
         Number(lat),
         Number(lon),
         String(query)
@@ -24,6 +36,7 @@ export class PlacesController {
 
       if (results) {
         res.json(results);
+        return;
       }
 
       res.status(200);

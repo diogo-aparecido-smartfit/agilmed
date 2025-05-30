@@ -1,18 +1,18 @@
-import { PlacesService } from "./places.service";
 import { AppointmentService } from "./appointment.service";
 import { DoctorService } from "./doctor.service";
+import { MedicalCentersService } from "./medical-centers.service";
 
 /**
  * Serviço para execução das ferramentas de IA
  */
 export class ToolService {
   private doctorService: DoctorService;
-  private placesService: PlacesService;
+  private medicalCentersService: MedicalCentersService;
   private appointmentService: AppointmentService;
 
   constructor() {
     this.doctorService = new DoctorService();
-    this.placesService = new PlacesService();
+    this.medicalCentersService = new MedicalCentersService();
     this.appointmentService = new AppointmentService();
   }
 
@@ -77,7 +77,11 @@ export class ToolService {
         lat = -18.91225967038251,
         lon = -48.27427181810462,
       } = args;
-      const places = await this.placesService.findNearbyPlaces(lat, lon, query);
+      const places = await this.medicalCentersService.findNearbyPlaces(
+        lat,
+        lon,
+        query
+      );
 
       if (!places || places.length === 0) {
         return {

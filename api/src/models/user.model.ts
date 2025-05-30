@@ -8,6 +8,7 @@ interface UserAttributes {
   email: string;
   password: string;
   phone: string;
+  cpf: string;
   profile_picture_url?: string | null;
   verificationCode?: string | null;
   isVerified: boolean;
@@ -28,6 +29,7 @@ export class User
   public email!: string;
   public password!: string;
   public phone!: string;
+  public cpf!: string;
   public profile_picture_url?: string | null;
   public verificationCode?: string | null;
   public isVerified!: boolean;
@@ -44,6 +46,7 @@ User.init(
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     password: { type: DataTypes.STRING, allowNull: false },
     phone: { type: DataTypes.STRING, allowNull: false },
+    cpf: { type: DataTypes.STRING, allowNull: false, unique: true },
     profile_picture_url: { type: DataTypes.STRING, allowNull: true },
     verificationCode: { type: DataTypes.STRING, allowNull: true },
     isVerified: { type: DataTypes.BOOLEAN, defaultValue: false },

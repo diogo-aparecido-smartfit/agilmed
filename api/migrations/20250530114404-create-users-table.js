@@ -4,41 +4,53 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     try {
       console.log("Criando tabela users...");
+
+      // Verificar se a tabela já existe e removê-la se necessário
+      const [tableExists] = await queryInterface.sequelize.query(
+        `SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'users';`
+      );
+
+      if (tableExists.length > 0) {
+        console.log("Tabela users já existe, removendo...");
+        await queryInterface.sequelize.query(`DROP TABLE users;`);
+      }
+
+      // Criar tabela users
       await queryInterface.createTable("users", {
         id: {
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
           type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+          allowNull: false,
         },
         full_name: {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(255),
           allowNull: false,
         },
         email: {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(255),
           allowNull: false,
           unique: true,
         },
         password: {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(255),
           allowNull: false,
         },
         phone: {
-          type: Sequelize.STRING,
-          allowNull: true,
+          type: Sequelize.STRING(50),
+          allowNull: false,
+        },
+        cpf: {
+          type: Sequelize.STRING(20),
+          allowNull: false,
+          unique: true,
         },
         profile_picture_url: {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(255),
           allowNull: true,
         },
-        role: {
-          type: Sequelize.STRING,
-          allowNull: false,
-          defaultValue: "patient",
-        },
         verification_code: {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING(100),
           allowNull: true,
         },
         is_verified: {
@@ -46,17 +58,22 @@ module.exports = {
           allowNull: false,
           defaultValue: false,
         },
-        created_at: {
+        role: {
+          type: Sequelize.ENUM("doctor", "patient", "admin"),
           allowNull: false,
+        },
+        created_at: {
           type: Sequelize.DATE,
+          allowNull: false,
           defaultValue: Sequelize.fn("GETDATE"),
         },
         updated_at: {
-          allowNull: false,
           type: Sequelize.DATE,
+          allowNull: false,
           defaultValue: Sequelize.fn("GETDATE"),
         },
       });
+
       console.log("Tabela users criada com sucesso!");
       return Promise.resolve();
     } catch (error) {
@@ -67,7 +84,9 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     try {
+      console.log("Removendo tabela users...");
       await queryInterface.dropTable("users");
+      console.log("Tabela users removida com sucesso!");
       return Promise.resolve();
     } catch (error) {
       console.error("Erro ao remover tabela users:", error);
