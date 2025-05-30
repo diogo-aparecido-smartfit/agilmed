@@ -14,11 +14,11 @@ export class DoctorService {
   }
 
   async createDoctor(data: any) {
-    // Separar os dados específicos de usuário e médico
     const userData = {
       full_name: data.full_name,
       email: data.email,
       password: data.password,
+      cpf: data.cpf,
       phone: data.phone,
       profile_picture_url: data.profile_picture_url,
       role: "doctor",
@@ -28,7 +28,7 @@ export class DoctorService {
       specialty: data.specialty,
       crm: data.crm,
       birthdate: data.birthdate,
-      cpf: data.cpf,
+
       address: data.address,
       city: data.city,
       state: data.state,
@@ -53,7 +53,6 @@ export class DoctorService {
   }
 
   async updateDoctor(id: number, data: any) {
-    // Se dados do usuário forem enviados, tratar separadamente
     if (
       data.full_name ||
       data.email ||
@@ -67,6 +66,7 @@ export class DoctorService {
           full_name: data.full_name,
           email: data.email,
           phone: data.phone,
+          cpf: data.cpf,
           profile_picture_url: data.profile_picture_url,
         });
 
@@ -76,12 +76,11 @@ export class DoctorService {
       }
     }
 
-    // Atualizar dados específicos do médico
     const doctorData = removeEmptyFields({
       specialty: data.specialty,
       crm: data.crm,
       birthdate: data.birthdate,
-      cpf: data.cpf,
+
       address: data.address,
       city: data.city,
       state: data.state,
@@ -107,11 +106,8 @@ export class DoctorService {
       return false;
     }
 
-    // Primeiro, deletar o médico
     await this.doctorRepository.deleteDoctor(id);
 
-    // Se o médico foi deletado com sucesso e temos o ID do usuário,
-    // podemos deletar o usuário associado
     if (doctor.user_id) {
       await this.userRepository.deleteUser(doctor.user_id);
     }
@@ -134,13 +130,12 @@ export class DoctorService {
       return null;
     }
 
-    // Combina as informações do médico e do usuário
     const { password, ...userWithoutPassword } = user.toJSON();
     const doctorData = doctor.toJSON();
 
     return {
-      ...userWithoutPassword, // Dados do usuário (sem city/state)
-      ...doctorData, // Dados do médico (incluindo city/state)
+      ...userWithoutPassword,
+      ...doctorData,
     };
   }
 }

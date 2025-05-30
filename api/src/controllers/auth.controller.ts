@@ -114,7 +114,7 @@ export class AuthController {
           ...patientData,
         });
 
-        await this.authService.sendVerificationEmail(
+        this.authService.sendVerificationEmail(
           email,
           verificationCode,
           user.full_name.split(" ")[0]
@@ -155,7 +155,7 @@ export class AuthController {
           ...doctorData,
         });
 
-        await this.authService.sendVerificationEmail(
+        this.authService.sendVerificationEmail(
           email,
           verificationCode,
           user.full_name.split(" ")[0]
@@ -181,7 +181,7 @@ export class AuthController {
       } else {
         const user = await this.userService.createUser(userData);
 
-        await this.authService.sendVerificationEmail(
+        this.authService.sendVerificationEmail(
           email,
           verificationCode,
           user.full_name.split(" ")[0]
@@ -219,28 +219,7 @@ export class AuthController {
         return;
       }
 
-      let existingUser = await this.userService.getUserByEmailOrCpf(document);
-
-      if (!existingUser) {
-        res.status(400).json({ message: "Usuário não encontrado!" });
-        return;
-      }
-
-      if (!existingUser) {
-        // Buscar paciente pelo CPF
-        const patientByCpf = await this.patientService.getPatientByCpf(
-          document
-        );
-        if (patientByCpf && patientByCpf.user) {
-          existingUser = patientByCpf.user;
-        }
-
-        // Ou verificar se for implementado, buscar médico pelo CPF
-        // const doctorByCpf = await this.doctorService.getDoctorByCpf(document);
-        // if (doctorByCpf && doctorByCpf.user) {
-        //   existingUser = doctorByCpf.user;
-        // }
-      }
+      const existingUser = await this.userService.getUserByEmailOrCpf(document);
 
       if (!existingUser) {
         res.status(400).json({ message: "Usuário não encontrado!" });

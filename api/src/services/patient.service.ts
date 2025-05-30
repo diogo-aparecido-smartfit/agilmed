@@ -15,6 +15,7 @@ export class PatientService {
     const userData = {
       full_name: data.full_name,
       email: data.email,
+      cpf: data.cpf,
       password: data.password,
       phone: data.phone,
       profile_picture_url: data.profile_picture_url,
@@ -23,7 +24,6 @@ export class PatientService {
 
     const patientData = {
       birthdate: data.birthdate,
-      cpf: data.cpf,
       address: data.address,
       city: data.city,
       state: data.state,
@@ -56,6 +56,7 @@ export class PatientService {
       if (patient && patient.user_id) {
         const userData = removeEmptyFields({
           full_name: data.full_name,
+          cpf: data.cpf,
           email: data.email,
           phone: data.phone,
           profile_picture_url: data.profile_picture_url,
@@ -69,7 +70,6 @@ export class PatientService {
 
     const patientData = removeEmptyFields({
       birthdate: data.birthdate,
-      cpf: data.cpf,
       address: data.address,
       city: data.city,
       state: data.state,
