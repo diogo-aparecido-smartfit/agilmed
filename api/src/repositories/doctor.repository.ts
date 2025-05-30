@@ -64,24 +64,45 @@ export class DoctorRepository {
   }
 
   async getAllDoctors(filters?: any): Promise<Doctor[]> {
-    const where: any = {};
+    try {
+      const where: any = {};
+      const userWhere: any = {};
 
-    if (filters?.specialty) {
-      where.specialty = {
-        [Op.iLike]: `%${filters.specialty}%`,
+      if (filters?.specialty) {
+        where.specialty = {
+          [Op.like]: `%${filters.specialty}%`,
+        };
+      }
+
+      if (filters?.name) {
+        userWhere.full_name = {
+          [Op.like]: `%${filters.name}%`,
+        };
+      }
+
+      const includeOptions: any = {
+        model: User,
+        as: "user",
       };
-    }
 
-    if (filters?.name) {
-      where["$user.full_name$"] = {
-        [Op.iLike]: `%${filters.name}%`,
-      };
-    }
+      if (Object.keys(userWhere).length > 0) {
+        includeOptions.where = userWhere;
+      }
 
-    return Doctor.findAll({
-      where,
-      include: [{ model: User, as: "user" }],
-    });
+      console.log("Buscando médicos com filtros:", { where, userWhere });
+
+      const doctors = await Doctor.findAll({
+        where,
+        include: [includeOptions],
+        nest: true,
+      });
+
+      console.log(`Encontrados ${doctors.length} médicos`);
+      return doctors;
+    } catch (error) {
+      console.error("Erro ao buscar médicos:", error);
+      throw error;
+    }
   }
 
   async deleteDoctor(id: number): Promise<void> {
