@@ -1,81 +1,90 @@
-import { Request, Response } from "express";
-import { ChatService } from "../services/chat.service";
-import {
-  handleBotAction,
-  parseAndHandleBotAction,
-} from "../middlewares/bot-actions.middleware";
+import { Response } from "express";
+import { LangChainService } from "../services/langchain.service";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
+import { SYSTEM_PROMPT } from "../utils/bot.prompt";
+import { getMessageHistory, addMessageToHistory } from "../config/redis";
 
 export class ChatController {
-  private chatService: ChatService;
+  private langChainService: LangChainService;
 
   constructor() {
-    this.chatService = new ChatService();
+    this.langChainService = new LangChainService();
   }
 
   async completions(req: AuthenticatedRequest, res: Response) {
     try {
-      console.log(
-        "[ChatController] completions - req.body:",
-        JSON.stringify(req.body, null, 2)
-      );
       const userId = req.user?.id;
-
       if (!userId) {
-        res.status(400).json({
-          message: "O id do usuário é obrigatório",
-        });
-        return;
+        return res.status(401).json({ message: "Usuário não autenticado" });
       }
 
-      const data = await this.chatService.completions({
-        userId,
-        userMessage: req.body.userMessage,
-      });
+      const { userMessage } = req.body;
+      if (!userMessage) {
+        return res.status(400).json({ message: "Mensagem não fornecida" });
+      }
 
-      const botMessage = data.choices?.[0]?.message?.content;
+      console.log(`📥 Recebendo mensagem do usuário ${userId}: ${userMessage}`);
 
-      console.log(
-        "[ChatController] completions - botMessage:",
-        JSON.stringify(botMessage, null, 2)
-      );
+      const history = await getMessageHistory(userId);
 
-      const { handled, result } = await parseAndHandleBotAction(
-        botMessage,
-        req.user
-      );
-
-      console.log(
-        "[ChatController] completions - handled:",
-        handled,
-        "result:",
-        result
-      );
-
-      if (handled) {
-        const newBotResponse = await this.chatService.completions({
-          userId,
-          userMessage: "Formate a resposta para o usuário.",
-        });
-
-        console.log(
-          "[ChatController] completions - newBotResponse:",
-          JSON.stringify(newBotResponse, null, 2)
+      let botResponse;
+      if (history.length === 0 && this.isGreeting(userMessage)) {
+        const presentationMatch = SYSTEM_PROMPT.match(
+          /# APRESENTAÇÃO INICIAL:[\s\S]*?\"([\s\S]*?)\"/
         );
-        res.json(newBotResponse);
-        return;
+        const initialGreeting = presentationMatch
+          ? presentationMatch[1]
+          : "Olá! Sou a Amélia, sua assistente virtual do AgilMed. Como posso ajudar?";
+
+        botResponse = {
+          role: "assistant",
+          content: initialGreeting,
+        };
+      } else {
+        botResponse = await this.langChainService.processMessage(
+          userId,
+          userMessage,
+          history
+        );
       }
 
-      res.json(data);
-    } catch (error: any) {
-      console.error(
-        "[ChatController] Error:",
-        error?.response?.data || error.message
-      );
+      await addMessageToHistory(userId, { role: "user", content: userMessage });
+      await addMessageToHistory(userId, botResponse);
+
+      const response = {
+        choices: [
+          {
+            message: botResponse,
+          },
+        ],
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error("Erro na API de chat:", error);
       res.status(500).json({
-        message: "Erro ao processar requisição do chatbot",
-        error: error?.response?.data || error.message,
+        message: "Erro ao processar mensagem",
+        error: error instanceof Error ? error.message : "Erro desconhecido",
       });
     }
+  }
+
+  private isGreeting(message: string): boolean {
+    const greetings = [
+      "oi",
+      "olá",
+      "ola",
+      "bom dia",
+      "boa tarde",
+      "boa noite",
+      "ei",
+      "hi",
+      "hello",
+    ];
+    const lowerMessage = message.toLowerCase();
+    return (
+      greetings.some((greeting) => lowerMessage.includes(greeting)) ||
+      lowerMessage.length < 10
+    );
   }
 }
