@@ -1,41 +1,41 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import { RootState } from '@/store'
-import { useCurrentLocation } from '@/hooks/useCurrentLocation'
-import { fetchPharmaciesRequest } from '@/store/slices/places.slice'
+import { useAppointments } from '@/hooks/api/useAppointments'
 import BottomSheet from '@gorhom/bottom-sheet'
+import { usePlaces } from '@/hooks/usePlaces'
 
-export function useHomeController() {
+export const useHomeController = () => {
+    const { user } = useSelector((state: RootState) => state.auth)
     const bottomSheetRef = useRef<BottomSheet>(null)
-    const snapPoints = useMemo(() => ['50%'], [])
-    const dispatch = useDispatch()
-    const { location } = useCurrentLocation()
 
-    const units = useSelector((state: RootState) => state.places.list)
-    const loading = useSelector((state: RootState) => state.places.loading)
-    const error = useSelector((state: RootState) => state.places.error)
+    const {
+        appointments,
+        error: appointmentsError,
+        loading: loadingAppointments,
+        refetch: refetchAppointments,
+    } = useAppointments()
 
-    useEffect(() => {
-        if (location) {
-            dispatch(
-                fetchPharmaciesRequest({
-                    lat: location.latitude,
-                    lon: location.longitude,
-                })
-            )
-        }
-    }, [location])
+    const { units, loading: loadingUnits, error: unitsError } = usePlaces()
 
     const handleOpenVerifyCode = useCallback(() => {
         bottomSheetRef.current?.expand()
     }, [])
 
+    const refetch = useCallback(() => {
+        refetchAppointments()
+    }, [refetchAppointments])
+
     return {
         units,
-        loading,
-        error,
-        snapPoints,
+        loading: loadingUnits,
+        error: unitsError,
+        appointments,
+        loadingAppointments,
+        appointmentsError,
         bottomSheetRef,
+        user,
+        refetch,
         handleOpenVerifyCode,
     }
 }

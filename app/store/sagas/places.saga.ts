@@ -16,7 +16,7 @@ function* handleFetchPharmacies(
 
         const response: any[] = yield call(
             Get,
-            `/medical-centers?lat=${lat}&lon=${lon}&query=pharmacy`
+            `/medical-centers?lat=${lat}&lon=${lon}&query=hospital,clinic,pharmacy`
         )
 
         const data: Pharmacy[] = response.map((item) => ({

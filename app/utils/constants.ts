@@ -38,4 +38,5 @@ export const categoryMap = {
     pharmacy: 'Farmácia',
     'drug store': 'Drogaria',
     shop: 'Loja',
+    general: 'Clínica',
 }

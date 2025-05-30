@@ -8,12 +8,7 @@ export const Container = styled.ImageBackground`
 `
 
 export const ContentContainer = styled.View`
-    /* flex: 1; */
-    /* width: 100%; */
-    /* height: 60%; */
     padding: 40px 24px;
-    /* bottom: 0;
-  position: absolute; */
     background-color: ${Theme.colors.white};
     flex-direction: column;
     border-top-right-radius: 24px;
@@ -302,3 +297,134 @@ export const customMapStyle = [
         ],
     },
 ]
+
+export const SectionContainer = styled.View`
+    margin-top: 24px;
+    flex-direction: column;
+    gap: 12px;
+`
+
+export const ServicesList = styled.View`
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+`
+
+export const ServiceItem = styled.View`
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    background-color: ${Theme.colors.lightGray};
+    padding: 8px 12px;
+    border-radius: 8px;
+`
+
+export const OpeningHoursContainer = styled.View`
+    flex-direction: column;
+    gap: 8px;
+`
+
+export const OpeningHoursItem = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 4px 0;
+`
+
+export const ActionsContainer = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 24px;
+`
+
+export const ActionButton = styled.TouchableOpacity`
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background-color: white;
+    border: 1px solid;
+    border-color: ${Theme.colors.mainColor};
+    padding: 12px 16px;
+    border-radius: 12px;
+    flex: 1;
+    margin: 0px 4px;
+`
+
+export const StatusContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+`
+
+export const StatusDot = styled.View<{ isOpen: boolean }>`
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background-color: ${(props) =>
+        props.isOpen ? Theme.colors.success : Theme.colors.error};
+`
+
+export const SpecialistsList = styled.View`
+    flex-direction: column;
+    gap: 16px;
+`
+
+export const SpecialistItem = styled.View`
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+`
+
+export const SpecialistInfo = styled.View`
+    flex-direction: column;
+`
+
+export const FacilityImagePlaceholder = styled.View`
+    width: 100%;
+    height: 220px;
+    background-color: ${Theme.colors.lightDescription};
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    margin-top: 16px;
+`
+
+export const PrimaryButton = styled(ActionButton)`
+    background-color: ${Theme.colors.mainColor};
+`
+
+export const SecondaryButton = styled(ActionButton)`
+    background-color: ${Theme.colors.lightGray};
+`
+
+export const OutlineButton = styled(ActionButton)`
+    background-color: transparent;
+    border: 1px solid ${Theme.colors.mainColor};
+`
+
+export const IconButton = styled.TouchableOpacity`
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: ${Theme.colors.lightGray};
+    justify-content: center;
+    align-items: center;
+`
+
+export const FloatingButton = styled.TouchableOpacity`
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    background-color: ${Theme.colors.mainColor};
+    justify-content: center;
+    align-items: center;
+    elevation: 5;
+    shadow-color: #000;
+    shadow-offset: 0px 2px;
+    shadow-opacity: 0.25;
+    shadow-radius: 3.84px;
+`

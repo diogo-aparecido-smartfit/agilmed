@@ -12,6 +12,7 @@ export const Theme = {
         inputColor: '#B2BCC9',
         error: '#ef4444',
         background: '#fff',
+        success: '#50C878',
         mainColor: tintColor,
         fillColor: fillColor,
         icon: '#687076',

@@ -1,9 +1,6 @@
 import FlashMessage from 'react-native-flash-message'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFonts } from 'expo-font'
-import { router } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
 import {
@@ -35,7 +32,7 @@ import { Provider } from 'react-redux'
 import Main from './main'
 import store from '@/store'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { checkOnboardingStatus } from '@/store/slices/onboarding.slice'
+import { AuthProvider } from '@/providers/auth.provider'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -61,24 +58,11 @@ export default function RootLayout() {
         Poppins_900Black_Italic,
     })
 
-    SplashScreen.setOptions({
-        duration: 1000,
-        fade: true,
-    })
-
     useEffect(() => {
         if (loaded) {
             SplashScreen.hideAsync()
         }
     }, [loaded])
-
-    useEffect(() => {
-        const token = AsyncStorage.getItem('token')
-
-        if (!token) {
-            router.replace('/onboarding')
-        }
-    }, [])
 
     if (!loaded) {
         return null
@@ -86,16 +70,18 @@ export default function RootLayout() {
 
     return (
         <Provider store={store}>
-            <GestureHandlerRootView>
-                <PortalProvider>
-                    <FlashMessage position="top" />
-                    <QueryProvider>
-                        <ThemeProvider theme={Theme}>
-                            <Main />
-                        </ThemeProvider>
-                    </QueryProvider>
-                </PortalProvider>
-            </GestureHandlerRootView>
+            <AuthProvider>
+                <GestureHandlerRootView>
+                    <PortalProvider>
+                        <FlashMessage position="top" />
+                        <QueryProvider>
+                            <ThemeProvider theme={Theme}>
+                                <Main />
+                            </ThemeProvider>
+                        </QueryProvider>
+                    </PortalProvider>
+                </GestureHandlerRootView>
+            </AuthProvider>
         </Provider>
     )
 }
