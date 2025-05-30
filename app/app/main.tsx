@@ -17,12 +17,10 @@ function CustomSplashScreen({
     const lottieRef = useRef<Lottie>(null)
 
     useEffect(() => {
-        // Iniciar a animação do Lottie
         if (lottieRef.current) {
             lottieRef.current.play()
         }
 
-        // Animar o fade in e o scale
         Animated.parallel([
             Animated.timing(fadeAnim, {
                 toValue: 1,
@@ -37,18 +35,15 @@ function CustomSplashScreen({
             }),
         ]).start()
 
-        // Configurar o timer para a animação de saída
         const timer = setTimeout(() => {
-            // Animar o fade out
             Animated.timing(fadeAnim, {
                 toValue: 0,
-                duration: 500, // Duração da animação de fade out
+                duration: 500,
                 useNativeDriver: true,
             }).start(() => {
-                // Chamar o callback quando a animação terminar
                 onAnimationComplete()
             })
-        }, 2000) // Ajustado para iniciar o fade out um pouco antes
+        }, 2000)
 
         return () => clearTimeout(timer)
     }, [fadeAnim, scaleAnim, onAnimationComplete])
@@ -87,9 +82,6 @@ export default function MainNavigator() {
     const handleSplashComplete = () => {
         setShowSplash(false)
     }
-
-    // Não precisamos mais do useEffect com setTimeout
-    // A própria animação vai chamar handleSplashComplete quando terminar
 
     if (isLoading || showSplash) {
         return (
