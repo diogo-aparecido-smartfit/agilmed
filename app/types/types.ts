@@ -88,12 +88,42 @@ export interface IAppointment {
     doctor_id: number
     patient_id: number
     appointment_date: string
-    doctor_name: string
-    patient_name: string
     reason: string
     status: string
+    notes: string | null
+    created_at: string
+    updated_at: string
     createdAt: string
     updatedAt: string
+    doctor: {
+        id: number
+        user_id: number
+        specialty: string
+        crm: string
+        birthdate: string
+        address: string
+        city: string
+        state: string
+        gender: string
+        bio: string | null
+        available_hours: string | null
+        createdAt: string
+        updatedAt: string
+        user: {
+            id: number
+            full_name: string
+            email: string
+            phone: string
+            cpf: string
+            profile_picture_url: string | null
+            verificationCode: string | null
+            isVerified: boolean
+            role: string
+            createdAt: string
+            updatedAt: string
+        }
+    }
+    doctor_name: string
 }
 
 export interface User {

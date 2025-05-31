@@ -5,39 +5,65 @@ export const Container = styled.TouchableOpacity`
     background-color: ${Theme.colors.mainColor};
     padding: 20px;
     flex-direction: column;
-    border-radius: 12px;
+    border-radius: 16px;
+    margin-horizontal: 16px;
+    margin-vertical: 8px;
+    elevation: 4;
+    shadow-color: ${Theme.colors.mainColor};
+    shadow-offset: 0px 2px;
+    shadow-opacity: 0.3;
+    shadow-radius: 4px;
 `
 
-export const DoctorInfoWrapper = styled.View`
-    flex-direction: column;
+export const CardHeader = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
 `
 
-export const Title = styled.Text`
-    font-size: 16px;
-    font-family: ${Theme.fonts.bold};
-    color: ${Theme.colors.white};
-`
-
-export const Subtitle = styled.Text`
-    font-size: 14px;
-    font-family: ${Theme.fonts.regular};
-    color: ${Theme.colors.lightDescription};
+export const StatusIndicator = styled.View`
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #4caf50;
+    box-shadow: 0px 0px 4px rgba(76, 175, 80, 0.6);
 `
 
 export const PrimaryContentWrapper = styled.View`
     flex-direction: row;
-    gap: 8px;
     align-items: center;
-    padding-bottom: 16px;
-    border-bottom-width: 1px;
-    border-bottom-color: ${Theme.colors.description};
+    gap: 16px;
+    margin-bottom: 16px;
+`
+
+export const AvatarContainer = styled.View`
+    border-radius: 30px;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.3);
+    padding: 2px;
+`
+
+export const DoctorInfoWrapper = styled.View`
+    flex-direction: column;
+    gap: 4px;
+`
+
+export const Divider = styled.View`
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.15);
+    margin-vertical: 16px;
 `
 
 export const SecondaryContentWrapper = styled.View`
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 14px;
-    margin-top: 18px;
+`
+
+export const InfoColumn = styled.View`
+    flex-direction: column;
+    gap: 12px;
 `
 
 export const AppointmentInfoWrapper = styled.View`
@@ -46,8 +72,11 @@ export const AppointmentInfoWrapper = styled.View`
     gap: 8px;
 `
 
-export const AppointmentInfoText = styled.Text`
-    font-size: 12px;
-    font-family: ${Theme.fonts.regular};
-    color: ${Theme.colors.white};
+export const ViewDetailsButton = styled.View`
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 8px 12px;
+    border-radius: 20px;
 `

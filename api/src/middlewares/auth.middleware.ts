@@ -49,12 +49,10 @@ export function isDoctor(
   next: NextFunction
 ) {
   if (req.user?.role !== "doctor") {
-    return res
-      .status(403)
-      .json({
-        message:
-          "Acesso não autorizado. Apenas médicos podem acessar este recurso.",
-      });
+    return res.status(403).json({
+      message:
+        "Acesso não autorizado. Apenas médicos podem acessar este recurso.",
+    });
   }
   next();
 }
@@ -65,12 +63,10 @@ export function isPatient(
   next: NextFunction
 ) {
   if (req.user?.role !== "patient") {
-    return res
-      .status(403)
-      .json({
-        message:
-          "Acesso não autorizado. Apenas pacientes podem acessar este recurso.",
-      });
+    return res.status(403).json({
+      message:
+        "Acesso não autorizado. Apenas pacientes podem acessar este recurso.",
+    });
   }
   next();
 }
@@ -79,14 +75,10 @@ export function isAdmin(
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
-) {
-  if (req.user?.role !== "admin") {
-    return res
-      .status(403)
-      .json({
-        message:
-          "Acesso não autorizado. Apenas administradores podem acessar este recurso.",
-      });
+): void {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    res.status(403).json({ message: "Access denied" });
   }
-  next();
 }

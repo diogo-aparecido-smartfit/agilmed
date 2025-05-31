@@ -3,25 +3,26 @@ import styled from '@emotion/native'
 
 export const Container = styled.View`
     flex: 1;
-    background-color: ${Theme.colors.white};
+    background-color: ${Theme.colors.background};
 `
 
-export const ContentContainer = styled.ScrollView`
-    flex-direction: column;
-`
-
-export const AppointmentList = styled.View`
-    width: 100%;
-    padding: 40px 24px;
-    flex-direction: column;
+export const LoadingContainer = styled.View`
     flex: 1;
-    gap: 24px;
-`
-
-export const CenteredContainer = styled.View`
-    flex: 1;
-    height: 100%;
-    width: 100%;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    padding: 24px;
+`
+
+export const EmptyContainer = styled.View`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+`
+
+export const ListHeader = styled.View`
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 8px;
 `

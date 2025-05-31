@@ -1,11 +1,83 @@
 import styled from '@emotion/native'
+import { Theme } from '@/config/theme'
 
 export const Container = styled.View`
-    flex-direction: column;
-    gap: 16px;
+    width: 100%;
+    margin-vertical: 16px;
+    padding-top: 8px;
+`
+
+export const SectionHeader = styled.View`
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+`
+
+export const TitleContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+`
+
+export const CountBadge = styled.View`
+    background-color: ${Theme.colors.mainColor};
+    padding-horizontal: 8px;
+    padding-vertical: 4px;
+    border-radius: 12px;
+    min-width: 24px;
+    align-items: center;
+    justify-content: center;
 `
 
 export const AppointmentsWrapper = styled.ScrollView`
-    margin-left: -24px;
-    margin-right: -24px;
+    width: 100%;
+`
+
+export const AppointmentContainer = styled.View`
+    margin-right: 16px;
+`
+
+export const PaginationContainer = styled.View`
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+    gap: 8px;
+`
+
+interface PaginationDotProps {
+    active: boolean
+}
+
+export const PaginationDot = styled.View<PaginationDotProps>`
+    width: ${(props) => (props.active ? '24px' : '8px')};
+    height: 8px;
+    border-radius: ${(props) => (props.active ? '4px' : '4px')};
+    background-color: ${(props) =>
+        props.active ? Theme.colors.mainColor : Theme.colors.lightGray};
+    transition: all 0.3s ease;
+`
+
+export const EmptyContainer = styled.View`
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background-color: ${Theme.colors.fillColor};
+    border-radius: 12px;
+    margin-horizontal: 24px;
+`
+
+export const EmptyIllustration = styled.View`
+    margin-bottom: 16px;
+`
+
+export const LoadingContainer = styled.View`
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    background-color: ${Theme.colors.fillColor};
+    border-radius: 12px;
+    margin-horizontal: 24px;
 `

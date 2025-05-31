@@ -2,6 +2,7 @@ import Button from '@/components/Button/Button'
 import * as S from './style'
 import { useCallback } from 'react'
 import { showMessage } from 'react-native-flash-message'
+import { Theme } from '@/config/theme'
 
 interface HeaderProps {
     statusFilter: string | null
@@ -26,26 +27,31 @@ const Header = ({ statusFilter, setStatusFilter }: HeaderProps) => {
     )
 
     return (
-        <S.Container
-            contentContainerStyle={{
-                flex: 1,
-                gap: 12,
-                paddingHorizontal: 24,
-            }}
-            horizontal={true}
-            scrollEnabled={true}
-            showsHorizontalScrollIndicator={false}
-        >
-            {statusOptions.map((option) => (
-                <Button
-                    key={option.label}
-                    onPress={() => setStatusFilter(option.value)}
-                    width="auto"
-                    isSecondary={statusFilter !== option.value}
-                    text={option.label}
-                />
-            ))}
-        </S.Container>
+        <S.HeaderContainer>
+            <S.ButtonsScroll
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                    paddingHorizontal: 24,
+                    gap: 8,
+                    paddingVertical: 8,
+                }}
+            >
+                {statusOptions.map((option) => (
+                    <S.FilterButton
+                        key={option.label}
+                        active={statusFilter === option.value}
+                        onPress={() => setStatusFilter(option.value)}
+                    >
+                        <S.FilterButtonText
+                            active={statusFilter === option.value}
+                        >
+                            {option.label}
+                        </S.FilterButtonText>
+                    </S.FilterButton>
+                ))}
+            </S.ButtonsScroll>
+        </S.HeaderContainer>
     )
 }
 

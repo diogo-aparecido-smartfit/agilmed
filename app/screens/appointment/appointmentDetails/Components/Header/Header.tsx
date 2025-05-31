@@ -1,15 +1,22 @@
-import { router } from "expo-router";
-import * as S from "./style";
-import { ArrowLeft } from "iconsax-react-native";
+import * as S from './style'
+import { ArrowLeft } from 'iconsax-react-native'
+import { Theme } from '@/config/theme'
+import { UseAppointmentDetailsController } from '../../appointment-details.controller'
 
 const Header = () => {
-  return (
-    <S.Container>
-      <S.BackButton onPress={() => router.back()}>
-        <ArrowLeft size={24} color="#FFF" />
-      </S.BackButton>
-    </S.Container>
-  );
-};
+    const { handleBackPress } = UseAppointmentDetailsController()
 
-export default Header;
+    return (
+        <S.Container>
+            <S.BackButton onPress={handleBackPress}>
+                <ArrowLeft
+                    color={Theme.colors.white}
+                    size={24}
+                    variant="Bold"
+                />
+            </S.BackButton>
+        </S.Container>
+    )
+}
+
+export default Header
