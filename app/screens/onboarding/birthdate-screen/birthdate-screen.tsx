@@ -2,14 +2,14 @@ import React, { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateOnboardingData } from '@/store/slices/onboarding.slice'
 import Input from '@/components/Input/Input'
 import Text from '@/components/Text/Text'
-import styled from '@emotion/native'
-import { Theme } from '@/config/theme'
-import { StyleSheet, SafeAreaView } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { parse, isValid, isAfter, format } from 'date-fns'
+import { RootState } from '@/store'
+import * as S from './birthdate-screen.style'
 
 const schema = yup.object().shape({
     birthdate: yup
@@ -25,6 +25,7 @@ const schema = yup.object().shape({
 })
 
 export function BirthdateScreen() {
+    const { userData } = useSelector((state: RootState) => state.onboarding)
     const dispatch = useDispatch()
     const {
         control,
@@ -37,30 +38,23 @@ export function BirthdateScreen() {
     const birthdate = watch('birthdate')
 
     useEffect(() => {
-        console.log('caiu')
-        console.log(birthdate)
-        console.log(birthdate?.length)
-        console.log(!errors.birthdate)
-        console.log(errors.birthdate)
         if (birthdate && birthdate.length === 10 && !errors.birthdate) {
             const parsedDate = parse(birthdate, 'dd/MM/yyyy', new Date())
 
-            console.log(parsedDate)
             if (isValid(parsedDate)) {
                 const isoDate = format(
                     parsedDate,
                     "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
                 )
-                console.log('isodate: ', isoDate)
                 dispatch(updateOnboardingData({ birthdate: isoDate }))
             }
         }
     }, [birthdate, errors.birthdate, dispatch])
 
     return (
-        <Container>
-            <ContentContainer>
-                <HeaderContainer>
+        <S.Container>
+            <S.ContentContainer>
+                <S.HeaderContainer>
                     <Text fontSize="2xl" fontWeight="700" textAlign="center">
                         Qual é a sua data de nascimento?
                     </Text>
@@ -72,9 +66,9 @@ export function BirthdateScreen() {
                     >
                         Usamos essa informação para personalizar sua experiência
                     </Text>
-                </HeaderContainer>
+                </S.HeaderContainer>
 
-                <FormContainer>
+                <S.FormContainer>
                     <Controller
                         name="birthdate"
                         control={control}
@@ -84,6 +78,7 @@ export function BirthdateScreen() {
                                 placeholder="DD/MM/AAAA"
                                 mask="99/99/9999"
                                 keyboardType="numeric"
+                                defaultValue={userData?.birthdate || ''}
                                 onChangeText={(formatted, _) =>
                                     onChange(formatted)
                                 }
@@ -91,29 +86,11 @@ export function BirthdateScreen() {
                             />
                         )}
                     />
-                </FormContainer>
-            </ContentContainer>
-        </Container>
+                </S.FormContainer>
+            </S.ContentContainer>
+        </S.Container>
     )
 }
-
-const Container = styled(SafeAreaView)`
-    flex: 1;
-    background-color: ${Theme.colors.white};
-`
-
-const ContentContainer = styled.ScrollView`
-    padding: 40px 24px;
-    flex-direction: column;
-`
-
-const HeaderContainer = styled.View`
-    margin-bottom: 40px;
-`
-
-const FormContainer = styled.View`
-    margin-top: 20px;
-`
 
 const styles = StyleSheet.create({
     marginTop: {

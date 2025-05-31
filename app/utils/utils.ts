@@ -100,3 +100,11 @@ export const resetAppData = async () => {
         })
     }
 }
+
+export function toLocalDateFromUTC(date: Date): Date {
+    return new Date(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate()
+    )
+}

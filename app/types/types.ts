@@ -129,3 +129,28 @@ export interface QuickAction {
     text: string
     icon: Icon
 }
+
+export interface IDoctor {
+    id: number
+    user_id: number
+    specialty: string
+    crm: string
+    birthdate: string
+    address: string
+    city: string
+    state: string
+    gender: string
+    bio: string | null
+    available_hours: string | null
+    createdAt: string
+    updatedAt: string
+    user: {
+        id: number
+        full_name: string
+        email: string
+        phone: string
+        cpf: string
+        profile_picture_url: string | null
+        role: string
+    }
+}

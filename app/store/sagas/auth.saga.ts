@@ -50,13 +50,13 @@ function* loginSaga(action: LoginAction): Generator<Effect> {
             yield call([authRef.current, authRef.current.checkAuthState])
         }
 
-        setTimeout(() => {
-            router.replace('/(home)')
-        }, 300)
+        showMessage({
+            message: 'Autenticado com sucesso',
+            type: 'success',
+        })
     } catch (error: any) {
         const errorMessage =
-            error?.response?.data?.message ||
-            'Credenciais inválidas ou erro de rede.'
+            error?.message || 'Credenciais inválidas ou erro de rede.'
         showMessage({
             message: errorMessage,
             type: 'danger',
@@ -91,10 +91,11 @@ function* registerSaga(action: RegisterAction): Generator<Effect> {
             registerSuccess({ token: response.token, user: response.user })
         )
         router.push('/(home)')
-    } catch (error) {
-        console.error(error)
+    } catch (error: any) {
         showMessage({
-            message: 'Erro ao registrar. Tente novamente mais tarde.',
+            message:
+                error?.message ||
+                'Erro ao registrar. Tente novamente mais tarde.',
             type: 'danger',
         })
         yield put(registerFailure('Erro ao registrar. Tente novamente.'))
@@ -115,10 +116,11 @@ function* resetPasswordSaga(action: ResetPasswordAction): Generator<Effect> {
             },
         })
         yield put(resetPasswordSuccess())
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
         showMessage({
             message:
+                error?.message ||
                 'Não foi possível resetar a senha, por favor, tente novamente mais tarde.',
             type: 'danger',
         })
@@ -162,10 +164,10 @@ function* verifyCodeSaga(action: VerifyCodeAction): Generator<Effect> {
         })
 
         router.replace('/(home)')
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
         showMessage({
-            message: 'Código incorreto.',
+            message: error?.message || 'Código incorreto.',
             type: 'danger',
         })
         yield put(

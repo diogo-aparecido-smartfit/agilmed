@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateOnboardingData } from '@/store/slices/onboarding.slice'
 import BasicInput from '@/components/BasicInput/BasicInput'
 import Text from '@/components/Text/Text'
-import styled from '@emotion/native'
-import { Theme } from '@/config/theme'
-import { StyleSheet, SafeAreaView } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { RootState } from '@/store'
+import * as S from './intro-screen.style'
 
 const schema = yup.object().shape({
     full_name: yup
@@ -23,6 +23,7 @@ const schema = yup.object().shape({
 
 export function IntroScreen() {
     const dispatch = useDispatch()
+    const { userData } = useSelector((state: RootState) => state.onboarding)
     const {
         control,
         formState: { errors },
@@ -40,15 +41,15 @@ export function IntroScreen() {
     }, [fullName, errors.full_name, dispatch])
 
     return (
-        <Container>
-            <ContentContainer>
-                <LogoContainer>
+        <S.Container>
+            <S.ContentContainer>
+                <S.LogoContainer>
                     <Text fontSize="3xl" color="mainColor" fontWeight="700">
                         AgilMed
                     </Text>
-                </LogoContainer>
+                </S.LogoContainer>
 
-                <WelcomeContainer>
+                <S.WelcomeContainer>
                     <Text fontSize="2xl" fontWeight="700" textAlign="center">
                         Bem-vindo à Demonstração
                     </Text>
@@ -62,9 +63,9 @@ export function IntroScreen() {
                         AgilMed. Vamos começar criando um perfil rápido para
                         você explorar todas as funcionalidades.
                     </Text>
-                </WelcomeContainer>
+                </S.WelcomeContainer>
 
-                <FormContainer>
+                <S.FormContainer>
                     <Controller
                         name="full_name"
                         control={control}
@@ -74,38 +75,16 @@ export function IntroScreen() {
                                 placeholder="Digite seu nome e sobrenome"
                                 onChangeText={onChange}
                                 value={value}
+                                defaultValue={userData?.full_name || ''}
                                 error={errors.full_name?.message}
                             />
                         )}
                     />
-                </FormContainer>
-            </ContentContainer>
-        </Container>
+                </S.FormContainer>
+            </S.ContentContainer>
+        </S.Container>
     )
 }
-
-const Container = styled(SafeAreaView)`
-    flex: 1;
-    background-color: ${Theme.colors.white};
-`
-
-const ContentContainer = styled.ScrollView`
-    padding: 40px 24px;
-    flex-direction: column;
-`
-
-const LogoContainer = styled.View`
-    align-items: center;
-    margin-bottom: 40px;
-`
-
-const WelcomeContainer = styled.View`
-    margin-bottom: 40px;
-`
-
-const FormContainer = styled.View`
-    margin-top: 20px;
-`
 
 const styles = StyleSheet.create({
     marginTop: {

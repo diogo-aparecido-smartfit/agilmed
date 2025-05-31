@@ -135,6 +135,13 @@ export default function MainNavigator() {
                     options={{ headerShown: false, headerTitle: 'Onboarding' }}
                 />
             </Stack.Protected>
+            <Stack.Screen
+                name="(onboarding-completion)"
+                options={{
+                    headerShown: false,
+                    headerTitle: 'Onboarding Completion',
+                }}
+            />
             <Stack.Screen name="+not-found" />
         </Stack>
     )

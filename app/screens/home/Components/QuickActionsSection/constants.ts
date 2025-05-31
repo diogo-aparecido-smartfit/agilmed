@@ -1,10 +1,17 @@
-import { Calendar1, Hospital, Link2, Sun } from 'iconsax-react-native'
+import {
+    Alarm,
+    Calendar1,
+    Hospital,
+    Link2,
+    Profile2User,
+    Sun,
+} from 'iconsax-react-native'
 
 export const QUICK_ACTIONS = [
     {
-        id: 'covid',
-        text: 'Covid 19',
-        icon: Sun,
+        id: 'sos',
+        text: 'SOS',
+        icon: Alarm,
     },
     {
         id: 'appointments',
@@ -12,9 +19,9 @@ export const QUICK_ACTIONS = [
         icon: Calendar1,
     },
     {
-        id: 'medications',
-        text: 'Remédios',
-        icon: Link2,
+        id: 'doctors',
+        text: 'Médicos',
+        icon: Profile2User,
     },
     {
         id: 'places',

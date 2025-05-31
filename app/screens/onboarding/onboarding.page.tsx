@@ -17,14 +17,23 @@ import {
 } from 'react-native'
 import { Theme } from '@/config/theme'
 import { router } from 'expo-router'
-import styled from '@emotion/native'
 import { OnboardingNavigation } from '@/components/OnboardingNavigation/OnboardingNavigation'
 import { EmailScreen } from './email-screen/email-screen.page'
 import { IntroScreen } from './intro-screen/intro-screen.page'
 import { PasswordScreen } from './password-screen/password-screen.page'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as S from './onboarding.style'
 
-const TOTAL_STEPS = 4
+const screenMap: Record<number, JSX.Element> = {
+    0: <IntroScreen />,
+    1: <BirthdateScreen />,
+    2: <EmailScreen />,
+    3: <PasswordScreen />,
+}
+
+type TScreenMap = keyof typeof screenMap
+
+const TOTAL_STEPS = 5
 
 export default function OnboardingScreen() {
     const dispatch = useDispatch()
@@ -55,33 +64,28 @@ export default function OnboardingScreen() {
         checkOnboardingStatus()
     }, [])
 
+    const stepValidationMap = {
+        0: () =>
+            !userData.full_name || userData.full_name.split(' ').length < 2,
+        1: () => !userData.birthdate,
+        2: () => !userData.email,
+        3: () => !userData.password || userData.password.length < 6,
+        4: () => false,
+    }
+
     useEffect(() => {
-        switch (currentStep) {
-            case 0:
-                setIsNextDisabled(
-                    !userData.full_name ||
-                        userData.full_name.split(' ').length < 2
-                )
-                break
-            case 1:
-                setIsNextDisabled(!userData.birthdate)
-                break
-            case 2:
-                setIsNextDisabled(!userData.email)
-                break
-            case 3:
-                setIsNextDisabled(
-                    !userData.password || userData.password.length < 6
-                )
-                break
-            default:
-                setIsNextDisabled(true)
-        }
+        setIsNextDisabled(
+            stepValidationMap[
+                currentStep as keyof typeof stepValidationMap
+            ]?.() ?? true
+        )
     }, [currentStep, userData])
 
     const handleNext = () => {
-        if (currentStep === TOTAL_STEPS - 1) {
+        if (currentStep === TOTAL_STEPS - 2) {
             dispatch(completeOnboarding())
+        } else if (currentStep === TOTAL_STEPS - 1) {
+            // do nothing
         } else {
             dispatch(nextStepAction())
         }
@@ -102,51 +106,35 @@ export default function OnboardingScreen() {
         )
     }
 
-    const renderStep = () => {
-        switch (currentStep) {
-            case 0:
-                return <IntroScreen />
-            case 1:
-                return <BirthdateScreen />
-            case 2:
-                return <EmailScreen />
-            case 3:
-                return <PasswordScreen />
-            default:
-                return <IntroScreen />
-        }
-    }
+    const renderStep = () =>
+        screenMap[currentStep as TScreenMap] || <IntroScreen />
+
+    const showNavigation =
+        currentStep < TOTAL_STEPS - 1 &&
+        !(currentStep === TOTAL_STEPS - 2 && isLoading)
 
     return (
-        <Container>
+        <S.Container>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.keyboardView}
             >
-                <ContentView>{renderStep()}</ContentView>
+                <S.ContentView>{renderStep()}</S.ContentView>
 
-                <OnboardingNavigation
-                    currentStep={currentStep}
-                    totalSteps={TOTAL_STEPS}
-                    onNext={handleNext}
-                    onPrev={handlePrev}
-                    isNextDisabled={isNextDisabled}
-                    isLoading={isLoading}
-                />
+                {showNavigation && (
+                    <OnboardingNavigation
+                        currentStep={currentStep}
+                        totalSteps={TOTAL_STEPS - 1}
+                        onNext={handleNext}
+                        onPrev={handlePrev}
+                        isNextDisabled={isNextDisabled}
+                        isLoading={isLoading}
+                    />
+                )}
             </KeyboardAvoidingView>
-        </Container>
+        </S.Container>
     )
 }
-
-const Container = styled.SafeAreaView`
-    flex: 1;
-    background-color: ${Theme.colors.white};
-`
-
-const ContentView = styled.View`
-    flex: 1;
-    padding-bottom: 120px;
-`
 
 const styles = StyleSheet.create({
     loadingContainer: {

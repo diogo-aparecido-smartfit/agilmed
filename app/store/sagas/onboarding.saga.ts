@@ -13,8 +13,8 @@ import { createUser } from '@/services/user/user.services'
 import { loginSuccess } from '../slices/auth.slice'
 import { generateRandomCPF } from '@/utils/utils'
 import { showMessage } from 'react-native-flash-message'
-import { router } from 'expo-router'
 import { authRef } from '@/providers/auth.provider'
+import { router } from 'expo-router'
 
 function* checkOnboardingStatusSaga(): Generator<Effect> {
     try {
@@ -82,14 +82,12 @@ function* completeOnboardingSaga(): Generator<Effect> {
             yield call([authRef.current, authRef.current.checkAuthState])
         }
 
-        setTimeout(() => {
-            router.replace('/(home)')
-        }, 300)
-    } catch (error) {
-        console.error('Erro ao completar onboarding:', error)
-
+        router.replace('/(onboarding-completion)/completion')
+    } catch (error: any) {
         showMessage({
-            message: 'Erro ao criar conta. Tente novamente mais tarde.',
+            message:
+                error?.message ||
+                'Erro ao criar conta. Tente novamente mais tarde.',
             type: 'danger',
         })
 
@@ -103,7 +101,7 @@ function* resetOnboardingSaga(): Generator<Effect> {
         yield call(AsyncStorage.removeItem, '@agilmed:onboardingData')
 
         showMessage({
-            message: 'Dados de onboarding resetados com sucesso',
+            message: 'Dados resetados com sucesso',
             type: 'success',
         })
 
@@ -114,7 +112,7 @@ function* resetOnboardingSaga(): Generator<Effect> {
         console.error('Erro ao resetar onboarding:', error)
 
         showMessage({
-            message: 'Erro ao resetar dados de onboarding',
+            message: 'Erro ao resetar dados',
             type: 'danger',
         })
     }

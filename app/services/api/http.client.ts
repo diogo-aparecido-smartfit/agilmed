@@ -2,6 +2,8 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import store from '@/store'
 import { logoffRequest } from '@/store/slices/auth.slice'
+import { router } from 'expo-router'
+import { replace } from 'expo-router/build/global-state/routing'
 
 const httpClient = axios.create({
     baseURL: 'https://agilmed-api.azurewebsites.net/api',
@@ -17,6 +19,7 @@ httpClient.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
         }
+
         return config
     },
     (error) => Promise.reject(error)
@@ -32,12 +35,18 @@ httpClient.interceptors.response.use(
     async (error) => {
         if (error.response?.status === 401) {
             store.dispatch(logoffRequest())
+            router.replace('/(auth)/login')
         }
+        console.log(
+            'error.response?.data: ',
+            JSON.stringify(error.response?.data)
+        )
+        console.log('error.message: ', JSON.stringify(error.message))
         console.error(
             '[HttpClient] Erro na requisição:',
             error.response?.data || error.message
         )
-        return Promise.reject(error)
+        return Promise.reject(error.response?.data || error)
     }
 )
 

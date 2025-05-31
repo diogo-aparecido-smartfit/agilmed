@@ -9,7 +9,7 @@ import * as S from './QuickActionsSection.style'
 export default function QuickActionsSection() {
     const handleActionPress = useCallback((action: string) => {
         switch (action) {
-            case 'covid':
+            case 'sos':
                 showMessage({
                     message:
                         'Desculpe, mas esta ação ainda não foi implementada.',
@@ -19,12 +19,8 @@ export default function QuickActionsSection() {
             case 'appointments':
                 router.push('/(home)/(appointments)/appointments')
                 break
-            case 'medications':
-                showMessage({
-                    message:
-                        'Desculpe, mas esta ação ainda não foi implementada.',
-                    type: 'warning',
-                })
+            case 'doctors':
+                router.push('/(doctors)/doctors-list')
                 break
             case 'places':
                 router.push('/(places)/places-list')

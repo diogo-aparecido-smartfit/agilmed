@@ -1,27 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateOnboardingData } from '@/store/slices/onboarding.slice'
 import BasicInput from '@/components/BasicInput/BasicInput'
 import Text from '@/components/Text/Text'
-import styled from '@emotion/native'
-import { Theme } from '@/config/theme'
-import { StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Eye, EyeSlash } from 'iconsax-react-native'
+import { Theme } from '@/config/theme'
+import { RootState } from '@/store'
+import * as S from './password-screen.style'
 
 const schema = yup.object().shape({
     password: yup
         .string()
-        .min(6, 'A senha deve ter pelo menos 6 caracteres')
-        .required('Senha é obrigatória'),
+        .required('Senha é obrigatória')
+        .min(6, 'A senha deve ter pelo menos 6 caracteres'),
 })
 
 export function PasswordScreen() {
+    const { userData } = useSelector((state: RootState) => state.onboarding)
     const dispatch = useDispatch()
     const [showPassword, setShowPassword] = useState(false)
-
     const {
         control,
         formState: { errors },
@@ -38,14 +39,14 @@ export function PasswordScreen() {
         }
     }, [password, errors.password, dispatch])
 
-    const togglePasswordVisibility = () => {
+    const toggleShowPassword = () => {
         setShowPassword(!showPassword)
     }
 
     return (
-        <Container>
-            <ContentContainer>
-                <HeaderContainer>
+        <S.Container>
+            <S.ContentContainer>
+                <S.HeaderContainer>
                     <Text fontSize="2xl" fontWeight="700" textAlign="center">
                         Crie uma senha
                     </Text>
@@ -55,56 +56,52 @@ export function PasswordScreen() {
                         textAlign="center"
                         style={styles.marginTop}
                     >
-                        Utilize uma senha segura para proteger sua conta
+                        Use uma senha segura para proteger sua conta
                     </Text>
-                </HeaderContainer>
+                </S.HeaderContainer>
 
-                <FormContainer>
+                <S.FormContainer>
                     <Controller
                         name="password"
                         control={control}
                         render={({ field: { onChange, value } }) => (
-                            <View style={styles.container}>
+                            <TouchableOpacity
+                                style={styles.container}
+                                activeOpacity={1}
+                            >
                                 <BasicInput
                                     label="Senha"
                                     placeholder="Digite sua senha"
                                     secureTextEntry={!showPassword}
                                     onChangeText={onChange}
                                     value={value}
+                                    defaultValue={userData?.password || ''}
                                     error={errors.password?.message}
-                                    icon={{
-                                        Icon: showPassword ? EyeSlash : Eye,
-                                        onPress: togglePasswordVisibility,
-                                        size: 18,
-                                        color: Theme.colors.lightGray,
-                                    }}
                                 />
-                            </View>
+                                <TouchableOpacity
+                                    style={styles.eyeIcon}
+                                    onPress={toggleShowPassword}
+                                >
+                                    {showPassword ? (
+                                        <EyeSlash
+                                            size={20}
+                                            color={Theme.colors.description}
+                                        />
+                                    ) : (
+                                        <Eye
+                                            size={20}
+                                            color={Theme.colors.description}
+                                        />
+                                    )}
+                                </TouchableOpacity>
+                            </TouchableOpacity>
                         )}
                     />
-                </FormContainer>
-            </ContentContainer>
-        </Container>
+                </S.FormContainer>
+            </S.ContentContainer>
+        </S.Container>
     )
 }
-
-const Container = styled(SafeAreaView)`
-    flex: 1;
-    background-color: ${Theme.colors.white};
-`
-
-const ContentContainer = styled.ScrollView`
-    padding: 40px 24px;
-    flex-direction: column;
-`
-
-const HeaderContainer = styled.View`
-    margin-bottom: 40px;
-`
-
-const FormContainer = styled.View`
-    margin-top: 20px;
-`
 
 const styles = StyleSheet.create({
     marginTop: {

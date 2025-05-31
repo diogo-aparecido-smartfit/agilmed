@@ -2,19 +2,20 @@ import React, { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateOnboardingData } from '@/store/slices/onboarding.slice'
 import BasicInput from '@/components/BasicInput/BasicInput'
 import Text from '@/components/Text/Text'
-import styled from '@emotion/native'
-import { Theme } from '@/config/theme'
-import { StyleSheet, SafeAreaView } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { RootState } from '@/store'
+import * as S from './email-screen.style'
 
 const schema = yup.object().shape({
     email: yup.string().email('Email inválido').required('Email é obrigatório'),
 })
 
 export function EmailScreen() {
+    const { userData } = useSelector((state: RootState) => state.onboarding)
     const dispatch = useDispatch()
     const {
         control,
@@ -33,9 +34,9 @@ export function EmailScreen() {
     }, [email, errors.email, dispatch])
 
     return (
-        <Container>
-            <ContentContainer>
-                <HeaderContainer>
+        <S.Container>
+            <S.ContentContainer>
+                <S.HeaderContainer>
                     <Text fontSize="2xl" fontWeight="700" textAlign="center">
                         Qual é o seu email?
                     </Text>
@@ -48,9 +49,9 @@ export function EmailScreen() {
                         Usamos seu email para acesso à conta e comunicações
                         importantes
                     </Text>
-                </HeaderContainer>
+                </S.HeaderContainer>
 
-                <FormContainer>
+                <S.FormContainer>
                     <Controller
                         name="email"
                         control={control}
@@ -61,34 +62,17 @@ export function EmailScreen() {
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                                 onChangeText={onChange}
+                                defaultValue={userData?.email || ''}
                                 value={value}
                                 error={errors.email?.message}
                             />
                         )}
                     />
-                </FormContainer>
-            </ContentContainer>
-        </Container>
+                </S.FormContainer>
+            </S.ContentContainer>
+        </S.Container>
     )
 }
-
-const Container = styled(SafeAreaView)`
-    flex: 1;
-    background-color: ${Theme.colors.white};
-`
-
-const ContentContainer = styled.ScrollView`
-    padding: 40px 24px;
-    flex-direction: column;
-`
-
-const HeaderContainer = styled.View`
-    margin-bottom: 40px;
-`
-
-const FormContainer = styled.View`
-    margin-top: 20px;
-`
 
 const styles = StyleSheet.create({
     marginTop: {
