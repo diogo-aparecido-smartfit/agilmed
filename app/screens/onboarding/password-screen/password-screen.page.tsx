@@ -77,23 +77,13 @@ export function PasswordScreen() {
                                     value={value}
                                     defaultValue={userData?.password || ''}
                                     error={errors.password?.message}
+                                    icon={{
+                                        Icon: showPassword ? EyeSlash : Eye,
+                                        color: Theme.colors.description,
+                                        onPress: toggleShowPassword,
+                                        size: 20,
+                                    }}
                                 />
-                                <TouchableOpacity
-                                    style={styles.eyeIcon}
-                                    onPress={toggleShowPassword}
-                                >
-                                    {showPassword ? (
-                                        <EyeSlash
-                                            size={20}
-                                            color={Theme.colors.description}
-                                        />
-                                    ) : (
-                                        <Eye
-                                            size={20}
-                                            color={Theme.colors.description}
-                                        />
-                                    )}
-                                </TouchableOpacity>
                             </TouchableOpacity>
                         )}
                     />

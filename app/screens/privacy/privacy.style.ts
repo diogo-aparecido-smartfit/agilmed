@@ -1,9 +1,8 @@
-import { Theme } from '@/config/theme'
 import styled from '@emotion/native'
 
 export const Container = styled.SafeAreaView`
     flex: 1;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const Header = styled.View`
@@ -11,9 +10,9 @@ export const Header = styled.View`
     align-items: center;
     justify-content: space-between;
     padding: 16px 24px;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
     border-bottom-width: 1px;
-    border-bottom-color: ${Theme.colors.fillColor};
+    border-bottom-color: ${(props) => props.theme.colors.fillColor};
 `
 
 export const BackButton = styled.TouchableOpacity`
@@ -44,7 +43,7 @@ export const PrivacyItem = styled.View`
     justify-content: space-between;
     align-items: center;
     padding: 16px;
-    background-color: ${Theme.colors.fillColor};
+    background-color: ${(props) => props.theme.colors.fillColor};
     border-radius: 12px;
     margin-bottom: 8px;
 `
@@ -62,7 +61,7 @@ export const ItemTextContainer = styled.View`
 
 export const ActionButton = styled.TouchableOpacity`
     padding: 16px;
-    background-color: ${Theme.colors.fillColor};
+    background-color: ${(props) => props.theme.colors.fillColor};
     border-radius: 12px;
     margin-bottom: 8px;
 `

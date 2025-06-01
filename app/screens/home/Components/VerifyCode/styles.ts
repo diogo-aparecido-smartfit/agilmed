@@ -2,17 +2,17 @@ import { Theme } from '@/config/theme'
 import styled from '@emotion/native'
 
 export const Container = styled.View`
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
     flex-direction: column;
     border-top-right-radius: 24px;
     border-top-left-radius: 24px;
     padding: 40px 24px;
     flex-direction: column;
-    background-color: ${Theme.colors.white};
 `
 
 export const ContentContainer = styled.View`
     /* flex: 1; */
+    background-color: ${(props) => props.theme.colors.background};
     padding: 40px 24px;
     flex-direction: column;
 `

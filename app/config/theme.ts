@@ -22,6 +22,7 @@ export const lightPalette = {
     danger: '#ef4444',
     cardBackground: '#FFFFFF',
     divider: '#F4F4F6',
+    blue: '#3178c6',
 }
 
 export const darkPalette = {
@@ -46,6 +47,7 @@ export const darkPalette = {
     danger: '#f87171',
     cardBackground: '#1E2022',
     divider: '#2C2F33',
+    blue: '#3178c6',
 }
 
 export const ThemeBase = {

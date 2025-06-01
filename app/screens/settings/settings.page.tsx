@@ -49,7 +49,6 @@ export default function SettingsPage() {
 
     return (
         <S.Container>
-            <StatusBar style="dark" />
             <S.ContentContainer
                 contentContainerStyle={{
                     flexGrow: 1,

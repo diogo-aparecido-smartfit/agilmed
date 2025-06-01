@@ -1,3 +1,4 @@
+import { ThemeTransition } from '@/components/ThemeTransition/theme-transition'
 import { ThemeBase, darkPalette, lightPalette } from '@/config/theme'
 import { RootState } from '@/store'
 import { ThemeProvider } from '@emotion/react'
@@ -11,12 +12,35 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
         colors: darkMode ? darkPalette : lightPalette,
     })
 
+    const [isTransitioning, setIsTransitioning] = useState(false)
+    const [lastThemeMode, setLastThemeMode] = useState(darkMode)
+
     useEffect(() => {
+        if (darkMode !== lastThemeMode) {
+            setIsTransitioning(true)
+            setLastThemeMode(darkMode)
+        }
+    }, [darkMode])
+
+    const handleTransitionComplete = () => {
         setThemeData({
             ...ThemeBase,
             colors: darkMode ? darkPalette : lightPalette,
         })
-    }, [darkMode])
+        setTimeout(() => {
+            setIsTransitioning(false)
+        }, 3000)
+    }
 
-    return <ThemeProvider theme={themeData}>{children}</ThemeProvider>
+    return (
+        <ThemeProvider theme={themeData}>
+            {children}
+
+            {isTransitioning && (
+                <ThemeTransition
+                    onTransitionComplete={handleTransitionComplete}
+                />
+            )}
+        </ThemeProvider>
+    )
 }

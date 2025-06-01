@@ -4,6 +4,7 @@ import BottomSheet, {
     BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { VerifyCode } from '../VerifyCode/VerifyCode'
+import { useTheme } from '@/hooks/useTheme'
 
 interface VerificationCodeModalProps {
     bottomSheetRef: MutableRefObject<BottomSheet | null>
@@ -14,6 +15,7 @@ export default function VerificationCodeModal({
     bottomSheetRef,
     isVerified,
 }: VerificationCodeModalProps) {
+    const { colors } = useTheme()
     if (isVerified) return null
 
     return (
@@ -22,6 +24,7 @@ export default function VerificationCodeModal({
             snapPoints={['50%']}
             enablePanDownToClose
             index={-1}
+            backgroundStyle={{ backgroundColor: colors.background }}
             backdropComponent={(props) => (
                 <BottomSheetBackdrop
                     {...props}
