@@ -11,6 +11,7 @@ import { categoryMap } from '@/utils/constants'
 import { useCallback, useMemo } from 'react'
 import { Linking } from 'react-native'
 import { router } from 'expo-router'
+import { useTheme } from '@/hooks/useTheme'
 
 export default function PlaceDetailsPage() {
     const {
@@ -21,6 +22,7 @@ export default function PlaceDetailsPage() {
         snapPoints,
         currentPlace,
     } = UsePlaceDetailsController()
+    const { colors } = useTheme()
 
     const isOpen = useMemo(() => {
         const now = new Date()
@@ -67,7 +69,10 @@ export default function PlaceDetailsPage() {
         >
             <Header />
             <BottomSheet
-                backgroundStyle={{ borderRadius: 32 }}
+                backgroundStyle={{
+                    borderRadius: 32,
+                    backgroundColor: colors.background,
+                }}
                 snapPoints={snapPoints}
                 ref={bottomSheetRef}
             >

@@ -1,15 +1,14 @@
-import { Theme } from '@/config/theme'
 import MapView from 'react-native-maps'
 import styled from '@emotion/native'
 
 export const Container = styled.ImageBackground`
     flex: 1;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const ContentContainer = styled.View`
     padding: 40px 24px;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
     flex-direction: column;
     border-top-right-radius: 24px;
     border-top-left-radius: 24px;
@@ -52,7 +51,7 @@ export const DividerContainer = styled.View`
 export const Divider = styled.View`
     flex: 1;
     height: 1px;
-    background-color: ${Theme.colors.inputColor};
+    background-color: ${(props) => props.theme.colors.inputColor};
 `
 
 export const DetailsContainer = styled.View``
@@ -314,7 +313,7 @@ export const ServiceItem = styled.View`
     flex-direction: row;
     align-items: center;
     gap: 8px;
-    background-color: ${Theme.colors.lightGray};
+    background-color: ${(props) => props.theme.colors.lightGray};
     padding: 8px 12px;
     border-radius: 8px;
 `
@@ -341,9 +340,8 @@ export const ActionButton = styled.TouchableOpacity`
     align-items: center;
     justify-content: center;
     gap: 4px;
-    background-color: white;
     border: 1px solid;
-    border-color: ${Theme.colors.mainColor};
+    border-color: ${(props) => props.theme.colors.mainColor};
     padding: 12px 16px;
     border-radius: 12px;
     flex: 1;
@@ -362,7 +360,9 @@ export const StatusDot = styled.View<{ isOpen: boolean }>`
     height: 8px;
     border-radius: 4px;
     background-color: ${(props) =>
-        props.isOpen ? Theme.colors.success : Theme.colors.error};
+        props.isOpen
+            ? (props) => props.theme.colors.success
+            : (props) => props.theme.colors.error};
 `
 
 export const SpecialistsList = styled.View`
@@ -383,7 +383,7 @@ export const SpecialistInfo = styled.View`
 export const FacilityImagePlaceholder = styled.View`
     width: 100%;
     height: 220px;
-    background-color: ${Theme.colors.lightDescription};
+    background-color: ${(props) => props.theme.colors.lightDescription};
     justify-content: center;
     align-items: center;
     border-radius: 8px;
@@ -391,23 +391,23 @@ export const FacilityImagePlaceholder = styled.View`
 `
 
 export const PrimaryButton = styled(ActionButton)`
-    background-color: ${Theme.colors.mainColor};
+    background-color: ${(props) => props.theme.colors.mainColor};
 `
 
 export const SecondaryButton = styled(ActionButton)`
-    background-color: ${Theme.colors.lightGray};
+    background-color: ${(props) => props.theme.colors.lightGray};
 `
 
 export const OutlineButton = styled(ActionButton)`
     background-color: transparent;
-    border: 1px solid ${Theme.colors.mainColor};
+    border: 1px solid ${(props) => props.theme.colors.mainColor};
 `
 
 export const IconButton = styled.TouchableOpacity`
     width: 40px;
     height: 40px;
     border-radius: 20px;
-    background-color: ${Theme.colors.lightGray};
+    background-color: ${(props) => props.theme.colors.lightGray};
     justify-content: center;
     align-items: center;
 `
@@ -419,7 +419,7 @@ export const FloatingButton = styled.TouchableOpacity`
     width: 56px;
     height: 56px;
     border-radius: 28px;
-    background-color: ${Theme.colors.mainColor};
+    background-color: ${(props) => props.theme.colors.mainColor};
     justify-content: center;
     align-items: center;
     elevation: 5;

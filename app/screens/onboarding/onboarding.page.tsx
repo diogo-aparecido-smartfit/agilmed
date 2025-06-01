@@ -23,17 +23,19 @@ import { IntroScreen } from './intro-screen/intro-screen.page'
 import { PasswordScreen } from './password-screen/password-screen.page'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as S from './onboarding.style'
+import { AppSettingsScreen } from './app-settings-screen/app-settings-screen'
 
 const screenMap: Record<number, JSX.Element> = {
     0: <IntroScreen />,
     1: <BirthdateScreen />,
     2: <EmailScreen />,
     3: <PasswordScreen />,
+    4: <AppSettingsScreen />,
 }
 
 type TScreenMap = keyof typeof screenMap
 
-const TOTAL_STEPS = 5
+const TOTAL_STEPS = 6
 
 export default function OnboardingScreen() {
     const dispatch = useDispatch()
@@ -71,6 +73,7 @@ export default function OnboardingScreen() {
         2: () => !userData.email,
         3: () => !userData.password || userData.password.length < 6,
         4: () => false,
+        5: () => false,
     }
 
     useEffect(() => {

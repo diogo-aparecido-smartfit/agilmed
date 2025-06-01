@@ -9,17 +9,7 @@ import Text from '@/components/Text/Text'
 import { StyleSheet } from 'react-native'
 import { RootState } from '@/store'
 import * as S from './intro-screen.style'
-
-const schema = yup.object().shape({
-    full_name: yup
-        .string()
-        .required('Nome completo é obrigatório')
-        .test('is-full-name', 'Digite nome e sobrenome', (value) => {
-            if (!value) return false
-            const names = value.trim().split(' ')
-            return names.length >= 2 && names[1].length > 0
-        }),
-})
+import { schema } from './intro-screen.schema'
 
 export function IntroScreen() {
     const dispatch = useDispatch()

@@ -24,9 +24,6 @@ export const FooterContainer = styled.KeyboardAvoidingView`
     margin-top: auto;
     justify-content: space-between;
     background-color: ${(props) => props.theme.colors.background};
-    border-top-width: 1px;
-    border-top-color: ${(props) =>
-        props.theme.colors.divider || props.theme.colors.borderColor};
 `
 
 export const SendMessageButton = styled.TouchableOpacity`
@@ -44,9 +41,6 @@ export const HeaderContainer = styled.View`
     flex-direction: row;
     align-items: center;
     background-color: ${(props) => props.theme.colors.background};
-    border-bottom-width: 1px;
-    border-bottom-color: ${(props) =>
-        props.theme.colors.divider || props.theme.colors.borderColor};
 `
 
 export const BotInfoContainer = styled.View`
