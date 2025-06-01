@@ -5,7 +5,7 @@ import styled from '@emotion/native'
 export const Container = styled.View`
     flex: 1;
     flex-direction: column;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const Header = styled.View`
