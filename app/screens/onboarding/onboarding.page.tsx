@@ -109,10 +109,6 @@ export default function OnboardingScreen() {
     const renderStep = () =>
         screenMap[currentStep as TScreenMap] || <IntroScreen />
 
-    const showNavigation =
-        currentStep < TOTAL_STEPS - 1 &&
-        !(currentStep === TOTAL_STEPS - 2 && isLoading)
-
     return (
         <S.Container>
             <KeyboardAvoidingView
@@ -121,16 +117,14 @@ export default function OnboardingScreen() {
             >
                 <S.ContentView>{renderStep()}</S.ContentView>
 
-                {showNavigation && (
-                    <OnboardingNavigation
-                        currentStep={currentStep}
-                        totalSteps={TOTAL_STEPS - 1}
-                        onNext={handleNext}
-                        onPrev={handlePrev}
-                        isNextDisabled={isNextDisabled}
-                        isLoading={isLoading}
-                    />
-                )}
+                <OnboardingNavigation
+                    currentStep={currentStep}
+                    totalSteps={TOTAL_STEPS - 1}
+                    onNext={handleNext}
+                    onPrev={handlePrev}
+                    isNextDisabled={isNextDisabled}
+                    isLoading={isLoading}
+                />
             </KeyboardAvoidingView>
         </S.Container>
     )

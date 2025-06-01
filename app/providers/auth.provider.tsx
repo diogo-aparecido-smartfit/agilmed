@@ -47,7 +47,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const checkAuthState = async () => {
         try {
-            console.log('checkAuthState executado')
             setState((prev) => ({ ...prev, isLoading: true }))
 
             const hasSeenOnboardingValue = await AsyncStorage.getItem(

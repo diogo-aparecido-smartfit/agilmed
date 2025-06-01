@@ -32,6 +32,7 @@ function* saveNotificationsSetting(
 
 function* loadSettings(): Generator<Effect> {
     try {
+        console.log('loadSettings executado')
         const darkMode = yield call(
             [AsyncStorage, 'getItem'],
             '@agilmed:darkMode'

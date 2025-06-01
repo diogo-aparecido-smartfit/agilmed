@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Theme.colors.white,
+        backgroundColor: Theme.colors.background,
     },
     content: {
         alignItems: 'center',

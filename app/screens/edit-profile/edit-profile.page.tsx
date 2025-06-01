@@ -13,6 +13,7 @@ import { Theme } from '@/config/theme'
 import * as S from './edit-profile.style'
 import { useSettingsController } from '../settings/settings.controller'
 import EditButton from '../settings/EditButton/EditButton'
+import { useTheme } from '@/hooks/useTheme'
 
 export default function EditProfilePage() {
     const {
@@ -24,6 +25,7 @@ export default function EditProfilePage() {
         imageUploadLoading,
         handleImageChange,
     } = useSettingsController()
+    const { colors } = useTheme()
     const { user } = useSelector((state: RootState) => state.auth)
 
     return (
@@ -31,7 +33,7 @@ export default function EditProfilePage() {
             <StatusBar style="dark" />
             <S.Header>
                 <S.BackButton onPress={() => router.back()}>
-                    <ArrowLeft size={24} color={Theme.colors.black} />
+                    <ArrowLeft size={24} color={colors.title} />
                 </S.BackButton>
                 <Text fontSize="lg" fontWeight="700">
                     Editar Perfil
