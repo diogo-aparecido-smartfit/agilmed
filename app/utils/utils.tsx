@@ -1,9 +1,11 @@
+import { Theme } from '@/config/theme'
 import store from '@/store'
 import { logoffRequest } from '@/store/slices/auth.slice'
 import { resetOnboarding } from '@/store/slices/onboarding.slice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { isValid, format, parse } from 'date-fns'
 import { router } from 'expo-router'
+import { Platform, View } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 
 export function convertToISODate(dateString: string) {
@@ -111,4 +113,21 @@ export function toLocalDateFromUTC(date: Date): Date {
 
 export function addMinutes(date: Date, minutes: number) {
     return new Date(date.getTime() + minutes * 60000)
+}
+
+export const HEADER_OPTIONS = {
+    header: () => (
+        <View
+            style={{
+                backgroundColor: Theme.colors.background,
+                height: Platform.OS === 'android' ? 30 : 40,
+                alignItems: 'flex-start',
+                justifyContent: 'flex-end',
+                paddingHorizontal: 24,
+            }}
+        />
+    ),
+    contentStyle: {
+        paddingTop: Platform.OS === 'android' ? 30 : 40,
+    },
 }

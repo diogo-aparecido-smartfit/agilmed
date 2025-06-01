@@ -5,7 +5,7 @@ export const Container = styled.TouchableOpacity`
     flex-direction: column;
     padding: 16px;
     gap: 12px;
-    background-color: ${(props) => props.theme.colors.white};
+    background-color: ${(props) => props.theme.colors.cardBackground};
     border-radius: 12px;
     margin-bottom: 16px;
     elevation: 2;
@@ -24,7 +24,7 @@ export const HeaderContainer = styled.View`
 export const Divider = styled.View`
     height: 1px;
     width: 100%;
-    background-color: ${(props) => props.theme.colors.inputBackground};
+    background-color: ${(props) => props.theme.colors.divider};
 `
 
 export const DoctorInfoWrapper = styled.View`
@@ -34,7 +34,7 @@ export const DoctorInfoWrapper = styled.View`
 `
 
 interface StatusBadgeProps {
-    status: string
+    status: 'confirmed' | 'cancelled' | 'completed' | 'pending'
 }
 
 export const StatusBadge = styled.View<StatusBadgeProps>`
@@ -43,13 +43,13 @@ export const StatusBadge = styled.View<StatusBadgeProps>`
     background-color: ${(props) => {
         switch (props.status) {
             case 'confirmed':
-                return (props) => props.theme.colors.success
+                return props.theme.colors.success
             case 'cancelled':
-                return (props) => props.theme.colors.error
+                return props.theme.colors.error
             case 'completed':
-                return (props) => props.theme.colors.mainColor
+                return props.theme.colors.mainColor
             default:
-                return (props) => props.theme.colors.warning
+                return props.theme.colors.warning
         }
     }};
 `

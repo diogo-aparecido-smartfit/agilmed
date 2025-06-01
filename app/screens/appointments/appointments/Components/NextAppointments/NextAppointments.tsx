@@ -8,6 +8,7 @@ import { ptBR } from 'date-fns/locale/pt-BR'
 import { TouchableOpacity } from 'react-native'
 import { router } from 'expo-router'
 import { IAppointment } from '@/types/types'
+import { useTheme } from '@/hooks/useTheme'
 
 const statusColors = {
     pending: Theme.colors.warning,
@@ -28,6 +29,8 @@ interface NextAppointmentsProps {
 }
 
 const NextAppointments = ({ appointment }: NextAppointmentsProps) => {
+    const { isDark } = useTheme()
+
     const handleNavigate = () => {
         router.push(`/(appointment)/details/${appointment.id}`)
     }
@@ -42,15 +45,15 @@ const NextAppointments = ({ appointment }: NextAppointmentsProps) => {
                     }
                 />
                 <S.DoctorInfoWrapper>
-                    <Text color="black" fontWeight="700">
-                        {appointment.doctor_name}
-                    </Text>
+                    <Text fontWeight="700">{appointment.doctor_name}</Text>
                     <Text color="description" fontSize="sm" fontWeight="400">
                         {appointment.doctor?.specialty || 'Médico'}
                     </Text>
                 </S.DoctorInfoWrapper>
-                <S.StatusBadge status={appointment.status}>
-                    <Text fontSize="xs" color="white">
+                <S.StatusBadge
+                    status={appointment.status as keyof typeof statusLabels}
+                >
+                    <Text color={isDark ? 'black' : 'white'} fontSize="xs">
                         {statusLabels[
                             appointment.status as keyof typeof statusLabels
                         ] || 'Pendente'}

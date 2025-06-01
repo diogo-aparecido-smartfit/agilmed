@@ -44,7 +44,7 @@ export default function Header({
                 <S.WelcomeWrapper>
                     <Text>{greeting}</Text>
                     <Text fontSize="xl" fontWeight="700">
-                        {getFirstAndLastName(user?.full_name ?? '')}
+                        {getFirstAndLastName(user?.full_name ?? '')} 🔥
                     </Text>
                 </S.WelcomeWrapper>
                 <Avatar

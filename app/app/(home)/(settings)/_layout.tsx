@@ -1,24 +1,8 @@
 import LayoutHeader from '@/components/LayoutHeader/LayoutHeader'
 import { Theme } from '@/config/theme'
+import { HEADER_OPTIONS } from '@/utils/utils'
 import { Stack } from 'expo-router'
 import { Platform, View } from 'react-native'
-
-const HEADER_OPTIONS = {
-    header: () => (
-        <View
-            style={{
-                backgroundColor: Theme.colors.background,
-                height: Platform.OS === 'android' ? 30 : 40,
-                alignItems: 'flex-start',
-                justifyContent: 'flex-end',
-                paddingHorizontal: 24,
-            }}
-        />
-    ),
-    contentStyle: {
-        paddingTop: Platform.OS === 'android' ? 30 : 40,
-    },
-}
 
 export default function StackLayout() {
     return (

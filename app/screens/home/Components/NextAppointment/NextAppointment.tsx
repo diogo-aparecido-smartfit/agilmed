@@ -4,9 +4,9 @@ import { Calendar, Clock, ArrowRight } from 'iconsax-react-native'
 import { useCallback } from 'react'
 import { router } from 'expo-router'
 import Text from '@/components/Text/Text'
-import { Theme } from '@/config/theme'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale/pt-BR'
+import { useTheme } from '@emotion/react'
 
 interface NextAppointmentProps {
     id: number
@@ -27,6 +27,8 @@ const NextAppointment = ({
     startAt,
     doctorImagePicture,
 }: NextAppointmentProps) => {
+    const theme = useTheme()
+
     const handleNavigateToAppointment = useCallback(() => {
         router.push(`/(appointment)/details/${id}`)
     }, [id])
@@ -71,7 +73,7 @@ const NextAppointment = ({
                     <S.AppointmentInfoWrapper>
                         <Calendar
                             size={16}
-                            color={Theme.colors.lightDescription}
+                            color={theme.colors.lightDescription}
                             variant="Bold"
                         />
                         <Text fontSize="sm" color="white">
@@ -82,7 +84,7 @@ const NextAppointment = ({
                     <S.AppointmentInfoWrapper>
                         <Clock
                             size={16}
-                            color={Theme.colors.lightDescription}
+                            color={theme.colors.lightDescription}
                             variant="Bold"
                         />
                         <Text fontSize="sm" color="white">
@@ -97,7 +99,7 @@ const NextAppointment = ({
                     </Text>
                     <ArrowRight
                         size={16}
-                        color={Theme.colors.white}
+                        color={theme.colors.white}
                         variant="Bold"
                     />
                 </S.ViewDetailsButton>

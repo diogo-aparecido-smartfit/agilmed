@@ -2,15 +2,20 @@ import Lottie from 'lottie-react-native'
 import { ArrowLeft, Cpu, Send2 } from 'iconsax-react-native'
 import * as S from './chatbot.style'
 import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native'
-import { Theme } from '@/config/theme'
 import { router } from 'expo-router'
 import Avatar from '@/components/Avatar/Avatar'
 import Text from '@/components/Text/Text'
 import MessageBubble from './Components/MessageBubble/MessageBubble'
 import useChatbotController from './chatbot.controller'
 import { StatusBar } from 'expo-status-bar'
+import { useTheme } from '@emotion/react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 
 export default function ChatBotPage() {
+    const theme = useTheme()
+    const { darkMode } = useSelector((state: RootState) => state.settings)
+
     const {
         today,
         onSendMessage,
@@ -29,10 +34,10 @@ export default function ChatBotPage() {
 
     return (
         <S.Container behavior="padding">
-            <StatusBar style="auto" />
+            <StatusBar style={darkMode ? 'light' : 'dark'} />
             <S.HeaderContainer>
                 <TouchableOpacity onPress={() => router.back()}>
-                    <ArrowLeft size={24} color={Theme.colors.black} />
+                    <ArrowLeft size={24} color={theme.colors.title} />
                 </TouchableOpacity>
                 <S.BotInfoContainer>
                     <Avatar uri={Cpu} size={44} />
@@ -53,6 +58,7 @@ export default function ChatBotPage() {
                     </S.BotInfoWrapper>
                 </S.BotInfoContainer>
             </S.HeaderContainer>
+
             {!hasMessages ? (
                 <S.EmptyContainer>
                     <Lottie
@@ -97,21 +103,16 @@ export default function ChatBotPage() {
                     />
                 </S.ChatContainer>
             )}
+
             <S.FooterContainer>
                 <S.TextInputWrapper>
                     <S.TextInput
-                        placeholderTextColor={Theme.colors.inputColor}
+                        placeholderTextColor={theme.colors.inputColor}
                         value={message}
                         onChangeText={setMessage}
                         placeholder="Digite uma mensagem..."
                         multiline={true}
                     />
-                    {/* <S.MicrophoneButton>
-                        <Microphone2
-                            size={24}
-                            color={Theme.colors.inputColor}
-                        />
-                    </S.MicrophoneButton> */}
                 </S.TextInputWrapper>
                 <S.SendMessageButton disabled={loading} onPress={onSendMessage}>
                     {loading ? (

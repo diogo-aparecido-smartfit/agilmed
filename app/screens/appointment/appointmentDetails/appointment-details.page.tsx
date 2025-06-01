@@ -12,7 +12,6 @@ import {
     Sms,
     Call,
 } from 'iconsax-react-native'
-import { Theme } from '@/config/theme'
 import { StatusBar } from 'expo-status-bar'
 import { Marker } from 'react-native-maps'
 import { UseAppointmentDetailsController } from './appointment-details.controller'
@@ -23,8 +22,14 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet'
 import { ActivityIndicator, TouchableOpacity } from 'react-native'
 import Avatar from '@/components/Avatar/Avatar'
+import { useTheme } from '@emotion/react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 
 export default function AppointmentDetailsPage() {
+    const theme = useTheme()
+    const { darkMode } = useSelector((state: RootState) => state.settings)
+
     const {
         appointment,
         isLoading,
@@ -57,7 +62,7 @@ export default function AppointmentDetailsPage() {
             <S.LoadingContainer>
                 <ActivityIndicator
                     size="large"
-                    color={Theme.colors.mainColor}
+                    color={theme.colors.mainColor}
                 />
                 <Text color="description" style={{ marginTop: 16 }}>
                     Carregando detalhes da consulta...
@@ -103,11 +108,11 @@ export default function AppointmentDetailsPage() {
             <Header />
             <BottomSheet
                 backgroundStyle={{
-                    backgroundColor: Theme.colors.white,
+                    backgroundColor: theme.colors.cardBackground,
                     borderRadius: 32,
                 }}
                 handleIndicatorStyle={{
-                    backgroundColor: Theme.colors.lightDescription,
+                    backgroundColor: theme.colors.lightDescription,
                     width: 60,
                 }}
                 snapPoints={snapPoints}
@@ -149,14 +154,14 @@ export default function AppointmentDetailsPage() {
                             <S.ActionButton>
                                 <Call
                                     size={22}
-                                    color={Theme.colors.mainColor}
+                                    color={theme.colors.mainColor}
                                     variant="Bold"
                                 />
                             </S.ActionButton>
                             <S.ActionButton>
                                 <Sms
                                     size={22}
-                                    color={Theme.colors.mainColor}
+                                    color={theme.colors.mainColor}
                                     variant="Bold"
                                 />
                             </S.ActionButton>
@@ -167,7 +172,7 @@ export default function AppointmentDetailsPage() {
                         <S.Divider />
                         <Clipboard
                             size={14}
-                            color={Theme.colors.inputColor}
+                            color={theme.colors.inputColor}
                             variant="Bold"
                         />
                         <S.Divider />
@@ -184,7 +189,7 @@ export default function AppointmentDetailsPage() {
                             <S.InfoItem>
                                 <Calendar1
                                     size={18}
-                                    color={Theme.colors.mainColor}
+                                    color={theme.colors.mainColor}
                                     variant="Bold"
                                 />
                                 <Text fontWeight="500">
@@ -197,7 +202,7 @@ export default function AppointmentDetailsPage() {
                             <S.InfoItem>
                                 <Clock
                                     size={18}
-                                    color={Theme.colors.mainColor}
+                                    color={theme.colors.mainColor}
                                     variant="Bold"
                                 />
                                 <Text fontWeight="500">
@@ -210,7 +215,7 @@ export default function AppointmentDetailsPage() {
                             <S.InfoItem>
                                 <Profile2User
                                     size={18}
-                                    color={Theme.colors.mainColor}
+                                    color={theme.colors.mainColor}
                                     variant="Bold"
                                 />
                                 <Text fontWeight="500">
@@ -226,7 +231,7 @@ export default function AppointmentDetailsPage() {
                             <S.ReasonCard>
                                 <Note
                                     size={18}
-                                    color={Theme.colors.mainColor}
+                                    color={theme.colors.mainColor}
                                     style={{ marginRight: 8 }}
                                 />
                                 <Text color="description">
@@ -260,7 +265,7 @@ export default function AppointmentDetailsPage() {
                                 <S.AddressInfo>
                                     <Location
                                         size={18}
-                                        color={Theme.colors.mainColor}
+                                        color={theme.colors.mainColor}
                                         variant="Bold"
                                         style={{ marginRight: 8 }}
                                     />
@@ -275,7 +280,11 @@ export default function AppointmentDetailsPage() {
                                     onPress={handleOpenOnMaps}
                                     ref={mapRef}
                                     initialRegion={region}
-                                    customMapStyle={S.customMapStyle}
+                                    customMapStyle={
+                                        darkMode
+                                            ? S.darkMapStyle
+                                            : S.customMapStyle
+                                    }
                                 >
                                     <Marker
                                         title={appointment.doctor_name}

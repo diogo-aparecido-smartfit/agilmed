@@ -1,11 +1,9 @@
-import { Theme } from '@/config/theme'
-import { ScrollView } from 'react-native'
 import styled from '@emotion/native'
 
 export const Container = styled.KeyboardAvoidingView`
     flex: 1;
     flex-grow: 1;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const ChatContainer = styled.View`
@@ -25,12 +23,16 @@ export const FooterContainer = styled.KeyboardAvoidingView`
     gap: 16px;
     margin-top: auto;
     justify-content: space-between;
+    background-color: ${(props) => props.theme.colors.background};
+    border-top-width: 1px;
+    border-top-color: ${(props) =>
+        props.theme.colors.divider || props.theme.colors.borderColor};
 `
 
 export const SendMessageButton = styled.TouchableOpacity`
     padding: 12px;
     border-radius: 999px;
-    background-color: ${Theme.colors.mainColor};
+    background-color: ${(props) => props.theme.colors.mainColor};
     align-items: center;
     justify-content: center;
     align-self: center;
@@ -38,9 +40,13 @@ export const SendMessageButton = styled.TouchableOpacity`
 
 export const HeaderContainer = styled.View`
     display: flex;
-    padding: 24px;
+    padding: 12px 24px;
     flex-direction: row;
     align-items: center;
+    background-color: ${(props) => props.theme.colors.background};
+    border-bottom-width: 1px;
+    border-bottom-color: ${(props) =>
+        props.theme.colors.divider || props.theme.colors.borderColor};
 `
 
 export const BotInfoContainer = styled.View`
@@ -82,9 +88,9 @@ export const TextInput = styled.TextInput`
     flex: 1;
     padding: 10px 20px;
     border-radius: 48px;
-    border: 1px solid ${Theme.colors.inputColor};
-    background-color: ${Theme.colors.inputBackground};
-    color: ${Theme.colors.black};
+    border: 1px solid ${(props) => props.theme.colors.inputColor};
+    background-color: ${(props) => props.theme.colors.inputBackground};
+    color: ${(props) => props.theme.colors.title};
 `
 
 export const MicrophoneButton = styled.TouchableOpacity`
@@ -113,4 +119,5 @@ export const EmptyContainer = styled.View`
     align-items: center;
     justify-content: center;
     opacity: 0.4;
+    background-color: ${(props) => props.theme.colors.background};
 `

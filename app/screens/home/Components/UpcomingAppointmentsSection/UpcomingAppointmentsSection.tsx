@@ -10,6 +10,7 @@ import { Theme } from '@/config/theme'
 import { Calendar } from 'iconsax-react-native'
 import { addMinutes } from '@/utils/utils'
 import AnimatedPagination from '@/components/AnimatedPagination/animated-pagination'
+import { useTheme } from '@/hooks/useTheme'
 
 interface UpcomingAppointmentsSectionProps {
     appointments: IAppointment[]
@@ -20,6 +21,7 @@ export default function UpcomingAppointmentsSection({
     appointments,
     loading,
 }: UpcomingAppointmentsSectionProps) {
+    const theme = useTheme()
     const scrollViewRef = useRef<ScrollView>(null)
     const [activeIndex, setActiveIndex] = useState(0)
     const { width: screenWidth } = Dimensions.get('window')

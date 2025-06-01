@@ -1,37 +1,25 @@
-import { Theme } from '@/config/theme'
-import MapView from 'react-native-maps'
 import styled from '@emotion/native'
+import MapView from 'react-native-maps'
+import { ImageBackground } from 'react-native'
 
-export const Container = styled.ImageBackground`
+export const Container = styled(ImageBackground)`
     flex: 1;
-    background-color: ${Theme.colors.black};
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const LoadingContainer = styled.View`
     flex: 1;
     justify-content: center;
     align-items: center;
-    background-color: ${Theme.colors.white};
-    padding: 24px;
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const ErrorContainer = styled.View`
     flex: 1;
     justify-content: center;
     align-items: center;
-    background-color: ${Theme.colors.white};
     padding: 24px;
-`
-
-export const ContentContainer = styled.ScrollView`
-    padding: 24px;
-`
-
-export const StatusBadge = styled.View`
-    align-self: flex-start;
-    padding: 6px 12px;
-    border-radius: 20px;
-    margin-bottom: 16px;
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const Header = styled.View`
@@ -44,39 +32,58 @@ export const Header = styled.View`
 export const DoctorInfoSection = styled.View`
     flex-direction: row;
     align-items: center;
-    flex: 1;
+    gap: 16px;
 `
 
 export const InformationContainer = styled.View`
     flex-direction: column;
-    margin-left: 12px;
+    gap: 4px;
 `
 
 export const ActionsContainer = styled.View`
     flex-direction: row;
-    gap: 8px;
+    gap: 12px;
 `
 
 export const ActionButton = styled.TouchableOpacity`
     width: 40px;
     height: 40px;
     border-radius: 20px;
-    background-color: ${Theme.colors.fillColor};
     justify-content: center;
     align-items: center;
+    background-color: ${(props) => props.theme.colors.fillColor};
+`
+
+export const StatusBadge = styled.View`
+    align-self: flex-start;
+    padding: 8px 16px;
+    border-radius: 50px;
+    margin-bottom: 16px;
+`
+
+export const DividerContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+    margin-vertical: 24px;
+`
+
+export const Divider = styled.View`
+    flex: 1;
+    height: 1px;
+    background-color: ${(props) => props.theme.colors.divider};
+    margin-horizontal: 8px;
 `
 
 export const Content = styled.View`
-    flex-direction: column;
     gap: 24px;
 `
 
 export const SectionTitle = styled.View`
-    margin-bottom: 8px;
+    margin-bottom: 16px;
 `
 
 export const InfoCard = styled.View`
-    background-color: ${Theme.colors.fillColor};
+    background-color: ${(props) => props.theme.colors.fillColor};
     border-radius: 16px;
     padding: 16px;
     gap: 12px;
@@ -89,68 +96,58 @@ export const InfoItem = styled.View`
 `
 
 export const ReasonSection = styled.View`
-    gap: 8px;
+    gap: 12px;
 `
 
 export const ReasonCard = styled.View`
-    background-color: ${Theme.colors.fillColor};
-    border-radius: 16px;
-    padding: 16px;
     flex-direction: row;
     align-items: flex-start;
+    background-color: ${(props) => props.theme.colors.fillColor};
+    padding: 16px;
+    border-radius: 16px;
 `
 
 export const NotesCard = styled.View`
-    background-color: ${Theme.colors.fillColor};
-    border-radius: 16px;
+    background-color: ${(props) => props.theme.colors.fillColor};
     padding: 16px;
+    border-radius: 16px;
 `
 
 export const AddressSection = styled.View`
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: 12px;
 `
 
 export const AddressCard = styled.View`
-    background-color: ${Theme.colors.fillColor};
+    background-color: ${(props) => props.theme.colors.fillColor};
     border-radius: 16px;
     padding: 16px;
-    gap: 12px;
+    overflow: hidden;
 `
 
 export const AddressInfo = styled.View`
     flex-direction: row;
     align-items: flex-start;
-`
-
-export const ReviewsContainer = styled.View`
-    flex-direction: row;
-    align-items: center;
-    gap: 4px;
-`
-
-export const DividerContainer = styled.View`
-    flex-direction: row;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 24px;
-`
-
-export const Divider = styled.View`
-    flex: 1;
-    height: 1px;
-    background-color: ${Theme.colors.inputBackground};
+    margin-bottom: 16px;
 `
 
 export const CustomMap = styled(MapView)`
     width: 100%;
-    height: 180px;
+    height: 150px;
     border-radius: 12px;
     overflow: hidden;
-    margin-top: 8px;
 `
 
+// Estilo de mapa para o tema claro
 export const customMapStyle = [
+    {
+        featureType: 'poi',
+        elementType: 'labels.text',
+        stylers: [{ visibility: 'off' }],
+    },
+]
+
+// Estilo de mapa para o tema escuro
+export const darkMapStyle = [
     {
         elementType: 'geometry',
         stylers: [{ color: '#242f3e' }],
@@ -167,6 +164,11 @@ export const customMapStyle = [
         featureType: 'administrative.locality',
         elementType: 'labels.text.fill',
         stylers: [{ color: '#d59563' }],
+    },
+    {
+        featureType: 'poi',
+        elementType: 'labels.text',
+        stylers: [{ visibility: 'off' }],
     },
     {
         featureType: 'poi',

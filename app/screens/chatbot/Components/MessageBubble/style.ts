@@ -1,4 +1,3 @@
-import { Theme } from '@/config/theme'
 import styled from '@emotion/native'
 
 export const ReceivedContainer = styled.View`
@@ -10,8 +9,8 @@ export const Container = styled.View<{ isReceived?: boolean }>`
     padding: 16px;
     flex-shrink: 1;
     align-self: ${({ isReceived }) => (isReceived ? 'flex-start' : 'flex-end')};
-    background-color: ${({ isReceived }) =>
-        isReceived ? Theme.colors.inputBackground : Theme.colors.mainColor};
+    background-color: ${({ isReceived, theme }) =>
+        isReceived ? theme.colors.inputBackground : theme.colors.mainColor};
     border-radius: ${({ isReceived }) =>
         isReceived ? '0px 24px 24px 24px' : '24px 24px 0px 24px'};
 `

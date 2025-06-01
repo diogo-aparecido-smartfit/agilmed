@@ -2,14 +2,18 @@ import React from 'react'
 import Text from '@/components/Text/Text'
 import * as S from './chat.style'
 import { Message } from 'iconsax-react-native'
-import { Theme } from '@/config/theme'
 import { StatusBar } from 'expo-status-bar'
 import { useChatlistController } from './chat-list.controller'
 import Lottie from 'lottie-react-native'
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import AnimatedPagination from '@/components/AnimatedPagination/animated-pagination'
+import { useTheme } from '@emotion/react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 
 export default function ChatPage() {
+    const theme = useTheme()
+    const { darkMode } = useSelector((state: RootState) => state.settings)
+
     const {
         handleStartConversation,
         animationRef,
@@ -22,7 +26,7 @@ export default function ChatPage() {
 
     return (
         <S.Container>
-            <StatusBar style="dark" />
+            <StatusBar style={darkMode ? 'light' : 'dark'} />
             <S.ContentContainer>
                 <S.HeaderSection>
                     <S.AvatarContainer>
@@ -87,7 +91,7 @@ export default function ChatPage() {
                                 <S.FeatureIconContainer>
                                     <item.icon
                                         size={32}
-                                        color={Theme.colors.mainColor}
+                                        color={theme.colors.mainColor}
                                         variant="Bulk"
                                     />
                                 </S.FeatureIconContainer>
@@ -95,7 +99,7 @@ export default function ChatPage() {
                                     <Text
                                         fontSize="lg"
                                         fontWeight="700"
-                                        color="black"
+                                        color={darkMode ? 'white' : 'black'}
                                         textAlign="center"
                                     >
                                         {item.title}
@@ -117,8 +121,8 @@ export default function ChatPage() {
                         <AnimatedPagination
                             totalItems={features.length}
                             activeIndex={activeIndex}
-                            dotActiveColor={Theme.colors.white}
-                            dotInactiveColor={Theme.colors.inputBackground}
+                            dotActiveColor={theme.colors.white}
+                            dotInactiveColor={theme.colors.inputBackground}
                         />
                     </S.CarouselPagination>
                 </S.FeaturesSection>
@@ -136,7 +140,7 @@ export default function ChatPage() {
                     </Text>
                     <Message
                         size={20}
-                        color={Theme.colors.white}
+                        color={theme.colors.white}
                         variant="Bold"
                     />
                 </S.StartChatButton>

@@ -1,5 +1,4 @@
 import styled from '@emotion/native'
-import { Theme } from '@/config/theme'
 
 export const Container = styled.View`
     width: 100%;

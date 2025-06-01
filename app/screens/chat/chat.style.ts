@@ -1,10 +1,9 @@
-import { Theme } from '@/config/theme'
 import styled from '@emotion/native'
 import Animated from 'react-native-reanimated'
 
 export const Container = styled.ScrollView`
     flex: 1;
-    background-color: ${Theme.colors.mainColor};
+    background-color: ${(props) => props.theme.colors.mainColor};
 `
 
 export const ScrollContainer = styled.ScrollView`
@@ -36,12 +35,13 @@ export const FeaturesSection = styled.View`
 `
 
 export const CarouselCard = styled.View`
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) =>
+        props.theme.colors.cardBackground || props.theme.colors.white};
     border-radius: 16px;
     padding: 24px;
     margin-vertical: 8px;
     elevation: 3;
-    shadow-color: #000;
+    shadow-color: ${(props) => props.theme.colors.black};
     shadow-offset: 0px 2px;
     shadow-opacity: 0.2;
     shadow-radius: 4px;
@@ -54,7 +54,7 @@ export const FeatureIconContainer = styled.View`
     width: 64px;
     height: 64px;
     border-radius: 32px;
-    background-color: ${Theme.colors.fillColor};
+    background-color: ${(props) => props.theme.colors.fillColor};
     justify-content: center;
     align-items: center;
     margin-bottom: 16px;
@@ -81,9 +81,10 @@ export const PaginationDot = styled(Animated.View)<PaginationDotProps>`
     height: 8px;
     border-radius: ${(props) => (props.active ? '6px' : '4px')};
     background-color: ${(props) =>
-        props.active ? Theme.colors.white : 'rgba(255, 255, 255, 0.5)'};
+        props.active ? props.theme.colors.white : 'rgba(255, 255, 255, 0.5)'};
     margin-horizontal: 4px;
 `
+
 export const StatusBadge = styled.View`
     flex-direction: row;
     align-items: center;
@@ -115,13 +116,14 @@ export const StartChatButton = styled.TouchableOpacity`
 
 export const FeatureCard = styled.View`
     flex-direction: row;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) =>
+        props.theme.colors.cardBackground || props.theme.colors.white};
     border-radius: 12px;
     padding: 12px;
     margin-bottom: 8px;
     width: 48%;
     elevation: 2;
-    shadow-color: #000;
+    shadow-color: ${(props) => props.theme.colors.black};
     shadow-offset: 0px 1px;
     shadow-opacity: 0.2;
     shadow-radius: 2px;
