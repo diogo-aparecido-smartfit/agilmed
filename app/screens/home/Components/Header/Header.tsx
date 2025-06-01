@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { router } from 'expo-router'
 import Avatar from '@/components/Avatar/Avatar'
 import Text from '@/components/Text/Text'
@@ -22,6 +22,18 @@ export default function Header({
         router.navigate('/(home)/(settings)/settings')
     }, [])
 
+    const greeting = useMemo(() => {
+        const currentHour = new Date().getHours()
+
+        if (currentHour >= 5 && currentHour < 12) {
+            return 'Olá, Bom dia'
+        } else if (currentHour >= 12 && currentHour < 18) {
+            return 'Olá, Boa tarde'
+        } else {
+            return 'Olá, Boa noite'
+        }
+    }, [])
+
     return (
         <S.Header>
             {showVerificationAlert && (
@@ -30,7 +42,7 @@ export default function Header({
 
             <S.HeaderContent>
                 <S.WelcomeWrapper>
-                    <S.Title>Olá</S.Title>
+                    <S.Title>{greeting}</S.Title>
                     <S.Username>
                         {getFirstAndLastName(user?.full_name ?? '')}
                     </S.Username>
