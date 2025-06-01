@@ -6,8 +6,8 @@ export const Container = styled.TouchableOpacity`
     padding: 20px;
     flex-direction: column;
     border-radius: 16px;
-    margin-horizontal: 16px;
-    margin-vertical: 8px;
+    min-width: 300px;
+    flex: 1;
     elevation: 4;
     shadow-color: ${Theme.colors.mainColor};
     shadow-offset: 0px 2px;
@@ -59,6 +59,7 @@ export const SecondaryContentWrapper = styled.View`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
 `
 
 export const InfoColumn = styled.View`

@@ -29,6 +29,11 @@ export const HeaderContent = styled.View`
     justify-content: space-between;
 `
 
+export const ContentSection = styled.View`
+    padding: 0px 24px;
+    width: 100%;
+`
+
 export const ContentContainer = styled.ScrollView`
     margin-top: 32px;
 `

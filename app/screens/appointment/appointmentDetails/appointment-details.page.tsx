@@ -112,7 +112,6 @@ export default function AppointmentDetailsPage() {
                 }}
                 snapPoints={snapPoints}
                 ref={bottomSheetRef}
-                enablePanDownToClose={true}
                 backdropComponent={renderBackdrop}
                 index={0}
             >

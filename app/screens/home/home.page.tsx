@@ -45,27 +45,33 @@ export default function HomePage() {
                         gap: 24,
                         flexDirection: 'column',
                         paddingBottom: 40,
-                        paddingHorizontal: 24,
+                        overflow: 'visible',
                         paddingTop: Platform.OS === 'android' ? 50 : 40,
                     }}
                 >
-                    <Header
-                        user={user}
-                        showVerificationAlert={!user?.isVerified}
-                        onOpenVerifyCode={handleOpenVerifyCode}
-                    />
+                    <S.ContentSection>
+                        <Header
+                            user={user}
+                            showVerificationAlert={!user?.isVerified}
+                            onOpenVerifyCode={handleOpenVerifyCode}
+                        />
+                    </S.ContentSection>
 
                     <UpcomingAppointmentsSection
                         appointments={appointments}
                         loading={loadingAppointments}
                     />
 
-                    <QuickActionsSection />
+                    <S.ContentSection>
+                        <QuickActionsSection />
+                    </S.ContentSection>
 
-                    <NearbyMedicalCentersSection
-                        units={units}
-                        loading={loadingUnits}
-                    />
+                    <S.ContentSection>
+                        <NearbyMedicalCentersSection
+                            units={units}
+                            loading={loadingUnits}
+                        />
+                    </S.ContentSection>
                 </S.ContentContainer>
             </S.Container>
         </GestureHandlerRootView>

@@ -3,8 +3,12 @@ import { Theme } from '@/config/theme'
 
 export const Container = styled.View`
     width: 100%;
-    margin-vertical: 16px;
+    margin: 16px 0px;
     padding-top: 8px;
+`
+
+export const Wrapper = styled.View`
+    overflow: visible;
 `
 
 export const SectionHeader = styled.View`
@@ -13,6 +17,7 @@ export const SectionHeader = styled.View`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
+    padding: 0px 24px;
 `
 
 export const TitleContainer = styled.View`
@@ -23,8 +28,7 @@ export const TitleContainer = styled.View`
 
 export const CountBadge = styled.View`
     background-color: ${Theme.colors.mainColor};
-    padding-horizontal: 8px;
-    padding-vertical: 4px;
+    padding: 4px 8px;
     border-radius: 12px;
     min-width: 24px;
     align-items: center;
@@ -36,7 +40,7 @@ export const AppointmentsWrapper = styled.ScrollView`
 `
 
 export const AppointmentContainer = styled.View`
-    margin-right: 16px;
+    min-width: 300px;
 `
 
 export const PaginationContainer = styled.View`

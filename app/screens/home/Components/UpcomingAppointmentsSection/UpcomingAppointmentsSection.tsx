@@ -22,13 +22,20 @@ export default function UpcomingAppointmentsSection({
     const scrollViewRef = useRef<ScrollView>(null)
     const [activeIndex, setActiveIndex] = useState(0)
     const { width: screenWidth } = Dimensions.get('window')
-    const CARD_WIDTH = screenWidth - 48
+
+    const SPACING = 16
+    const CARD_WIDTH = screenWidth - 24
+    const ITEM_SIZE = CARD_WIDTH + SPACING
+    const SIDE_PADDING = (screenWidth - CARD_WIDTH) / 2
+
+    const INITIAL_OFFSET = 0
 
     const handleScroll = (event: {
         nativeEvent: { contentOffset: { x: any } }
     }) => {
         const contentOffsetX = event.nativeEvent.contentOffset.x
-        const index = Math.round(contentOffsetX / CARD_WIDTH)
+        const index = Math.round(contentOffsetX / ITEM_SIZE)
+
         if (
             index !== activeIndex &&
             index >= 0 &&
@@ -44,16 +51,18 @@ export default function UpcomingAppointmentsSection({
         const interval = setInterval(() => {
             if (scrollViewRef.current) {
                 const nextIndex = (activeIndex + 1) % appointments.length
+
+                const xPosition = nextIndex * ITEM_SIZE + INITIAL_OFFSET
+
                 scrollViewRef.current.scrollTo({
-                    x: nextIndex * CARD_WIDTH,
+                    x: xPosition,
                     animated: true,
                 })
-                setActiveIndex(nextIndex)
             }
         }, 5000)
 
         return () => clearInterval(interval)
-    }, [activeIndex, appointments.length, CARD_WIDTH])
+    }, [activeIndex, appointments.length, ITEM_SIZE, INITIAL_OFFSET])
 
     if (loading) {
         return (
@@ -119,7 +128,7 @@ export default function UpcomingAppointmentsSection({
                     </Text>
                 </S.EmptyContainer>
             ) : (
-                <View>
+                <S.Wrapper>
                     <S.AppointmentsWrapper
                         ref={scrollViewRef}
                         scrollEnabled
@@ -127,17 +136,22 @@ export default function UpcomingAppointmentsSection({
                         horizontal
                         pagingEnabled
                         decelerationRate="fast"
-                        snapToInterval={CARD_WIDTH}
+                        snapToInterval={ITEM_SIZE}
                         snapToAlignment="center"
                         onMomentumScrollEnd={handleScroll}
                         contentContainerStyle={{
+                            paddingHorizontal: SIDE_PADDING,
                             paddingBottom: 16,
                         }}
                     >
-                        {appointments.map((appointment) => (
+                        {appointments.map((appointment, index) => (
                             <S.AppointmentContainer
                                 key={appointment.id}
-                                style={{ width: CARD_WIDTH - 32 }}
+                                style={{
+                                    width: CARD_WIDTH,
+                                    marginRight: SPACING,
+                                    marginLeft: index === 0 ? 0 : 0,
+                                }}
                             >
                                 <NextAppointment
                                     id={appointment.id}
@@ -180,7 +194,7 @@ export default function UpcomingAppointmentsSection({
                             ))}
                         </S.PaginationContainer>
                     )}
-                </View>
+                </S.Wrapper>
             )}
         </S.Container>
     )
