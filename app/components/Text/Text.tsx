@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/native'
 import { TextProps as RNTextProps } from 'react-native'
 import { Theme } from '@/config/theme'
+import { useTheme } from '@emotion/react'
 
 const fontWeightMap = {
     '100': 'thin',
@@ -29,21 +30,22 @@ interface TextProps extends RNTextProps {
 }
 
 const StyledText = styled.Text<TextProps>`
-    color: ${({ color }) => (color ? Theme.colors[color] : Theme.colors.title)};
-    font-size: ${({ fontSize }) =>
-        fontSize ? Theme.sizes[fontSize] : Theme.sizes.base};
+    color: ${({ color, theme }) =>
+        color ? theme.colors[color] : theme.colors.title};
+    font-size: ${({ fontSize, theme }) =>
+        fontSize ? theme.sizes[fontSize] : theme.sizes.base};
     text-align: ${({ textAlign }) => textAlign || 'left'};
     letter-spacing: ${({ letterSpacing }) => letterSpacing || '0px'};
     text-decoration-line: ${({ textDecoration }) => textDecoration || 'none'};
     text-transform: ${({ textTransform }) => textTransform || 'none'};
-    font-family: ${({ fontWeight, italic }) =>
+    font-family: ${({ fontWeight, italic, theme }) =>
         fontWeight
-            ? Theme.fonts[
+            ? theme.fonts[
                   italic
                       ? (`${fontWeightMap[fontWeight]}Italic` as keyof typeof Theme.fonts)
                       : fontWeightMap[fontWeight]
               ]
-            : Theme.fonts.regular};
+            : theme.fonts.regular};
 `
 
 const Text: React.FC<TextProps> = ({

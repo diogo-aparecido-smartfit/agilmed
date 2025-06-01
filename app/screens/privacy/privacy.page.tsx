@@ -169,9 +169,9 @@ export default function PrivacyPage() {
                         borderRadius={12}
                         text="Limpar histórico de dados"
                         onPress={() => {}}
-                        // leftIcon={
-                        //     <Trash size={20} color={Theme.colors.danger} />
-                        // }
+                        leftIcon={
+                            <Trash size={20} color={Theme.colors.error} />
+                        }
                     />
                     <Button
                         variant="destructive"

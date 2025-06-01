@@ -1,11 +1,14 @@
 import Lottie from 'lottie-react-native'
-import { Theme } from '@/config/theme'
+import { darkPalette, lightPalette, Theme, ThemeBase } from '@/config/theme'
 import { useAuth } from '@/providers/auth.provider'
 import { router, Stack } from 'expo-router'
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Text from '@/components/Text/Text'
+import { ThemeProvider } from '@emotion/react'
+import { RootState } from '@/store'
+import { useSelector } from 'react-redux'
 
 function CustomSplashScreen({
     onAnimationComplete,
@@ -75,6 +78,13 @@ function CustomSplashScreen({
 }
 
 export default function MainNavigator() {
+    const { darkMode } = useSelector((state: RootState) => state.settings)
+
+    const theme = {
+        ...ThemeBase,
+        colors: darkMode ? darkPalette : lightPalette,
+    }
+
     const [showSplash, setShowSplash] = useState(true)
     const { isLoading, hasSeenOnboarding, userToken, isAuthenticated } =
         useAuth()
@@ -82,12 +92,6 @@ export default function MainNavigator() {
     const handleSplashComplete = () => {
         setShowSplash(false)
     }
-
-    console.log('Navigation state:', {
-        hasSeenOnboarding,
-        isAuthenticated,
-        type: typeof hasSeenOnboarding,
-    })
 
     if (isLoading || showSplash) {
         return (
@@ -112,7 +116,10 @@ export default function MainNavigator() {
                 />
                 <Stack.Screen
                     name="(appointment)"
-                    options={{ headerShown: false, headerTitle: 'Appointment' }}
+                    options={{
+                        headerShown: false,
+                        headerTitle: 'Appointment',
+                    }}
                 />
                 <Stack.Screen
                     name="(places)"
@@ -120,7 +127,10 @@ export default function MainNavigator() {
                 />
                 <Stack.Screen
                     name="(verifyCode)"
-                    options={{ headerShown: false, headerTitle: 'VerifyCode' }}
+                    options={{
+                        headerShown: false,
+                        headerTitle: 'VerifyCode',
+                    }}
                 />
             </Stack.Protected>
             <Stack.Protected guard={hasSeenOnboarding === true}>
@@ -132,7 +142,10 @@ export default function MainNavigator() {
             <Stack.Protected guard={hasSeenOnboarding === false}>
                 <Stack.Screen
                     name="(onboarding)"
-                    options={{ headerShown: false, headerTitle: 'Onboarding' }}
+                    options={{
+                        headerShown: false,
+                        headerTitle: 'Onboarding',
+                    }}
                 />
             </Stack.Protected>
             <Stack.Screen

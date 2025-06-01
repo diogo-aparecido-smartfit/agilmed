@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
 import styled from '@emotion/native'
 
 export const Container = styled(SafeAreaView)`
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
     flex: 1;
 `
 

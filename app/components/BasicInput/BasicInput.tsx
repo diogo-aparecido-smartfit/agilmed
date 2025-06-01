@@ -2,6 +2,8 @@ import * as S from './style'
 import { Theme } from '@/config/theme'
 import { Icon } from 'iconsax-react-native'
 import { TextInputProps } from 'react-native'
+import Text from '../Text/Text'
+import { useTheme } from '@/hooks/useTheme'
 
 interface InputProps extends TextInputProps {
     error?: string
@@ -16,19 +18,23 @@ interface InputProps extends TextInputProps {
 }
 
 const BasicInput = ({ error, label, icon, ...props }: InputProps) => {
+    const theme = useTheme()
+
     return (
         <S.InputContainer>
-            <S.InputLabel>{label}</S.InputLabel>
+            <Text fontWeight="600" style={{ marginBottom: 12 }}>
+                {label}
+            </Text>
             <S.InputText
                 focusable={true}
                 {...props}
-                placeholderTextColor={Theme.colors.inputColor}
+                placeholderTextColor={theme.colors.inputColor}
                 onFocus={(e) => {
                     e.target.setNativeProps({
                         style: {
                             borderColor: !error
-                                ? Theme.colors.mainColor
-                                : Theme.colors.error,
+                                ? theme.colors.mainColor
+                                : theme.colors.error,
                         },
                     })
                 }}
@@ -36,15 +42,20 @@ const BasicInput = ({ error, label, icon, ...props }: InputProps) => {
                     e.target.setNativeProps({
                         style: {
                             borderColor: !error
-                                ? Theme.colors.borderColor
-                                : Theme.colors.error,
+                                ? theme.colors.borderColor
+                                : theme.colors.error,
                         },
                     })
                 }}
             />
             {icon && (
                 <S.IconContainer onPress={icon.onPress}>
-                    {<icon.Icon color={icon.color} size={icon.size} />}
+                    {
+                        <icon.Icon
+                            color={icon.color || theme.colors.icon}
+                            size={icon.size || 20}
+                        />
+                    }
                 </S.IconContainer>
             )}
             <S.ErrorText>{error}</S.ErrorText>

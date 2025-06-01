@@ -26,13 +26,14 @@ import {
 import { ThemeProvider } from '@emotion/react'
 
 import { PortalProvider } from '@gorhom/portal'
-import { Theme } from '@/config/theme'
+import { darkPalette, lightPalette, ThemeBase } from '@/config/theme'
 import { QueryProvider } from '@/providers/query.provider'
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import Main from './main'
-import store from '@/store'
+import store, { RootState } from '@/store'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { AuthProvider } from '@/providers/auth.provider'
+import { AppThemeProvider } from '@/providers/theme.provider'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -70,18 +71,18 @@ export default function RootLayout() {
 
     return (
         <Provider store={store}>
-            <AuthProvider>
-                <GestureHandlerRootView>
-                    <PortalProvider>
-                        <FlashMessage position="top" />
-                        <QueryProvider>
-                            <ThemeProvider theme={Theme}>
+            <AppThemeProvider>
+                <AuthProvider>
+                    <GestureHandlerRootView>
+                        <PortalProvider>
+                            <FlashMessage position="top" />
+                            <QueryProvider>
                                 <Main />
-                            </ThemeProvider>
-                        </QueryProvider>
-                    </PortalProvider>
-                </GestureHandlerRootView>
-            </AuthProvider>
+                            </QueryProvider>
+                        </PortalProvider>
+                    </GestureHandlerRootView>
+                </AuthProvider>
+            </AppThemeProvider>
         </Provider>
     )
 }

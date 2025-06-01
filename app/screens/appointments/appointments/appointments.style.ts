@@ -3,7 +3,7 @@ import styled from '@emotion/native'
 
 export const Container = styled.View`
     flex: 1;
-    background-color: ${Theme.colors.background};
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const LoadingContainer = styled.View`

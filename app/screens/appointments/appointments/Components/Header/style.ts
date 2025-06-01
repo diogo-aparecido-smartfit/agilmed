@@ -3,9 +3,9 @@ import styled from '@emotion/native'
 
 export const HeaderContainer = styled.View`
     width: 100%;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
     border-bottom-width: 1px;
-    border-bottom-color: ${Theme.colors.inputBackground};
+    border-bottom-color: ${(props) => props.theme.colors.inputBackground};
 `
 
 export const ButtonsScroll = styled.ScrollView`
@@ -20,14 +20,18 @@ export const FilterButton = styled.TouchableOpacity<FilterButtonProps>`
     padding: 8px 16px;
     border-radius: 20px;
     background-color: ${(props) =>
-        props.active ? Theme.colors.mainColor : Theme.colors.inputBackground};
+        props.active
+            ? (props) => props.theme.colors.mainColor
+            : (props) => props.theme.colors.inputBackground};
     min-height: 36px;
     justify-content: center;
 `
 
 export const FilterButtonText = styled.Text<FilterButtonProps>`
     color: ${(props) =>
-        props.active ? Theme.colors.white : Theme.colors.description};
-    font-family: ${Theme.fonts.medium};
+        props.active
+            ? (props) => props.theme.colors.white
+            : (props) => props.theme.colors.description};
+    font-family: ${(props) => props.theme.fonts.medium};
     font-size: 14px;
 `

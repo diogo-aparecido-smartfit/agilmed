@@ -1,6 +1,10 @@
-import { Theme } from '@/config/theme'
 import { View, Text, TouchableOpacity } from 'react-native'
 import styled from '@emotion/native'
+import { Theme } from '@emotion/react'
+
+interface ThemeProps {
+    theme: Theme
+}
 
 export const InputContainer = styled(View)`
     flex: 1;
@@ -15,25 +19,19 @@ export const IconContainer = styled(TouchableOpacity)`
     top: 50%;
 `
 
-export const InputLabel = styled(Text)`
-    color: ${Theme.colors.black};
-    font-size: 16px;
-    font-family: ${Theme.fonts.medium};
-    margin-bottom: 12px;
-`
-
 export const InputText = styled.TextInput`
     border-radius: 16px;
     padding: 16px;
-    color: ${Theme.colors.black};
+    color: ${(props: ThemeProps) => props.theme.colors.title};
     font-size: 16px;
-    background-color: ${Theme.colors.inputBackground};
+    background-color: ${(props: ThemeProps) =>
+        props.theme.colors.inputBackground};
     border-width: 1px;
-    border-color: ${Theme.colors.borderColor};
+    border-color: ${(props: ThemeProps) => props.theme.colors.borderColor};
 `
 
 export const ErrorText = styled(Text)`
-    color: ${Theme.colors.error};
-    font-family: ${Theme.fonts.regular};
+    color: ${(props: ThemeProps) => props.theme.colors.error};
+    font-family: ${(props: ThemeProps) => props.theme.fonts.regular};
     font-size: 14px;
 `

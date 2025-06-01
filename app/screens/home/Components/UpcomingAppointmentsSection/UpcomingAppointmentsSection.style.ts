@@ -27,7 +27,7 @@ export const TitleContainer = styled.View`
 `
 
 export const CountBadge = styled.View`
-    background-color: ${Theme.colors.mainColor};
+    background-color: ${(props) => props.theme.colors.mainColor};
     padding: 4px 8px;
     border-radius: 12px;
     min-width: 24px;
@@ -60,7 +60,9 @@ export const PaginationDot = styled.View<PaginationDotProps>`
     height: 8px;
     border-radius: ${(props) => (props.active ? '4px' : '4px')};
     background-color: ${(props) =>
-        props.active ? Theme.colors.mainColor : Theme.colors.lightGray};
+        props.active
+            ? props.theme.colors.mainColor
+            : props.theme.colors.lightGray};
     transition: all 0.3s ease;
 `
 
@@ -68,7 +70,7 @@ export const EmptyContainer = styled.View`
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background-color: ${Theme.colors.fillColor};
+    background-color: ${(props) => props.theme.colors.fillColor};
     border-radius: 12px;
     margin-horizontal: 24px;
 `
@@ -81,7 +83,7 @@ export const LoadingContainer = styled.View`
     align-items: center;
     justify-content: center;
     padding: 32px;
-    background-color: ${Theme.colors.fillColor};
+    background-color: ${(props) => props.theme.colors.fillColor};
     border-radius: 12px;
     margin-horizontal: 24px;
 `

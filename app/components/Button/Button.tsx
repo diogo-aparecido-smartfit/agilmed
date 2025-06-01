@@ -1,6 +1,7 @@
 import { Theme } from '@/config/theme'
 import * as S from './style'
-import { ActivityIndicator, TouchableOpacityProps } from 'react-native'
+import { ActivityIndicator, TouchableOpacityProps, View } from 'react-native'
+import React, { ReactNode } from 'react'
 
 type ButtonVariant = 'primary' | 'destructive' | 'warning'
 
@@ -13,6 +14,9 @@ interface ButtonProps extends TouchableOpacityProps {
     borderRadius?: number
     width?: string
     variant?: ButtonVariant
+    leftIcon?: ReactNode
+    rightIcon?: ReactNode
+    iconSpacing?: number
 }
 
 const Button = ({
@@ -24,6 +28,9 @@ const Button = ({
     isSecondary,
     variant = 'primary',
     onPress,
+    leftIcon,
+    rightIcon,
+    iconSpacing = 8,
     ...props
 }: ButtonProps) => {
     if (isLoading) {
@@ -66,6 +73,9 @@ const Button = ({
                 onPress={onPress}
                 {...props}
             >
+                {leftIcon && (
+                    <View style={{ marginRight: iconSpacing }}>{leftIcon}</View>
+                )}
                 <S.ButtonText
                     isSecondary={isSecondary}
                     outlined={outlined}
@@ -73,6 +83,9 @@ const Button = ({
                 >
                     {text}
                 </S.ButtonText>
+                {rightIcon && (
+                    <View style={{ marginLeft: iconSpacing }}>{rightIcon}</View>
+                )}
             </S.ButtonContainer>
         )
     }

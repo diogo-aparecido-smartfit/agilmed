@@ -15,15 +15,3 @@ export const HeaderContent = styled.View`
 export const WelcomeWrapper = styled.View`
     flex-direction: column;
 `
-
-export const Title = styled.Text`
-    font-family: ${Theme.fonts.regular};
-    font-size: 16px;
-    color: ${Theme.colors.title};
-`
-
-export const Username = styled.Text`
-    font-size: 24px;
-    color: ${Theme.colors.title};
-    font-family: ${Theme.fonts.bold};
-`

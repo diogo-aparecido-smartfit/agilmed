@@ -4,7 +4,7 @@ import styled from '@emotion/native'
 
 export const Container = styled.View<{ transparent?: boolean }>`
     background-color: ${({ transparent }) =>
-        transparent ? 'transparent' : Theme.colors.white};
+        transparent ? 'transparent' : Theme.colors.background};
     height: ${Platform.OS === 'android' ? '70px' : '90px'};
     align-items: flex-start;
     justify-content: flex-end;

@@ -15,10 +15,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
 import { Alert } from 'react-native'
 import { resetAppData } from '@/utils/utils'
+import { setDarkMode } from '@/store/slices/settings.slice'
 
 export const useSettingsController = () => {
     const dispatch = useDispatch()
     const { user } = useSelector((state: RootState) => state.auth)
+    const { darkMode } = useSelector((state: RootState) => state.settings)
     const { loading, error, imageUploadError, imageUploadLoading } =
         useSelector((state: RootState) => state.user)
 
@@ -74,6 +76,10 @@ export const useSettingsController = () => {
         )
     }
 
+    const handleToggleDarkMode = (value: boolean) => {
+        dispatch(setDarkMode(value))
+    }
+
     return {
         loading,
         error,
@@ -85,5 +91,7 @@ export const useSettingsController = () => {
         imageUploadError,
         handleImageChange,
         handleClearAllData,
+        handleToggleDarkMode,
+        darkMode,
     }
 }

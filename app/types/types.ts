@@ -1,4 +1,5 @@
 import { categoryMap } from '@/utils/constants'
+import { Theme } from '@emotion/react'
 import { Icon } from 'iconsax-react-native'
 
 /**
@@ -183,4 +184,8 @@ export interface IDoctor {
         profile_picture_url: string | null
         role: string
     }
+}
+
+export interface ThemeProps {
+    theme: Theme
 }

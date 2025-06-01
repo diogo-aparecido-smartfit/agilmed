@@ -11,5 +11,5 @@ export const FastActionWrapper = styled.View`
 export const FastActionButton = styled.TouchableOpacity`
     padding: 24px;
     border-radius: 999px;
-    background-color: ${Theme.colors.inputBackground};
+    background-color: ${(props) => props.theme.colors.inputBackground};
 `

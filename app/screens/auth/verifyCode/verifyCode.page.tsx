@@ -92,9 +92,7 @@ export default function VerifyCodePage() {
                                 textAlign="center"
                             >
                                 Lembrou sua senha?{' '}
-                                <Text fontWeight="700" color="black">
-                                    Entre agora mesmo
-                                </Text>
+                                <Text fontWeight="700">Entre agora mesmo</Text>
                             </Text>
                         </S.RememberedPassword>
                     )}

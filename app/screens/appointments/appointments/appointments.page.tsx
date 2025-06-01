@@ -3,16 +3,18 @@ import NextAppointments from './Components/NextAppointments/NextAppointments'
 import Header from './Components/Header/Header'
 import { useAppointmentsController } from './appointments.controller'
 import { ActivityIndicator, FlatList } from 'react-native'
-import { Theme } from '@/config/theme'
 import Text from '@/components/Text/Text'
 import { Calendar, ClipboardTick, EmptyWalletTime } from 'iconsax-react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { IAppointment } from '@/types/types'
+import { useTheme } from '@/hooks/useTheme'
 
 function AppointmentsLoading() {
+    const { colors } = useTheme()
+
     return (
         <S.LoadingContainer>
-            <ActivityIndicator size="large" color={Theme.colors.mainColor} />
+            <ActivityIndicator size="large" color={colors.mainColor} />
             <Text color="description" style={{ marginTop: 16 }}>
                 Carregando consultas...
             </Text>
@@ -21,9 +23,11 @@ function AppointmentsLoading() {
 }
 
 function AppointmentsError() {
+    const { colors } = useTheme()
+
     return (
         <S.EmptyContainer>
-            <EmptyWalletTime size={64} color={Theme.colors.error} />
+            <EmptyWalletTime size={64} color={colors.error} />
             <Text
                 color="error"
                 fontSize="lg"
@@ -44,11 +48,13 @@ function AppointmentsError() {
 }
 
 function AppointmentsEmpty() {
+    const { colors } = useTheme()
+
     return (
         <S.EmptyContainer>
             <Calendar
                 size={64}
-                color={Theme.colors.lightDescription}
+                color={colors.lightDescription}
                 variant="Bulk"
             />
             <Text
@@ -71,6 +77,7 @@ function AppointmentsEmpty() {
 }
 
 export default function AppointmentsPage() {
+    const { colors } = useTheme()
     const { appointments, loading, error, statusFilter, setStatusFilter } =
         useAppointmentsController()
 
@@ -80,11 +87,7 @@ export default function AppointmentsPage() {
 
     const ListHeaderComponent = () => (
         <S.ListHeader>
-            <ClipboardTick
-                size={22}
-                color={Theme.colors.mainColor}
-                variant="Bold"
-            />
+            <ClipboardTick size={22} color={colors.mainColor} variant="Bold" />
             <Text fontSize="lg" fontWeight="600">
                 Minhas Consultas
             </Text>

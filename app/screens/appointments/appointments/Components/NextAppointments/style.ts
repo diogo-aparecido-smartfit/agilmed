@@ -1,4 +1,3 @@
-import { Theme } from '@/config/theme'
 import styled from '@emotion/native'
 
 export const Container = styled.TouchableOpacity`
@@ -6,11 +5,11 @@ export const Container = styled.TouchableOpacity`
     flex-direction: column;
     padding: 16px;
     gap: 12px;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.white};
     border-radius: 12px;
     margin-bottom: 16px;
     elevation: 2;
-    shadow-color: ${Theme.colors.black};
+    shadow-color: ${(props) => props.theme.colors.black};
     shadow-offset: 0px 2px;
     shadow-opacity: 0.1;
     shadow-radius: 4px;
@@ -25,7 +24,7 @@ export const HeaderContainer = styled.View`
 export const Divider = styled.View`
     height: 1px;
     width: 100%;
-    background-color: ${Theme.colors.inputBackground};
+    background-color: ${(props) => props.theme.colors.inputBackground};
 `
 
 export const DoctorInfoWrapper = styled.View`
@@ -44,13 +43,13 @@ export const StatusBadge = styled.View<StatusBadgeProps>`
     background-color: ${(props) => {
         switch (props.status) {
             case 'confirmed':
-                return Theme.colors.success
+                return (props) => props.theme.colors.success
             case 'cancelled':
-                return Theme.colors.error
+                return (props) => props.theme.colors.error
             case 'completed':
-                return Theme.colors.mainColor
+                return (props) => props.theme.colors.mainColor
             default:
-                return Theme.colors.warning
+                return (props) => props.theme.colors.warning
         }
     }};
 `
@@ -70,7 +69,7 @@ export const ScheduleContainer = styled.View`
 export const ReasonContainer = styled.View`
     flex-direction: column;
     gap: 4px;
-    background-color: ${Theme.colors.fillColor};
+    background-color: ${(props) => props.theme.colors.fillColor};
     padding: 8px 12px;
     border-radius: 8px;
 `

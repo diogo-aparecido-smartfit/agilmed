@@ -7,7 +7,7 @@ const HEADER_OPTIONS = {
     header: () => (
         <View
             style={{
-                backgroundColor: Theme.colors.white,
+                backgroundColor: Theme.colors.background,
                 height: Platform.OS === 'android' ? 30 : 40,
                 alignItems: 'flex-start',
                 justifyContent: 'flex-end',

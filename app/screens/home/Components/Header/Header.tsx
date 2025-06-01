@@ -42,10 +42,10 @@ export default function Header({
 
             <S.HeaderContent>
                 <S.WelcomeWrapper>
-                    <S.Title>{greeting}</S.Title>
-                    <S.Username>
+                    <Text>{greeting}</Text>
+                    <Text fontSize="xl" fontWeight="700">
                         {getFirstAndLastName(user?.full_name ?? '')}
-                    </S.Username>
+                    </Text>
                 </S.WelcomeWrapper>
                 <Avatar
                     uri={user?.profile_picture_url ?? undefined}

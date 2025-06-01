@@ -35,10 +35,11 @@ export default function SettingsPage() {
         imageUploadLoading,
         handleImageChange,
         handleClearAllData,
+        handleToggleDarkMode,
+        darkMode,
     } = useSettingsController()
     const { user } = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
-    const [darkMode, setDarkMode] = useState(false)
     const [notifications, setNotifications] = useState(true)
 
     const handleLogoff = () => {
@@ -83,7 +84,7 @@ export default function SettingsPage() {
                             />
                         </S.AvatarContainer>
                         <S.ProfileInfo>
-                            <Text color="black" fontSize="lg" fontWeight="600">
+                            <Text fontSize="lg" fontWeight="600">
                                 {getFirstAndLastName(user?.full_name ?? '')}
                             </Text>
                             <Text fontSize="sm" color="description">
@@ -136,7 +137,7 @@ export default function SettingsPage() {
                         </S.SettingItemLeft>
                         <Switch
                             value={darkMode}
-                            onValueChange={setDarkMode}
+                            onValueChange={handleToggleDarkMode}
                             trackColor={{
                                 false: Theme.colors.lightGray,
                                 true: Theme.colors.mainColor,

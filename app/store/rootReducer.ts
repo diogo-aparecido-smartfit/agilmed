@@ -4,6 +4,7 @@ import userReducer from './slices/user.slice'
 import chatReducer from './slices/chat.slice'
 import placesReducer from './slices/places.slice'
 import onboardingReducer from './slices/onboarding.slice'
+import settingsReducer from './slices/settings.slice'
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     chat: chatReducer,
     places: placesReducer,
     onboarding: onboardingReducer,
+    settings: settingsReducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

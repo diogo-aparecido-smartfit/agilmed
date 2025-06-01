@@ -2,14 +2,14 @@ import { Theme } from '@/config/theme'
 import styled from '@emotion/native'
 
 export const Container = styled.TouchableOpacity`
-    background-color: ${Theme.colors.mainColor};
+    background-color: ${(props) => props.theme.colors.mainColor};
     padding: 20px;
     flex-direction: column;
     border-radius: 16px;
     min-width: 300px;
     flex: 1;
     elevation: 4;
-    shadow-color: ${Theme.colors.mainColor};
+    shadow-color: ${(props) => props.theme.colors.mainColor};
     shadow-offset: 0px 2px;
     shadow-opacity: 0.3;
     shadow-radius: 4px;

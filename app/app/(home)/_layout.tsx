@@ -1,15 +1,18 @@
 import { Tabs, useSegments } from 'expo-router'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Home, Calendar2, Message, Profile } from 'iconsax-react-native'
 import { Theme } from '@/config/theme'
 import { Platform } from 'react-native'
 import styled from '@emotion/native'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
+import { ThemeProvider } from '@emotion/react'
 
 const Container = styled.View<{ focused: boolean }>`
     padding: 14px;
     border-radius: 12px;
-    background-color: ${({ focused }) =>
-        focused ? Theme.colors.fillColor : 'transparent'};
+    background-color: ${({ focused, theme }) =>
+        focused ? theme.colors.fillColor : 'transparent'};
 `
 
 const TabBarIcon = ({
@@ -27,13 +30,25 @@ const TabBarIcon = ({
 }
 
 export default function TabLayout() {
+    const { darkMode } = useSelector((state: RootState) => state.settings)
+
+    const getBackgroundColor = () =>
+        darkMode ? Theme.colors.black : Theme.colors.white
+    const getBorderColor = () =>
+        darkMode ? Theme.colors.borderColor : '#E5E5E5'
+
     return (
         <Tabs
             screenOptions={{
                 tabBarActiveTintColor: Theme.colors.mainColor,
+                tabBarInactiveTintColor: darkMode
+                    ? Theme.colors.lightGray
+                    : Theme.colors.description,
                 tabBarStyle: {
                     height: Platform.OS === 'ios' ? 100 : 80,
                     borderTopWidth: 1,
+                    borderTopColor: getBorderColor(),
+                    backgroundColor: getBackgroundColor(),
                     shadowOpacity: 0,
                     elevation: 0,
                 },
@@ -79,7 +94,11 @@ export default function TabLayout() {
                 name="(chat)"
                 options={{
                     title: 'Chat',
-                    tabBarStyle: { display: 'none' },
+                    tabBarStyle: {
+                        display: 'none',
+                        backgroundColor: getBackgroundColor(),
+                        borderTopColor: getBorderColor(),
+                    },
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon focused={focused}>
                             <Message
@@ -95,7 +114,11 @@ export default function TabLayout() {
                 name="(settings)"
                 options={{
                     title: 'Settings',
-                    tabBarStyle: { display: 'none' },
+                    tabBarStyle: {
+                        display: 'none',
+                        backgroundColor: getBackgroundColor(),
+                        borderTopColor: getBorderColor(),
+                    },
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon focused={focused}>
                             <Profile
