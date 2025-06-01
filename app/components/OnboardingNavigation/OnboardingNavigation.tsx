@@ -34,8 +34,6 @@ export function OnboardingNavigation({
         })
     }, [currentStep, totalSteps])
 
-    console.log(progress)
-
     const animatedCircleStyle = useAnimatedStyle(() => {
         return {
             strokeDashoffset: 264 * (1 - progress.value),

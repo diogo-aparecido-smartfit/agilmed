@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar'
 import { useChatlistController } from './chat-list.controller'
 import Lottie from 'lottie-react-native'
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import AnimatedPagination from '@/components/AnimatedPagination/animated-pagination'
 
 export default function ChatPage() {
     const {
@@ -113,42 +114,12 @@ export default function ChatPage() {
                     </S.ScrollContainer>
 
                     <S.CarouselPagination>
-                        {features.map((_, index) => {
-                            const animatedDotStyle = useAnimatedStyle(() => {
-                                return {
-                                    width: withTiming(
-                                        index === activeIndex ? 12 : 8,
-                                        {
-                                            duration: 300,
-                                        }
-                                    ),
-                                    opacity: withTiming(
-                                        index === activeIndex ? 1 : 0.5,
-                                        {
-                                            duration: 300,
-                                        }
-                                    ),
-                                    transform: [
-                                        {
-                                            scale: withTiming(
-                                                index === activeIndex ? 1.2 : 1,
-                                                {
-                                                    duration: 300,
-                                                }
-                                            ),
-                                        },
-                                    ],
-                                }
-                            })
-
-                            return (
-                                <S.PaginationDot
-                                    key={index}
-                                    active={index === activeIndex}
-                                    style={animatedDotStyle}
-                                />
-                            )
-                        })}
+                        <AnimatedPagination
+                            totalItems={features.length}
+                            activeIndex={activeIndex}
+                            dotActiveColor={Theme.colors.white}
+                            dotInactiveColor={Theme.colors.inputBackground}
+                        />
                     </S.CarouselPagination>
                 </S.FeaturesSection>
 

@@ -9,6 +9,7 @@ import { IAppointment } from '@/types/types'
 import { Theme } from '@/config/theme'
 import { Calendar } from 'iconsax-react-native'
 import { addMinutes } from '@/utils/utils'
+import AnimatedPagination from '@/components/AnimatedPagination/animated-pagination'
 
 interface UpcomingAppointmentsSectionProps {
     appointments: IAppointment[]
@@ -28,7 +29,7 @@ export default function UpcomingAppointmentsSection({
     const ITEM_SIZE = CARD_WIDTH + SPACING
     const SIDE_PADDING = (screenWidth - CARD_WIDTH) / 2
 
-    const INITIAL_OFFSET = 0
+    const INITIAL_OFFSET = SIDE_PADDING
 
     const handleScroll = (event: {
         nativeEvent: { contentOffset: { x: any } }
@@ -52,7 +53,7 @@ export default function UpcomingAppointmentsSection({
             if (scrollViewRef.current) {
                 const nextIndex = (activeIndex + 1) % appointments.length
 
-                const xPosition = nextIndex * ITEM_SIZE + INITIAL_OFFSET
+                const xPosition = nextIndex * ITEM_SIZE
 
                 scrollViewRef.current.scrollTo({
                     x: xPosition,
@@ -185,14 +186,12 @@ export default function UpcomingAppointmentsSection({
                     </S.AppointmentsWrapper>
 
                     {appointments.length > 1 && (
-                        <S.PaginationContainer>
-                            {appointments.map((_, index) => (
-                                <S.PaginationDot
-                                    key={index}
-                                    active={index === activeIndex}
-                                />
-                            ))}
-                        </S.PaginationContainer>
+                        <AnimatedPagination
+                            totalItems={appointments.length}
+                            activeIndex={activeIndex}
+                            dotActiveColor={Theme.colors.mainColor}
+                            dotInactiveColor={Theme.colors.lightDescription}
+                        />
                     )}
                 </S.Wrapper>
             )}

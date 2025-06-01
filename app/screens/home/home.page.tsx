@@ -46,7 +46,7 @@ export default function HomePage() {
                         flexDirection: 'column',
                         paddingBottom: 40,
                         overflow: 'visible',
-                        paddingTop: Platform.OS === 'android' ? 50 : 40,
+                        paddingTop: 50,
                     }}
                 >
                     <S.ContentSection>
