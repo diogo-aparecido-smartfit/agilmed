@@ -22,21 +22,21 @@ import {
 import { Theme } from '@/config/theme'
 import { Switch } from 'react-native'
 import { useState } from 'react'
+import { PrivacyModal } from '@/components/PrivacyModal/PrivacyModal'
+import { TermsModal } from '@/components/TermsModal/TermsModal'
 
 export default function SettingsPage() {
     const {
-        control,
-        error,
-        formValues,
-        handleSubmit,
-        loading,
-        onSubmit,
-        imageUploadError,
         imageUploadLoading,
-        handleImageChange,
         handleClearAllData,
         handleToggleDarkMode,
         darkMode,
+        showPrivacyModal,
+        showTermsModal,
+        handleTogglePrivacyModal,
+        handleToggleTermsModal,
+        setShowPrivacyModal,
+        setShowTermsModal,
     } = useSettingsController()
     const { user } = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
@@ -200,7 +200,7 @@ export default function SettingsPage() {
                         <Text fontSize="sm">1.0.0</Text>
                     </S.AboutItem>
 
-                    <S.AboutItem>
+                    <S.AboutItem onPress={handleToggleTermsModal}>
                         <Text fontSize="sm" color="description">
                             Termos de uso
                         </Text>
@@ -210,7 +210,7 @@ export default function SettingsPage() {
                         />
                     </S.AboutItem>
 
-                    <S.AboutItem>
+                    <S.AboutItem onPress={handleTogglePrivacyModal}>
                         <Text fontSize="sm" color="description">
                             Política de privacidade
                         </Text>
@@ -236,6 +236,16 @@ export default function SettingsPage() {
                     />
                 </S.ButtonsSection>
             </S.ContentContainer>
+
+            <TermsModal
+                isVisible={showTermsModal}
+                onClose={() => setShowTermsModal(false)}
+            />
+
+            <PrivacyModal
+                isVisible={showPrivacyModal}
+                onClose={() => setShowPrivacyModal(false)}
+            />
         </S.Container>
     )
 }

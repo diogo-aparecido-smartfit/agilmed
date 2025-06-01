@@ -16,9 +16,12 @@ import { router } from 'expo-router'
 import { Alert } from 'react-native'
 import { resetAppData } from '@/utils/utils'
 import { setDarkMode } from '@/store/slices/settings.slice'
+import { useCallback, useState } from 'react'
 
 export const useSettingsController = () => {
     const dispatch = useDispatch()
+    const [showTermsModal, setShowTermsModal] = useState(false)
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false)
     const { user } = useSelector((state: RootState) => state.auth)
     const { darkMode } = useSelector((state: RootState) => state.settings)
     const { loading, error, imageUploadError, imageUploadLoading } =
@@ -80,6 +83,14 @@ export const useSettingsController = () => {
         dispatch(setDarkMode(value))
     }
 
+    const handleToggleTermsModal = useCallback(() => {
+        setShowTermsModal((prev) => !prev)
+    }, [])
+
+    const handleTogglePrivacyModal = useCallback(() => {
+        setShowTermsModal((prev) => !prev)
+    }, [])
+
     return {
         loading,
         error,
@@ -93,5 +104,11 @@ export const useSettingsController = () => {
         handleClearAllData,
         handleToggleDarkMode,
         darkMode,
+        showTermsModal,
+        showPrivacyModal,
+        handleTogglePrivacyModal,
+        handleToggleTermsModal,
+        setShowPrivacyModal,
+        setShowTermsModal,
     }
 }
