@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch } from 'react-redux'
 import { loginSuccess } from '@/store/slices/auth.slice'
 import { setOnboardingStatus } from '@/store/slices/onboarding.slice'
+import { setDarkMode } from '@/store/slices/settings.slice'
 
 type AuthState = {
     isLoading: boolean
@@ -48,6 +49,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const checkAuthState = async () => {
         try {
             setState((prev) => ({ ...prev, isLoading: true }))
+
+            const darkModeValue = await AsyncStorage.getItem(
+                '@agilmed:darkMode'
+            )
+            const notificationsValue = await AsyncStorage.getItem(
+                '@agilmed:notifications'
+            )
+
+            if (darkModeValue !== null) {
+                dispatch(setDarkMode(JSON.parse(darkModeValue)))
+            }
 
             const hasSeenOnboardingValue = await AsyncStorage.getItem(
                 '@agilmed:hasSeenOnboarding'

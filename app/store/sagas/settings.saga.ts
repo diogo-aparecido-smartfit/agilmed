@@ -55,7 +55,7 @@ function* loadSettings(): Generator<Effect> {
 }
 
 export function* settingsSaga() {
+    yield call(loadSettings)
     yield takeLatest(setDarkMode.type, saveDarkModeSetting)
     yield takeLatest(setNotifications.type, saveNotificationsSetting)
-    yield call(loadSettings)
 }

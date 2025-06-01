@@ -4,6 +4,7 @@ import usersSaga from './sagas/user.saga'
 import chatSaga from './sagas/chat.saga'
 import placesSaga from './sagas/places.saga'
 import { onboardingSaga } from './sagas/onboarding.saga'
+import { settingsSaga } from './sagas/settings.saga'
 
 export default function* rootSaga() {
     yield all([
@@ -12,5 +13,6 @@ export default function* rootSaga() {
         chatSaga(),
         placesSaga(),
         onboardingSaga(),
+        settingsSaga(),
     ])
 }
