@@ -2,7 +2,6 @@ import Avatar from '@/components/Avatar/Avatar'
 import * as S from './settings.style'
 import Button from '@/components/Button/Button'
 import Text from '@/components/Text/Text'
-import Input from '@/components/Input/Input'
 import EditButton from './EditButton/EditButton'
 import { StatusBar } from 'expo-status-bar'
 import { getFirstAndLastName } from '@/utils/utils'
@@ -13,6 +12,16 @@ import { logoffRequest } from '@/store/slices/auth.slice'
 import { router } from 'expo-router'
 import { useSettingsController } from './settings.controller'
 import { Controller } from 'react-hook-form'
+import {
+    ArrowRight2,
+    Lock,
+    Notification,
+    Moon,
+    Security,
+} from 'iconsax-react-native'
+import { Theme } from '@/config/theme'
+import { Switch } from 'react-native'
+import { useState } from 'react'
 
 export default function SettingsPage() {
     const {
@@ -29,6 +38,8 @@ export default function SettingsPage() {
     } = useSettingsController()
     const { user } = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
+    const [darkMode, setDarkMode] = useState(false)
+    const [notifications, setNotifications] = useState(true)
 
     const handleLogoff = () => {
         dispatch(logoffRequest())
@@ -41,95 +52,176 @@ export default function SettingsPage() {
             <S.ContentContainer
                 contentContainerStyle={{
                     flexGrow: 1,
-                    alignItems: 'center',
                     paddingVertical: 40,
                     paddingHorizontal: 24,
                 }}
                 automaticallyAdjustKeyboardInsets
+                showsVerticalScrollIndicator={false}
             >
-                <S.AvatarContainer>
-                    <Avatar
-                        uri={user?.profile_picture_url ?? undefined}
-                        isLoading={imageUploadLoading}
-                        size={139}
-                    />
-                    <EditButton onChange={handleImageChange} />
-                </S.AvatarContainer>
-                <S.PersonalInfo>
-                    <Text color="black" fontSize="xl" fontWeight="600">
-                        {getFirstAndLastName(user?.full_name ?? '')}
-                    </Text>
-                    <Text fontSize="sm" color="description">
-                        {user?.city} - {user?.state}
-                    </Text>
-                </S.PersonalInfo>
+                <S.ProfileSection>
+                    <S.ProfileHeader>
+                        <Text fontSize="xl" fontWeight="700">
+                            Perfil
+                        </Text>
+                        <S.EditProfileButton
+                            onPress={() =>
+                                router.push('/(home)/(settings)/edit-profile')
+                            }
+                        >
+                            <Text fontSize="sm" color="mainColor">
+                                Editar
+                            </Text>
+                        </S.EditProfileButton>
+                    </S.ProfileHeader>
 
-                <S.FormContainer>
-                    <Controller
-                        name="password"
-                        control={control}
-                        render={({ field: { onChange } }) => (
-                            <BasicInput
-                                onChangeText={(text) => onChange(text)}
-                                label="Email"
-                                placeholder="Digite seu email"
-                                defaultValue={user?.email}
-                                keyboardType="email-address"
+                    <S.ProfileCard>
+                        <S.AvatarContainer>
+                            <Avatar
+                                uri={user?.profile_picture_url ?? undefined}
+                                isLoading={imageUploadLoading}
+                                size={70}
                             />
-                        )}
-                    />
-                    <Controller
-                        name="cpf"
-                        control={control}
-                        render={({ field: { onChange } }) => (
-                            <BasicInput
-                                onChangeText={(text) => onChange(text)}
-                                label="CPF"
-                                placeholder="Digite seu CPF"
-                                defaultValue={user?.cpf}
-                                mask="999.999.999-99"
-                                keyboardType="number-pad"
+                        </S.AvatarContainer>
+                        <S.ProfileInfo>
+                            <Text color="black" fontSize="lg" fontWeight="600">
+                                {getFirstAndLastName(user?.full_name ?? '')}
+                            </Text>
+                            <Text fontSize="sm" color="description">
+                                {user?.email}
+                            </Text>
+                            <Text fontSize="xs" color="description">
+                                {user?.city} - {user?.state}
+                            </Text>
+                        </S.ProfileInfo>
+                    </S.ProfileCard>
+                </S.ProfileSection>
+
+                <S.SettingSection>
+                    <Text
+                        fontSize="xl"
+                        fontWeight="700"
+                        style={{ marginBottom: 16 }}
+                    >
+                        Configurações do App
+                    </Text>
+
+                    <S.SettingItem>
+                        <S.SettingItemLeft>
+                            <Notification
+                                size={22}
+                                color={Theme.colors.mainColor}
+                                variant="Bold"
                             />
-                        )}
-                    />
-                    <Controller
-                        name="phone"
-                        control={control}
-                        render={({ field: { onChange } }) => (
-                            <BasicInput
-                                onChangeText={(text) => onChange(text)}
-                                label="Telefone"
-                                placeholder="Digite seu telefone"
-                                defaultValue={user?.phone}
-                                mask="+(99) 9 9999-9999"
-                                keyboardType="phone-pad"
+                            <Text fontSize="base">Notificações</Text>
+                        </S.SettingItemLeft>
+                        <Switch
+                            value={notifications}
+                            onValueChange={setNotifications}
+                            trackColor={{
+                                false: Theme.colors.lightGray,
+                                true: Theme.colors.mainColor,
+                            }}
+                            thumbColor={Theme.colors.white}
+                        />
+                    </S.SettingItem>
+
+                    <S.SettingItem>
+                        <S.SettingItemLeft>
+                            <Moon
+                                size={22}
+                                color={Theme.colors.mainColor}
+                                variant="Bold"
                             />
-                        )}
-                    />
-                    <Controller
-                        name="password"
-                        control={control}
-                        render={({ field: { onChange } }) => (
-                            <BasicInput
-                                onChangeText={(text) => onChange(text)}
-                                label="Senha"
-                                placeholder="Digite sua senha"
-                                value="teste123"
-                                secureTextEntry
-                            />
-                        )}
-                    />
-                </S.FormContainer>
-                <S.ButtonWrapper>
-                    <Button
-                        disabled={loading}
-                        isLoading={loading}
-                        borderRadius={12}
-                        text="Salvar"
+                            <Text fontSize="base">Modo escuro</Text>
+                        </S.SettingItemLeft>
+                        <Switch
+                            value={darkMode}
+                            onValueChange={setDarkMode}
+                            trackColor={{
+                                false: Theme.colors.lightGray,
+                                true: Theme.colors.mainColor,
+                            }}
+                            thumbColor={Theme.colors.white}
+                        />
+                    </S.SettingItem>
+
+                    <S.SettingItem
                         onPress={() =>
-                            handleSubmit(() => onSubmit(formValues))()
+                            router.push('/(home)/(settings)/security')
                         }
-                    />
+                    >
+                        <S.SettingItemLeft>
+                            <Security
+                                size={22}
+                                color={Theme.colors.mainColor}
+                                variant="Bold"
+                            />
+                            <Text fontSize="base">Segurança</Text>
+                        </S.SettingItemLeft>
+                        <ArrowRight2
+                            size={20}
+                            color={Theme.colors.description}
+                        />
+                    </S.SettingItem>
+
+                    <S.SettingItem
+                        onPress={() =>
+                            router.push('/(home)/(settings)/privacy')
+                        }
+                    >
+                        <S.SettingItemLeft>
+                            <Lock
+                                size={22}
+                                color={Theme.colors.mainColor}
+                                variant="Bold"
+                            />
+                            <Text fontSize="base">Privacidade</Text>
+                        </S.SettingItemLeft>
+                        <ArrowRight2
+                            size={20}
+                            color={Theme.colors.description}
+                        />
+                    </S.SettingItem>
+                </S.SettingSection>
+
+                <S.SettingSection>
+                    <Text
+                        fontSize="xl"
+                        fontWeight="700"
+                        style={{ marginBottom: 16 }}
+                    >
+                        Sobre
+                    </Text>
+
+                    <S.AboutItem>
+                        <Text fontSize="sm" color="description">
+                            Versão
+                        </Text>
+                        <Text fontSize="sm">1.0.0</Text>
+                    </S.AboutItem>
+
+                    <S.AboutItem>
+                        <Text fontSize="sm" color="description">
+                            Termos de uso
+                        </Text>
+                        <ArrowRight2
+                            size={16}
+                            color={Theme.colors.description}
+                        />
+                    </S.AboutItem>
+
+                    <S.AboutItem>
+                        <Text fontSize="sm" color="description">
+                            Política de privacidade
+                        </Text>
+                        <ArrowRight2
+                            size={16}
+                            color={Theme.colors.description}
+                        />
+                    </S.AboutItem>
+                </S.SettingSection>
+
+                <S.ButtonsSection>
                     <Button
                         outlined
                         borderRadius={12}
@@ -142,7 +234,7 @@ export default function SettingsPage() {
                         text="Limpar todos os dados"
                         onPress={handleClearAllData}
                     />
-                </S.ButtonWrapper>
+                </S.ButtonsSection>
             </S.ContentContainer>
         </S.Container>
     )

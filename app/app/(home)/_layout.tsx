@@ -26,15 +26,6 @@ const TabBarIcon = ({
     return <Container focused={focused}>{children}</Container>
 }
 
-const appointmentsPageToHideTabBar = ['[id]']
-
-const tabBarStyle = {
-    height: Platform.OS === 'ios' ? 100 : 80,
-    borderTopWidth: 1,
-    shadowOpacity: 0,
-    elevation: 0,
-}
-
 export default function TabLayout() {
     return (
         <Tabs

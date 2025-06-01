@@ -10,24 +10,69 @@ export const ContentContainer = styled.ScrollView`
     flex-direction: column;
 `
 
-export const ButtonWrapper = styled.View`
-    align-items: center;
-    flex-direction: column;
-    flex-grow: 1;
-    align-self: stretch;
-    gap: 8px;
+export const ProfileSection = styled.View`
+    margin-bottom: 24px;
 `
 
-export const AvatarContainer = styled.View``
-
-export const PersonalInfo = styled.View`
-    margin-top: 18px;
+export const ProfileHeader = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    margin-bottom: 16px;
 `
 
-export const FormContainer = styled.View`
-    width: 100%;
-    margin: 32px 0;
-    gap: 20px;
+export const EditProfileButton = styled.TouchableOpacity`
+    padding: 8px;
+`
+
+export const ProfileCard = styled.View`
+    flex-direction: row;
+    align-items: center;
+    background-color: ${Theme.colors.fillColor};
+    padding: 16px;
+    border-radius: 16px;
+`
+
+export const AvatarContainer = styled.View`
+    margin-right: 16px;
+`
+
+export const ProfileInfo = styled.View`
+    flex: 1;
+    gap: 4px;
+`
+
+export const SettingSection = styled.View`
+    margin-bottom: 24px;
+`
+
+export const SettingItem = styled.TouchableOpacity`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: ${Theme.colors.fillColor};
+    border-radius: 12px;
+    margin-bottom: 8px;
+`
+
+export const SettingItemLeft = styled.View`
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+`
+
+export const AboutItem = styled.TouchableOpacity`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: ${Theme.colors.fillColor};
+    border-radius: 12px;
+    margin-bottom: 8px;
+`
+
+export const ButtonsSection = styled.View`
+    margin-top: 16px;
+    gap: 12px;
 `
