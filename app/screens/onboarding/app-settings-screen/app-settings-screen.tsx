@@ -3,11 +3,17 @@ import { StyleSheet, Switch } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import { setDarkMode, setNotifications } from '@/store/slices/settings.slice'
+import {
+    setTermsAccepted,
+    setPrivacyAccepted,
+} from '@/store/slices/onboarding.slice'
 import Text from '@/components/Text/Text'
 import * as S from './app-settings-screen.style'
 import { Moon, Notification } from 'iconsax-react-native'
 import { useTheme } from '@emotion/react'
 import { Checkbox } from '@/components/Checkbox/Checkbox'
+import { TermsModal } from '@/components/TermsModal/TermsModal'
+import { PrivacyModal } from '@/components/PrivacyModal/PrivacyModal'
 
 export function AppSettingsScreen() {
     const dispatch = useDispatch()
@@ -15,8 +21,12 @@ export function AppSettingsScreen() {
     const { darkMode, notifications } = useSelector(
         (state: RootState) => state.settings
     )
-    const [termsAccepted, setTermsAccepted] = useState(false)
-    const [privacyAccepted, setPrivacyAccepted] = useState(false)
+    const { termsAccepted, privacyAccepted } = useSelector(
+        (state: RootState) => state.onboarding
+    )
+
+    const [showTermsModal, setShowTermsModal] = useState(false)
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false)
 
     const handleToggleDarkMode = (value: boolean) => {
         dispatch(setDarkMode(value))
@@ -24,6 +34,14 @@ export function AppSettingsScreen() {
 
     const handleToggleNotifications = (value: boolean) => {
         dispatch(setNotifications(value))
+    }
+
+    const handleTermsAccepted = (value: boolean) => {
+        dispatch(setTermsAccepted(value))
+    }
+
+    const handlePrivacyAccepted = (value: boolean) => {
+        dispatch(setPrivacyAccepted(value))
     }
 
     return (
@@ -107,10 +125,12 @@ export function AppSettingsScreen() {
                         <S.TermsItem>
                             <Checkbox
                                 value={termsAccepted}
-                                onValueChange={setTermsAccepted}
+                                onValueChange={handleTermsAccepted}
                                 label="Eu aceito os Termos de Uso"
                             />
-                            <S.TermsLink>
+                            <S.TermsLink
+                                onPress={() => setShowTermsModal(true)}
+                            >
                                 <Text fontSize="sm" color="mainColor">
                                     Ler termos
                                 </Text>
@@ -120,10 +140,12 @@ export function AppSettingsScreen() {
                         <S.TermsItem>
                             <Checkbox
                                 value={privacyAccepted}
-                                onValueChange={setPrivacyAccepted}
+                                onValueChange={handlePrivacyAccepted}
                                 label="Eu aceito a Política de Privacidade"
                             />
-                            <S.TermsLink>
+                            <S.TermsLink
+                                onPress={() => setShowPrivacyModal(true)}
+                            >
                                 <Text fontSize="sm" color="mainColor">
                                     Ler política
                                 </Text>
@@ -132,6 +154,16 @@ export function AppSettingsScreen() {
                     </S.Section>
                 </S.SettingsContainer>
             </S.ContentContainer>
+
+            <TermsModal
+                isVisible={showTermsModal}
+                onClose={() => setShowTermsModal(false)}
+            />
+
+            <PrivacyModal
+                isVisible={showPrivacyModal}
+                onClose={() => setShowPrivacyModal(false)}
+            />
         </S.Container>
     )
 }

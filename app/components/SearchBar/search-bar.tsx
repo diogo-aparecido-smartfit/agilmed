@@ -2,6 +2,7 @@ import React from 'react'
 import { TextInput, StyleSheet, View } from 'react-native'
 import { SearchNormal1 } from 'iconsax-react-native'
 import { Theme } from '@/config/theme'
+import { useTheme } from '@/hooks/useTheme'
 
 interface SearchBarProps {
     placeholder: string
@@ -14,13 +15,15 @@ export function SearchBar({
     value,
     onChangeText,
 }: SearchBarProps) {
+    const { colors } = useTheme()
+
     return (
         <View style={styles.container}>
-            <SearchNormal1 size={20} color={Theme.colors.description} />
+            <SearchNormal1 size={20} color={colors.description} />
             <TextInput
                 style={styles.input}
                 placeholder={placeholder}
-                placeholderTextColor={Theme.colors.description}
+                placeholderTextColor={colors.description}
                 value={value}
                 onChangeText={onChangeText}
             />

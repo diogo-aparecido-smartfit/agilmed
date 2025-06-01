@@ -4,12 +4,12 @@ import styled from '@emotion/native'
 
 export const Container = styled(SafeAreaView)`
     flex: 1;
-    background-color: ${Theme.colors.background};
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const Header = styled.View`
     padding: 16px;
-    background-color: ${Theme.colors.white};
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const HeaderTop = styled.View`

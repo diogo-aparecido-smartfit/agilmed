@@ -30,7 +30,7 @@ export const InfoWrapper = styled.View`
 export const Divider = styled.View`
     height: 1px;
     width: 100%;
-    background-color: ${Theme.colors.lightDescription};
+    background-color: ${Theme.colors.inputColor};
     margin: 20px 0;
 `
 

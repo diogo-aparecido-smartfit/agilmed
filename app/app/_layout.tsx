@@ -35,6 +35,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { AuthProvider } from '@/providers/auth.provider'
 import { AppThemeProvider } from '@/providers/theme.provider'
 import StatusBarManager from '@/components/StatusManager/status-manager'
+import { AppModals } from '@/components/AppModals/AppModals'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -80,6 +81,7 @@ export default function RootLayout() {
                             <QueryProvider>
                                 <StatusBarManager />
                                 <Main />
+                                <AppModals />
                             </QueryProvider>
                         </PortalProvider>
                     </GestureHandlerRootView>

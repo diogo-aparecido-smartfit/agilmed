@@ -9,8 +9,11 @@ import { IDoctor } from '@/types/types'
 import { SearchBar } from '@/components/SearchBar/search-bar'
 import { useDoctorsListController } from './doctors-list.controller'
 import { ArrowLeft } from 'iconsax-react-native'
+import Text from '@/components/Text/Text'
+import { useTheme } from '@/hooks/useTheme'
 
 export default function DoctorsListPage() {
+    const { colors } = useTheme()
     const {
         filteredDoctors,
         specialties,
@@ -32,9 +35,11 @@ export default function DoctorsListPage() {
             <S.Header>
                 <S.HeaderTop>
                     <S.BackButton onPress={handleBackPress}>
-                        <ArrowLeft size="24" color={Theme.colors.black} />
+                        <ArrowLeft size="24" color={colors.title} />
                     </S.BackButton>
-                    <S.HeaderTitle>Médicos</S.HeaderTitle>
+                    <Text fontSize="xl" fontWeight="700">
+                        Médicos
+                    </Text>
                 </S.HeaderTop>
 
                 <SearchBar
@@ -52,10 +57,7 @@ export default function DoctorsListPage() {
 
             {isLoading ? (
                 <S.LoadingContainer>
-                    <ActivityIndicator
-                        size="large"
-                        color={Theme.colors.mainColor}
-                    />
+                    <ActivityIndicator size="large" color={colors.mainColor} />
                 </S.LoadingContainer>
             ) : (
                 <S.ListWrapper>
@@ -72,7 +74,7 @@ export default function DoctorsListPage() {
                             <RefreshControl
                                 refreshing={isLoading}
                                 onRefresh={handleRefresh}
-                                colors={[Theme.colors.mainColor]}
+                                tintColor={colors.title}
                             />
                         }
                         ListEmptyComponent={<EmptyList />}

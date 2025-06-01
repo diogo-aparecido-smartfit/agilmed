@@ -23,14 +23,16 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
             <S.PrimaryContentWrapper>
                 <Avatar uri={doctor.user.profile_picture_url || ''} />
                 <S.DoctorInfoWrapper>
-                    <S.Title>{doctor.user.full_name}</S.Title>
-                    <S.Subtitle>{doctor.specialty}</S.Subtitle>
+                    <Text fontWeight="700">{doctor.user.full_name}</Text>
+                    <Text fontSize="sm">{doctor.specialty}</Text>
                 </S.DoctorInfoWrapper>
             </S.PrimaryContentWrapper>
             <S.Divider />
             <S.SecondaryContentWrapper>
                 <S.InfoItem>
-                    <S.InfoLabel>CRM:</S.InfoLabel>
+                    <Text fontSize="sm" fontWeight="600">
+                        CRM:
+                    </Text>
                     <Text fontSize="sm" color="description">
                         {doctor.crm}
                     </Text>

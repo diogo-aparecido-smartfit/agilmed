@@ -10,6 +10,8 @@ export interface OnboardingState {
         email: string
         password: string
     }
+    termsAccepted: boolean
+    privacyAccepted: boolean
 }
 
 const initialState: OnboardingState = {
@@ -22,6 +24,8 @@ const initialState: OnboardingState = {
         email: '',
         password: '',
     },
+    termsAccepted: false,
+    privacyAccepted: false,
 }
 
 const onboardingSlice = createSlice({
@@ -62,6 +66,12 @@ const onboardingSlice = createSlice({
         completeOnboardingFailure(state) {
             state.isLoading = false
         },
+        setTermsAccepted(state, action: PayloadAction<boolean>) {
+            state.termsAccepted = action.payload
+        },
+        setPrivacyAccepted(state, action: PayloadAction<boolean>) {
+            state.privacyAccepted = action.payload
+        },
     },
 })
 
@@ -75,6 +85,8 @@ export const {
     completeOnboarding,
     completeOnboardingSuccess,
     completeOnboardingFailure,
+    setTermsAccepted,
+    setPrivacyAccepted,
 } = onboardingSlice.actions
 
 export default onboardingSlice.reducer
