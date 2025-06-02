@@ -216,8 +216,16 @@ export interface IDoctor {
         phone: string
         cpf: string
         profile_picture_url: string | null
+        verificationCode: string | null
+        isVerified: boolean
         role: string
+        createdAt: string
+        updatedAt: string
     }
+    email: string
+    full_name: string
+    phone: string
+    profile_picture_url: string | null
 }
 
 export interface ThemeProps {

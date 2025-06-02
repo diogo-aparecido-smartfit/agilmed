@@ -14,8 +14,7 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
     const router = useRouter()
 
     const handleNavigateToDoctor = () => {
-        // router.push(`/doctors/${doctor.id}`)
-        console.log('aqui')
+        router.push(`/(doctors)/details/${doctor.id}`)
     }
 
     return (

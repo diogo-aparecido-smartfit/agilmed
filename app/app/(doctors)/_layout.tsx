@@ -5,16 +5,17 @@ export default function DoctorsLayout() {
     return (
         <Stack>
             <Stack.Screen
-                name="doctors-list"
+                name="details/[id]"
                 options={{
+                    title: 'Detalhes do médico',
+                    headerTitleAlign: 'center',
                     headerShown: false,
                 }}
             />
             <Stack.Screen
-                name="[id]"
+                name="doctors-list"
                 options={{
-                    title: 'Detalhes do médico',
-                    headerTitleAlign: 'center',
+                    headerShown: false,
                 }}
             />
         </Stack>
