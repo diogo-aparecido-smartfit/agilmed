@@ -38,7 +38,9 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
                     </Text>
                 </S.InfoItem>
                 <S.InfoItem>
-                    <S.InfoLabel>Cidade:</S.InfoLabel>
+                    <Text fontWeight="600" fontSize="sm">
+                        Cidade:
+                    </Text>
                     <Text fontSize="sm" color="description">
                         {doctor.city}/{doctor.state}
                     </Text>

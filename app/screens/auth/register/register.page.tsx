@@ -5,7 +5,6 @@ import { Controller } from 'react-hook-form'
 import { useRegisterController } from './register.controller'
 import Input from '@/components/Input/Input'
 import { Location, User } from 'iconsax-react-native'
-import { StatusBar } from 'expo-status-bar'
 import BasicInput from '@/components/BasicInput/BasicInput'
 import GenericDropdown from '@/components/GenericDropdown/GenericDropdown'
 import { genders, states } from '@/utils/constants'
@@ -22,7 +21,6 @@ export default function RegisterPage() {
 
     return (
         <S.Container>
-            <StatusBar style="dark" />
             <S.ContentContainer
                 automaticallyAdjustKeyboardInsets
                 keyboardShouldPersistTaps="handled"

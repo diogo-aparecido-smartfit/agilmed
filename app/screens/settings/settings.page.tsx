@@ -2,16 +2,12 @@ import Avatar from '@/components/Avatar/Avatar'
 import * as S from './settings.style'
 import Button from '@/components/Button/Button'
 import Text from '@/components/Text/Text'
-import EditButton from './EditButton/EditButton'
-import { StatusBar } from 'expo-status-bar'
 import { getFirstAndLastName } from '@/utils/utils'
-import BasicInput from '@/components/BasicInput/BasicInput'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import { logoffRequest } from '@/store/slices/auth.slice'
 import { router } from 'expo-router'
 import { useSettingsController } from './settings.controller'
-import { Controller } from 'react-hook-form'
 import {
     ArrowRight2,
     Lock,
@@ -90,7 +86,7 @@ export default function SettingsPage() {
                                 {user?.email}
                             </Text>
                             <Text fontSize="xs" color="description">
-                                {user?.city} - {user?.state}
+                                {user?.patient?.city} - {user?.patient?.state}
                             </Text>
                         </S.ProfileInfo>
                     </S.ProfileCard>

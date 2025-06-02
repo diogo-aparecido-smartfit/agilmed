@@ -28,7 +28,7 @@ export const DoctorInfoWrapper = styled.View`
 export const Title = styled.Text`
     font-size: 16px;
     font-family: ${Theme.fonts.bold};
-    color: ${Theme.colors.black};
+    color: ${Theme.colors.title};
 `
 
 export const Subtitle = styled.Text`
@@ -58,5 +58,5 @@ export const InfoItem = styled.View`
 export const InfoLabel = styled.Text`
     font-size: 14px;
     font-family: ${Theme.fonts.semiBold};
-    color: ${Theme.colors.black};
+    color: ${Theme.colors.title};
 `

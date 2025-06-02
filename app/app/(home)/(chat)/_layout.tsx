@@ -4,7 +4,6 @@ import { Platform, TouchableOpacity, View } from 'react-native'
 import { useTheme } from '@emotion/react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/store'
-import { StatusBar } from 'expo-status-bar'
 
 export default function StackLayout() {
     const theme = useTheme()
@@ -12,7 +11,6 @@ export default function StackLayout() {
 
     return (
         <>
-            <StatusBar style="light" />
             <Stack
                 screenOptions={{
                     headerShown: true,
@@ -24,7 +22,7 @@ export default function StackLayout() {
                     header: () => (
                         <View
                             style={{
-                                backgroundColor: theme.colors.mainColor,
+                                backgroundColor: theme.colors.background,
                                 height: Platform.OS === 'android' ? 70 : 90,
                                 alignItems: 'flex-start',
                                 justifyContent: 'flex-end',
@@ -34,7 +32,7 @@ export default function StackLayout() {
                             <TouchableOpacity onPress={() => router.back()}>
                                 <ArrowLeft
                                     size={24}
-                                    color={theme.colors.white}
+                                    color={theme.colors.title}
                                 />
                             </TouchableOpacity>
                         </View>

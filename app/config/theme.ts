@@ -21,6 +21,7 @@ export const lightPalette = {
     warning: '#F9A825',
     danger: '#ef4444',
     cardBackground: '#FFFFFF',
+    cardHighlight: '#4894FE',
     divider: '#F4F4F6',
     blue: '#3178c6',
 }
@@ -46,6 +47,7 @@ export const darkPalette = {
     warning: '#FBBF24',
     danger: '#f87171',
     cardBackground: '#1E2022',
+    cardHighlight: '#2A3352',
     divider: '#2C2F33',
     blue: '#3178c6',
 }

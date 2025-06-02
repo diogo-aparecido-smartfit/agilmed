@@ -5,6 +5,7 @@ import { ArrowDown2, ArrowUp2 } from 'iconsax-react-native'
 import { TouchableOpacity, View } from 'react-native'
 import Text from '../Text/Text'
 import { Theme } from '@/config/theme'
+import { useTheme } from '@/hooks/useTheme'
 
 interface IData {
     label: string
@@ -29,9 +30,11 @@ const TextDropdown = ({
     error,
     onSelect,
 }: DropdownProps) => {
+    const { colors } = useTheme()
+
     return (
         <S.DropdownContainer>
-            {label && <S.DropdownButtonText>{label}</S.DropdownButtonText>}
+            {label && <Text fontWeight="600">{label}</Text>}
             <SelectDropdown
                 data={data}
                 onSelect={(selectedItem, index) =>
@@ -41,7 +44,9 @@ const TextDropdown = ({
                     <TouchableOpacity>
                         <S.DropdownButton>
                             {selectedItem ? (
-                                <Text color="black">{selectedItem.label}</Text>
+                                <Text color={'title'}>
+                                    {selectedItem.label}
+                                </Text>
                             ) : (
                                 <Text ellipsizeMode="tail" color="inputColor">
                                     {placeholder}
@@ -62,7 +67,7 @@ const TextDropdown = ({
                     </TouchableOpacity>
                 )}
                 renderItem={(item, index) => (
-                    <View>
+                    <View style={{ backgroundColor: colors.background }}>
                         <S.DropdownItem>
                             <S.DropdownItemText>
                                 {item.label}

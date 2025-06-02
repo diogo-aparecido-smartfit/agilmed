@@ -23,7 +23,6 @@ export default function SecurityPage() {
 
     return (
         <S.Container>
-            <StatusBar style="dark" />
             <S.Header>
                 <S.BackButton onPress={() => router.back()}>
                     <ArrowLeft size={24} color={Theme.colors.title} />

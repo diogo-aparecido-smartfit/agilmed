@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated'
 
 export const Container = styled.ScrollView`
     flex: 1;
-    background-color: ${(props) => props.theme.colors.mainColor};
+    background-color: ${(props) => props.theme.colors.background};
 `
 
 export const ScrollContainer = styled.ScrollView`
@@ -107,8 +107,8 @@ export const StartChatButton = styled.TouchableOpacity`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background-color: ${(props) => props.theme.colors.inputBackground};
+    border: 1px solid ${(props) => props.theme.colors.tabIconDefault};
     border-radius: 12px;
     padding: 16px;
     gap: 8px;

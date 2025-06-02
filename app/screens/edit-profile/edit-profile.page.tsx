@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { Controller } from 'react-hook-form'
 import { useSelector } from 'react-redux'
@@ -9,11 +8,13 @@ import BasicInput from '@/components/BasicInput/BasicInput'
 import Button from '@/components/Button/Button'
 import Text from '@/components/Text/Text'
 import { ArrowLeft } from 'iconsax-react-native'
-import { Theme } from '@/config/theme'
 import * as S from './edit-profile.style'
-import { useSettingsController } from '../settings/settings.controller'
+import { useEditProfileController } from './edit-profile.controller'
 import EditButton from '../settings/EditButton/EditButton'
 import { useTheme } from '@/hooks/useTheme'
+import GenericDropdown from '@/components/GenericDropdown/GenericDropdown'
+import { genders, states } from '@/utils/constants'
+import { IUpdateUserData } from '@/types/types'
 
 export default function EditProfilePage() {
     const {
@@ -24,13 +25,13 @@ export default function EditProfilePage() {
         onSubmit,
         imageUploadLoading,
         handleImageChange,
-    } = useSettingsController()
+        errors,
+    } = useEditProfileController()
     const { colors } = useTheme()
     const { user } = useSelector((state: RootState) => state.auth)
 
     return (
         <S.Container>
-            <StatusBar style="dark" />
             <S.Header>
                 <S.BackButton onPress={() => router.back()}>
                     <ArrowLeft size={24} color={colors.title} />
@@ -44,7 +45,6 @@ export default function EditProfilePage() {
             <S.ContentContainer
                 contentContainerStyle={{
                     flexGrow: 1,
-                    alignItems: 'center',
                     paddingVertical: 20,
                     paddingHorizontal: 24,
                 }}
@@ -61,69 +61,180 @@ export default function EditProfilePage() {
                 </S.AvatarContainer>
 
                 <S.FormContainer>
+                    <S.SectionTitle>
+                        <Text fontSize="lg" fontWeight="600">
+                            Informações Pessoais
+                        </Text>
+                    </S.SectionTitle>
+
                     <Controller
                         name="full_name"
                         control={control}
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { onChange, value } }) => (
                             <BasicInput
                                 onChangeText={(text) => onChange(text)}
                                 label="Nome completo"
                                 placeholder="Digite seu nome completo"
-                                defaultValue={user?.full_name}
+                                value={value ?? undefined}
+                                error={errors.full_name?.message}
                             />
                         )}
                     />
+
                     <Controller
                         name="email"
                         control={control}
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { onChange, value } }) => (
                             <BasicInput
                                 onChangeText={(text) => onChange(text)}
                                 label="Email"
                                 placeholder="Digite seu email"
-                                defaultValue={user?.email}
+                                value={value ?? undefined}
                                 keyboardType="email-address"
+                                error={errors.email?.message}
                             />
                         )}
                     />
-                    <Controller
-                        name="cpf"
-                        control={control}
-                        render={({ field: { onChange } }) => (
-                            <BasicInput
-                                onChangeText={(text) => onChange(text)}
-                                label="CPF"
-                                placeholder="Digite seu CPF"
-                                defaultValue={user?.cpf}
-                                mask="999.999.999-99"
-                                keyboardType="number-pad"
-                            />
-                        )}
-                    />
+
                     <Controller
                         name="phone"
                         control={control}
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { onChange, value } }) => (
                             <BasicInput
                                 onChangeText={(text) => onChange(text)}
                                 label="Telefone"
                                 placeholder="Digite seu telefone"
-                                defaultValue={user?.phone}
-                                mask="+(99) 9 9999-9999"
+                                value={value ?? undefined}
+                                mask="(99) 9 9999-9999"
                                 keyboardType="phone-pad"
+                                error={errors.phone?.message}
                             />
                         )}
                     />
+
+                    <S.SectionTitle>
+                        <Text fontSize="lg" fontWeight="600">
+                            Endereço
+                        </Text>
+                    </S.SectionTitle>
+
+                    <Controller
+                        name="address"
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <BasicInput
+                                onChangeText={(text) => onChange(text)}
+                                label="Endereço"
+                                placeholder="Digite seu endereço"
+                                value={value ?? undefined}
+                                error={errors.address?.message}
+                            />
+                        )}
+                    />
+
+                    <S.RowContainer>
+                        <S.RowItem>
+                            <Controller
+                                name="city"
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <BasicInput
+                                        onChangeText={(text) => onChange(text)}
+                                        label="Cidade"
+                                        placeholder="Digite sua cidade"
+                                        value={value ?? undefined}
+                                        error={errors.city?.message}
+                                    />
+                                )}
+                            />
+                        </S.RowItem>
+
+                        <S.RowItem>
+                            <Controller
+                                name="state"
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <GenericDropdown
+                                        placeholder="Selecionar"
+                                        label="Estado"
+                                        onSelect={(item) =>
+                                            onChange(item.value)
+                                        }
+                                        data={states}
+                                        error={errors.state?.message}
+                                    />
+                                )}
+                            />
+                        </S.RowItem>
+                    </S.RowContainer>
+
+                    <S.SectionTitle>
+                        <Text fontSize="lg" fontWeight="600">
+                            Informações Médicas
+                        </Text>
+                    </S.SectionTitle>
+
+                    <Controller
+                        name="gender"
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <GenericDropdown
+                                placeholder="Selecione uma opção"
+                                label="Sexo"
+                                onSelect={(item) => onChange(item.value)}
+                                data={genders}
+                                error={errors.gender?.message}
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="allergies"
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <BasicInput
+                                onChangeText={(text) => onChange(text)}
+                                label="Alergias"
+                                placeholder="Exemplo: Dipirona, AAS..."
+                                value={value ?? undefined}
+                                error={errors.allergies?.message}
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="medical_history"
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <BasicInput
+                                onChangeText={(text) => onChange(text)}
+                                label="Histórico médico"
+                                placeholder="Descreva seu histórico médico"
+                                value={value ?? undefined}
+                                multiline
+                                numberOfLines={4}
+                                error={errors.medical_history?.message}
+                            />
+                        )}
+                    />
+
+                    <S.SectionTitle>
+                        <Text fontSize="lg" fontWeight="600">
+                            Segurança
+                        </Text>
+                    </S.SectionTitle>
+
                     <Controller
                         name="password"
                         control={control}
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { onChange, value } }) => (
                             <BasicInput
                                 onChangeText={(text) => onChange(text)}
-                                label="Senha"
-                                placeholder="Digite sua senha"
-                                value="••••••••"
+                                label="Nova senha"
+                                placeholder="Digite para alterar sua senha"
+                                value={value ?? undefined}
                                 secureTextEntry
+                                error={errors.password?.message}
                             />
                         )}
                     />
@@ -134,13 +245,11 @@ export default function EditProfilePage() {
                         disabled={loading}
                         isLoading={loading}
                         borderRadius={12}
-                        text="Salvar"
-                        onPress={() =>
-                            handleSubmit(() => {
-                                onSubmit(formValues)
-                                router.back()
-                            })()
-                        }
+                        text="Salvar alterações"
+                        onPress={handleSubmit((data) => {
+                            onSubmit(data as IUpdateUserData)
+                            router.back()
+                        })}
                     />
                 </S.ButtonContainer>
             </S.ContentContainer>

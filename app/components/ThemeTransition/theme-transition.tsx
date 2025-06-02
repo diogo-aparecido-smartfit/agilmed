@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, StyleSheet, View } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import { lightPalette, darkPalette } from '@/config/theme'
@@ -125,8 +124,6 @@ export const ThemeTransition: React.FC<ThemeTransitionProps> = ({
                 },
             ]}
         >
-            <StatusBar animated={true} style={darkMode ? 'light' : 'dark'} />
-
             <View style={styles.contentContainer}>
                 <Lottie
                     ref={lottieRef}

@@ -40,14 +40,8 @@ export class DoctorController {
         return;
       }
 
-      if (doctor.user) {
-        const { password, ...userWithoutPassword } = doctor.user.dataValues;
-        const sanitizedDoctor = { ...doctor, user: userWithoutPassword };
-        res.json(sanitizedDoctor);
-        return;
-      }
-
-      res.json(doctor);
+      const sanitizedDoctor = this.sanitizeDoctorData(doctor);
+      res.json(sanitizedDoctor);
     } catch (error: any) {
       console.error("Error getting doctor:", error);
       res.status(500).json({

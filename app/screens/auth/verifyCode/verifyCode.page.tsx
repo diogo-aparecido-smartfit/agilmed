@@ -3,7 +3,6 @@ import * as S from './verifyCode.style'
 import OTPInput from '@/components/OtpInput/OtpInput'
 import Button from '@/components/Button/Button'
 import { router, useLocalSearchParams } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import { useVerifyCodeController } from './verifyCode.controller'
 import { Controller } from 'react-hook-form'
 import { useSelector } from 'react-redux'
@@ -26,7 +25,6 @@ export default function VerifyCodePage() {
 
     return (
         <S.Container>
-            <StatusBar style="dark" />
             <S.ContentContainer
                 automaticallyAdjustKeyboardInsets
                 showsVerticalScrollIndicator={false}

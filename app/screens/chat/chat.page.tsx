@@ -2,7 +2,6 @@ import React from 'react'
 import Text from '@/components/Text/Text'
 import * as S from './chat.style'
 import { Message } from 'iconsax-react-native'
-import { StatusBar } from 'expo-status-bar'
 import { useChatlistController } from './chat-list.controller'
 import Lottie from 'lottie-react-native'
 import AnimatedPagination from '@/components/AnimatedPagination/animated-pagination'
@@ -26,7 +25,6 @@ export default function ChatPage() {
 
     return (
         <S.Container>
-            <StatusBar style={darkMode ? 'light' : 'dark'} />
             <S.ContentContainer>
                 <S.HeaderSection>
                     <S.AvatarContainer>
@@ -41,7 +39,7 @@ export default function ChatPage() {
                         />
                     </S.AvatarContainer>
                     <Text
-                        color="white"
+                        color="title"
                         fontSize="3xl"
                         fontWeight="700"
                         textAlign="center"
@@ -49,7 +47,7 @@ export default function ChatPage() {
                         Conheça a Amélia
                     </Text>
                     <Text
-                        color="lightDescription"
+                        color="description"
                         fontSize="base"
                         fontWeight="400"
                         textAlign="center"
@@ -135,12 +133,12 @@ export default function ChatPage() {
                 </S.StatusBadge>
 
                 <S.StartChatButton onPress={handleStartConversation}>
-                    <Text color="white" fontWeight="700" fontSize="base">
+                    <Text color="title" fontWeight="700" fontSize="base">
                         Iniciar conversa
                     </Text>
                     <Message
                         size={20}
-                        color={theme.colors.white}
+                        color={theme.colors.title}
                         variant="Bold"
                     />
                 </S.StartChatButton>

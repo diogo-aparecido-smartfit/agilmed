@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import { View } from 'react-native'
@@ -15,8 +14,6 @@ export default function StatusBarManager() {
                     : Theme.colors.white,
                 height: 0,
             }}
-        >
-            <StatusBar style={darkMode ? 'light' : 'dark'} />
-        </View>
+        ></View>
     )
 }

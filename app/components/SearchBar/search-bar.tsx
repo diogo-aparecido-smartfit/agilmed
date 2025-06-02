@@ -1,8 +1,7 @@
 import React from 'react'
-import { TextInput, StyleSheet, View } from 'react-native'
 import { SearchNormal1 } from 'iconsax-react-native'
-import { Theme } from '@/config/theme'
 import { useTheme } from '@/hooks/useTheme'
+import * as S from './search-bar.style'
 
 interface SearchBarProps {
     placeholder: string
@@ -18,33 +17,14 @@ export function SearchBar({
     const { colors } = useTheme()
 
     return (
-        <View style={styles.container}>
+        <S.Container>
             <SearchNormal1 size={20} color={colors.description} />
-            <TextInput
-                style={styles.input}
+            <S.Input
                 placeholder={placeholder}
                 placeholderTextColor={colors.description}
                 value={value}
                 onChangeText={onChangeText}
             />
-        </View>
+        </S.Container>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: Theme.colors.inputBackground,
-        borderRadius: 8,
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-    },
-    input: {
-        flex: 1,
-        marginLeft: 8,
-        fontFamily: Theme.fonts.regular,
-        fontSize: 16,
-        color: Theme.colors.black,
-    },
-})

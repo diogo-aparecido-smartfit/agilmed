@@ -7,7 +7,6 @@ import Avatar from '@/components/Avatar/Avatar'
 import Text from '@/components/Text/Text'
 import MessageBubble from './Components/MessageBubble/MessageBubble'
 import useChatbotController from './chatbot.controller'
-import { StatusBar } from 'expo-status-bar'
 import { useTheme } from '@emotion/react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/store'
@@ -34,7 +33,6 @@ export default function ChatBotPage() {
 
     return (
         <S.Container behavior="padding">
-            <StatusBar style={darkMode ? 'light' : 'dark'} />
             <S.HeaderContainer>
                 <TouchableOpacity onPress={() => router.back()}>
                     <ArrowLeft size={24} color={theme.colors.title} />

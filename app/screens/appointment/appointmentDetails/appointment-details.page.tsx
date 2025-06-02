@@ -12,7 +12,6 @@ import {
     Sms,
     Call,
 } from 'iconsax-react-native'
-import { StatusBar } from 'expo-status-bar'
 import { Marker } from 'react-native-maps'
 import { UseAppointmentDetailsController } from './appointment-details.controller'
 import BottomSheet, {
@@ -104,7 +103,6 @@ export default function AppointmentDetailsPage() {
                 opacity: 0.8,
             }}
         >
-            <StatusBar style="light" />
             <Header />
             <BottomSheet
                 backgroundStyle={{

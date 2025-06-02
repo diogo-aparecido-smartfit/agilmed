@@ -3,38 +3,33 @@ import { Theme } from '@emotion/react'
 import { Icon } from 'iconsax-react-native'
 
 /**
- * Representa os dados retornados da API.
+ * Tipo de papel do usuário no sistema
  */
-export interface IUserData {
-    id?: number
-    full_name: string
-    birthdate?: string
-    cpf: string
-    address?: string
-    city?: string
-    state?: string
-    phone: string
-    email?: string
-    gender?: string
-    blood_type?: string
-    allergies?: string
-    medical_history?: string
-    verificationCode?: string | null
-    isVerified?: boolean
-    createdAt?: string
-    updatedAt?: string
-    profile_picture_url?: string
-    chatbot_user_id?: string
-}
+export type UserRole = 'patient' | 'doctor' | 'admin'
 
 /**
- * Representa os dados a serem enviados no body da requisição.
+ * Representa os dados básicos de um usuário
  */
-export interface IRegisterUserData {
+export interface IBaseUser {
+    id: number
     full_name: string
     email: string
     phone: string
-    password: string
+    cpf: string
+    profile_picture_url: string | null
+    verificationCode: string | null
+    isVerified: boolean
+    role: UserRole
+    createdAt: string
+    updatedAt: string
+}
+
+/**
+ * Representa os dados de um paciente
+ */
+export interface IPatient {
+    id: number
+    user_id: number
     birthdate: string
     address: string
     city: string
@@ -43,10 +38,48 @@ export interface IRegisterUserData {
     blood_type: string
     allergies: string
     medical_history: string
+    createdAt: string
+    updatedAt: string
+    user: IBaseUser
 }
 
 /**
- * Representa os dados a serem enviados no body da requisição.
+ * Representa os dados retornados da API.
+ */
+export interface IUserData extends IBaseUser {
+    patient?: IPatient
+}
+
+/**
+ * Resposta do endpoint de login
+ */
+export interface ILoginResponse {
+    token: string
+    user: IUserData
+}
+
+/**
+ * Representa os dados a serem enviados no body da requisição de registro.
+ */
+export interface IRegisterUserData {
+    full_name: string
+    email: string
+    phone: string
+    password: string
+    cpf: string
+    birthdate: string
+    address: string
+    city: string
+    state: string
+    gender: string
+    blood_type: string
+    allergies: string
+    medical_history: string
+    role: UserRole
+}
+
+/**
+ * Representa os dados a serem enviados no body da requisição de login.
  */
 export interface ILoginData {
     identifier: string
@@ -59,6 +92,7 @@ export interface ILoginData {
 export interface IUpdateUserData {
     id?: number
     address?: string
+    full_name?: string
     city?: string
     state?: string
     phone?: string

@@ -1,13 +1,23 @@
 import styled from '@emotion/native'
 import { Theme } from '@/config/theme'
 
-export const Container = styled.TouchableOpacity`
+interface ContainerProps {
+    isDark: boolean
+}
+
+export const Container = styled.TouchableOpacity<ContainerProps>`
     border-radius: 16px;
     padding: 16px;
-    background-color: ${(props) => props.theme.colors.mainColor};
+    background-color: ${(props) =>
+        props.isDark
+            ? props.theme.colors.fillColor
+            : props.theme.colors.mainColor};
     overflow: hidden;
     elevation: 4;
-    shadow-color: ${(props) => props.theme.colors.mainColor};
+    shadow-color: ${(props) =>
+        props.isDark
+            ? props.theme.colors.fillColor
+            : props.theme.colors.mainColor};
     shadow-offset: 0px 2px;
     shadow-opacity: 0.3;
     shadow-radius: 4px;

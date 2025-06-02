@@ -6,7 +6,7 @@ import { router } from 'expo-router'
 import Text from '@/components/Text/Text'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale/pt-BR'
-import { useTheme } from '@emotion/react'
+import { useTheme } from '@/hooks/useTheme'
 
 interface NextAppointmentProps {
     id: number
@@ -44,7 +44,10 @@ const NextAppointment = ({
     }
 
     return (
-        <S.Container onPress={handleNavigateToAppointment}>
+        <S.Container
+            isDark={theme.isDark}
+            onPress={handleNavigateToAppointment}
+        >
             <S.CardHeader>
                 <Text fontSize="lg" fontWeight="700" color="white">
                     Próxima Consulta
@@ -60,7 +63,10 @@ const NextAppointment = ({
                     <Text fontSize="lg" fontWeight="700" color="white">
                         {doctorName}
                     </Text>
-                    <Text fontSize="sm" color="lightDescription">
+                    <Text
+                        fontSize="sm"
+                        color={theme.isDark ? 'description' : 'inputBackground'}
+                    >
                         {doctorType}
                     </Text>
                 </S.DoctorInfoWrapper>
@@ -73,7 +79,11 @@ const NextAppointment = ({
                     <S.AppointmentInfoWrapper>
                         <Calendar
                             size={16}
-                            color={theme.colors.lightDescription}
+                            color={
+                                theme.isDark
+                                    ? theme.colors.description
+                                    : theme.colors.inputBackground
+                            }
                             variant="Bold"
                         />
                         <Text fontSize="sm" color="white">
@@ -84,7 +94,11 @@ const NextAppointment = ({
                     <S.AppointmentInfoWrapper>
                         <Clock
                             size={16}
-                            color={theme.colors.lightDescription}
+                            color={
+                                theme.isDark
+                                    ? theme.colors.description
+                                    : theme.colors.inputBackground
+                            }
                             variant="Bold"
                         />
                         <Text fontSize="sm" color="white">

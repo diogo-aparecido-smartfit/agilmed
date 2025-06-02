@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { StatusBar } from 'expo-status-bar'
 import { router } from 'expo-router'
 import { Switch } from 'react-native'
 import {
@@ -21,7 +20,6 @@ export default function PrivacyPage() {
 
     return (
         <S.Container>
-            <StatusBar style="dark" />
             <S.Header>
                 <S.BackButton onPress={() => router.back()}>
                     <ArrowLeft size={24} color={Theme.colors.title} />
