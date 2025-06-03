@@ -18,23 +18,38 @@ export class ChatController {
         return res.status(401).json({ message: "Usuário não autenticado" });
       }
 
+      const userName = req.user?.full_name?.split(" ")[0] || "";
+
       const { userMessage } = req.body;
       if (!userMessage) {
         return res.status(400).json({ message: "Mensagem não fornecida" });
       }
 
-      console.log(`📥 Recebendo mensagem do usuário ${userId}: ${userMessage}`);
-
       const history = await getMessageHistory(userId);
 
       let botResponse;
       if (history.length === 0 && this.isGreeting(userMessage)) {
+        let initialGreeting =
+          "Olá! Sou a Amélia, sua assistente virtual do AgilMed. Como posso ajudar?";
+
         const presentationMatch = SYSTEM_PROMPT.match(
           /# APRESENTAÇÃO INICIAL:[\s\S]*?\"([\s\S]*?)\"/
         );
-        const initialGreeting = presentationMatch
-          ? presentationMatch[1]
-          : "Olá! Sou a Amélia, sua assistente virtual do AgilMed. Como posso ajudar?";
+
+        if (presentationMatch) {
+          initialGreeting = presentationMatch[1];
+          if (userName) {
+            initialGreeting = initialGreeting.replace(
+              "[nome do usuário]",
+              userName
+            );
+          } else {
+            initialGreeting = initialGreeting.replace(
+              "[nome do usuário]! ",
+              ""
+            );
+          }
+        }
 
         botResponse = {
           role: "assistant",
@@ -44,7 +59,8 @@ export class ChatController {
         botResponse = await this.langChainService.processMessage(
           userId,
           userMessage,
-          history
+          history,
+          userName
         );
       }
 

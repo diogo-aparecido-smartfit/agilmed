@@ -26,7 +26,8 @@ export class LangChainService {
   public async processMessage(
     userId: number,
     message: string,
-    history: any[] = []
+    history: any[] = [],
+    userName?: string
   ) {
     try {
       const modelWithTools = this.model.bind({
@@ -35,7 +36,14 @@ export class LangChainService {
       });
 
       const formattedHistory = this.formatChatHistory(history);
-      const systemMessage = new SystemMessage(TOOL_SYSTEM_PROMPT);
+
+      // Adicionar o nome do usuário ao prompt do sistema
+      let systemPrompt = TOOL_SYSTEM_PROMPT;
+      if (userName) {
+        systemPrompt += `\n\n# INFORMAÇÕES DO USUÁRIO:\nNome do usuário: ${userName}\n\nLembre-se de sempre se dirigir ao usuário pelo nome quando responder.`;
+      }
+
+      const systemMessage = new SystemMessage(systemPrompt);
 
       const response = await modelWithTools.invoke([
         systemMessage,

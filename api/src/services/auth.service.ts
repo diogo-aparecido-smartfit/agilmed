@@ -25,21 +25,12 @@ export class AuthService {
     password: string
   ): Promise<string | null> {
     try {
-      console.log(`Tentando autenticar com identificador: ${identifier}`);
-
-      // Buscar usuário diretamente pelo email ou CPF na tabela users
       const user = await this.userRepository.findByEmailOrCpf(identifier);
 
       if (!user) {
-        console.log(
-          `Usuário não encontrado para o identificador: ${identifier}`
-        );
         return null;
       }
 
-      console.log(`Usuário encontrado: ${user.full_name} (ID: ${user.id})`);
-
-      // Verificar senha
       const isPasswordValid = await bcrypt.compare(password, user.password);
 
       if (!isPasswordValid) {
@@ -47,9 +38,6 @@ export class AuthService {
         return null;
       }
 
-      console.log("Autenticação bem-sucedida, gerando token");
-
-      // Gerar token JWT
       return this.generateJwtToken(
         user.id,
         user.full_name,

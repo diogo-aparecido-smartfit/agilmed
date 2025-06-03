@@ -60,6 +60,7 @@ export async function addMessageToHistory(
 export async function getMessageHistory(userId: number): Promise<any[]> {
   console.log(`🔵 Pegando mensagens ${userId}:`);
   const items = await redisClient.lrange(`chat:history:${userId}`, 0, 49);
+  console.log("Mensagens pegas: ", items?.length);
   return items.map((item) => JSON.parse(item));
 }
 

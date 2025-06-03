@@ -11,6 +11,7 @@ import patientRouter from "../routes/patient.routes";
 import doctorRouter from "../routes/doctor.routes";
 import medicalCentersRouter from "../routes/medical-centers.routes";
 import { setupCacheCleaner } from "../utils/setup-cache.cleaner";
+import { setupMessageHistoryCleaner } from "../utils/setup-message-history.cleaner";
 
 export class App {
   public app: Application;
@@ -56,6 +57,9 @@ export class App {
       });
 
       setupCacheCleaner();
+      setupMessageHistoryCleaner().catch((err) => {
+        console.error("Falha ao limpar histórico de mensagens:", err);
+      });
     } catch (error) {
       console.error("Error on start server:", error);
       process.exit(1);
