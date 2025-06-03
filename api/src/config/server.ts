@@ -10,6 +10,7 @@ import chatRouter from "../routes/chat.routes";
 import patientRouter from "../routes/patient.routes";
 import doctorRouter from "../routes/doctor.routes";
 import medicalCentersRouter from "../routes/medical-centers.routes";
+import { setupCacheCleaner } from "../utils/setup-cache.cleaner";
 
 export class App {
   public app: Application;
@@ -46,11 +47,18 @@ export class App {
   }
 
   public async start(): Promise<void> {
-    await connectDB();
-    const PORT = Number(process.env.PORT) || 3000;
+    try {
+      await connectDB();
+      const PORT = Number(process.env.PORT) || 3000;
 
-    this.app.listen(PORT, "0.0.0.0", () => {
-      console.log(`🔥 Server running on http://0.0.0.0:${PORT}`);
-    });
+      this.app.listen(PORT, "0.0.0.0", () => {
+        console.log(`🔥 Server running on http://0.0.0.0:${PORT}`);
+      });
+
+      setupCacheCleaner();
+    } catch (error) {
+      console.error("Error on start server:", error);
+      process.exit(1);
+    }
   }
 }

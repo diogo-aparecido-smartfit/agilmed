@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { DoctorService } from "../services/doctor.service";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
+import { invalidateCache } from "../middlewares/cache.middleware";
 
 export class DoctorController {
   private doctorService: DoctorService;
@@ -17,6 +18,7 @@ export class DoctorController {
       const { user, doctor } = result;
       const { password, ...userWithoutPassword } = user.dataValues;
 
+      await invalidateCache("doctors*");
       res.status(201).json({
         user: userWithoutPassword,
         doctor,
@@ -82,6 +84,9 @@ export class DoctorController {
         data
       );
       const sanitizedDoctor = this.sanitizeDoctorData(updatedDoctor);
+
+      await invalidateCache("doctors*");
+      await invalidateCache(`doctors/${req.params.id}`);
 
       res.json(sanitizedDoctor);
     } catch (error: any) {
