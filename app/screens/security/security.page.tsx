@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { StatusBar } from 'expo-status-bar'
 import { router } from 'expo-router'
 import { Switch } from 'react-native'
 import {
