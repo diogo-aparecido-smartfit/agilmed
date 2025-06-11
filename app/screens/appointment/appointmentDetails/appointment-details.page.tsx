@@ -140,7 +140,12 @@ export default function AppointmentDetailsPage() {
                                 }
                             />
                             <S.InformationContainer>
-                                <Text fontWeight="700" fontSize="xl">
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                    fontWeight="700"
+                                    fontSize="xl"
+                                >
                                     {appointment.doctor_name}
                                 </Text>
                                 <Text fontWeight="400" color="description">

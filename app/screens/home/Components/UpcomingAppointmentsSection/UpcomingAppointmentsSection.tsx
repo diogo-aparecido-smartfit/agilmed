@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { View, ScrollView, Dimensions, ActivityIndicator } from 'react-native'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale/pt-BR'
@@ -26,6 +26,14 @@ export default function UpcomingAppointmentsSection({
     const [activeIndex, setActiveIndex] = useState(0)
     const { width: screenWidth } = Dimensions.get('window')
 
+    const upcomingAppointments = useMemo(() => {
+        return appointments.filter(
+            (appointment) =>
+                appointment.status === 'confirmed' ||
+                appointment.status === 'pending'
+        )
+    }, [appointments])
+
     const SPACING = 16
     const CARD_WIDTH = screenWidth - 24
     const ITEM_SIZE = CARD_WIDTH + SPACING
@@ -42,18 +50,19 @@ export default function UpcomingAppointmentsSection({
         if (
             index !== activeIndex &&
             index >= 0 &&
-            index < appointments.length
+            index < upcomingAppointments.length
         ) {
             setActiveIndex(index)
         }
     }
 
     useEffect(() => {
-        if (appointments.length <= 1) return
+        if (upcomingAppointments.length <= 1) return
 
         const interval = setInterval(() => {
             if (scrollViewRef.current) {
-                const nextIndex = (activeIndex + 1) % appointments.length
+                const nextIndex =
+                    (activeIndex + 1) % upcomingAppointments.length
 
                 const xPosition = nextIndex * ITEM_SIZE
 
@@ -65,7 +74,7 @@ export default function UpcomingAppointmentsSection({
         }, 5000)
 
         return () => clearInterval(interval)
-    }, [activeIndex, appointments.length, ITEM_SIZE, INITIAL_OFFSET])
+    }, [activeIndex, upcomingAppointments.length, ITEM_SIZE, INITIAL_OFFSET])
 
     if (loading) {
         return (
@@ -78,7 +87,7 @@ export default function UpcomingAppointmentsSection({
                             variant="Bold"
                         />
                         <Text fontWeight="600" fontSize="lg">
-                            Agendamentos Futuros
+                            Próximos Agendamentos
                         </Text>
                     </S.TitleContainer>
                 </S.SectionHeader>
@@ -105,19 +114,19 @@ export default function UpcomingAppointmentsSection({
                         variant="Bold"
                     />
                     <Text fontWeight="600" fontSize="lg">
-                        Agendamentos Futuros
+                        Próximos Agendamentos
                     </Text>
                 </S.TitleContainer>
-                {appointments.length > 0 && (
+                {upcomingAppointments.length > 0 && (
                     <S.CountBadge>
                         <Text fontSize="xs" color="white" fontWeight="500">
-                            {appointments.length}
+                            {upcomingAppointments.length}
                         </Text>
                     </S.CountBadge>
                 )}
             </S.SectionHeader>
 
-            {appointments.length === 0 ? (
+            {upcomingAppointments.length === 0 ? (
                 <S.EmptyContainer>
                     <S.EmptyIllustration>
                         <Calendar
@@ -127,7 +136,7 @@ export default function UpcomingAppointmentsSection({
                         />
                     </S.EmptyIllustration>
                     <Text color="description" textAlign="center">
-                        Você ainda não possui agendamentos futuros.
+                        Você ainda não possui agendamentos confirmados.
                     </Text>
                 </S.EmptyContainer>
             ) : (
@@ -147,7 +156,7 @@ export default function UpcomingAppointmentsSection({
                             paddingBottom: 16,
                         }}
                     >
-                        {appointments.map((appointment, index) => (
+                        {upcomingAppointments.map((appointment, index) => (
                             <S.AppointmentContainer
                                 key={appointment.id}
                                 style={{
@@ -187,9 +196,9 @@ export default function UpcomingAppointmentsSection({
                         ))}
                     </S.AppointmentsWrapper>
 
-                    {appointments.length > 1 && (
+                    {upcomingAppointments.length > 1 && (
                         <AnimatedPagination
-                            totalItems={appointments.length}
+                            totalItems={upcomingAppointments.length}
                             activeIndex={activeIndex}
                             dotActiveColor={Theme.colors.mainColor}
                             dotInactiveColor={Theme.colors.lightDescription}

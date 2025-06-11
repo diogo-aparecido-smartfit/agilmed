@@ -33,16 +33,21 @@ export const DoctorInfoSection = styled.View`
     flex-direction: row;
     align-items: center;
     gap: 16px;
+    flex: 1;
+    margin-right: 12px;
 `
 
 export const InformationContainer = styled.View`
     flex-direction: column;
     gap: 4px;
+    flex: 1;
+    max-width: 70%;
 `
 
 export const ActionsContainer = styled.View`
     flex-direction: row;
     gap: 12px;
+    align-items: center;
 `
 
 export const ActionButton = styled.TouchableOpacity`
