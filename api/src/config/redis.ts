@@ -59,9 +59,12 @@ export async function addMessageToHistory(
 
 export async function getMessageHistory(userId: number): Promise<any[]> {
   console.log(`🔵 Pegando mensagens ${userId}:`);
-  const items = await redisClient.lrange(`chat:history:${userId}`, 0, 49);
+  const items = await redisClient.lrange(`chat:history:${userId}`, 0, -1);
   console.log("Mensagens pegas: ", items?.length);
-  return items.map((item) => JSON.parse(item));
+
+  // Sort messages in chronological order (oldest first)
+  const messages = items.map((item) => JSON.parse(item));
+  return messages;
 }
 
 export async function clearMessageHistory(userId: number): Promise<void> {
