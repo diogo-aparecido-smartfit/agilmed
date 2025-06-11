@@ -4,18 +4,21 @@ import { UserService } from "../services/user.service";
 import { PatientService } from "../services/patient.service";
 import { User } from "../models/user.model";
 import { DoctorService } from "../services/doctor.service";
+import { SampleDataService } from "../services/sample-data.service";
 
 export class AuthController {
   private authService: AuthService;
   private userService: UserService;
   private patientService: PatientService;
   private doctorService: DoctorService;
+  private sampleDataService: SampleDataService;
 
   constructor() {
     this.authService = new AuthService();
     this.userService = new UserService();
     this.patientService = new PatientService();
     this.doctorService = new DoctorService();
+    this.sampleDataService = new SampleDataService();
   }
 
   public async authenticate(req: Request, res: Response): Promise<void> {
@@ -119,6 +122,9 @@ export class AuthController {
           verificationCode,
           user.full_name.split(" ")[0]
         );
+
+        // Create sample appointments for the new patient (runs asynchronously)
+        this.sampleDataService.createSampleAppointmentsForPatient(patient);
 
         const token = this.authService.generateJwtToken(
           user.id,

@@ -43,6 +43,7 @@ export default function DoctorDetailsPage() {
                 disappearsOnIndex={-1}
                 appearsOnIndex={0}
                 opacity={0.7}
+                pressBehavior={'none'}
             />
         ),
         []
