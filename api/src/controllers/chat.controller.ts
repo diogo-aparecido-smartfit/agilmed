@@ -3,17 +3,9 @@ import { LangChainService } from "../services/langchain.service";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
 import { SYSTEM_PROMPT } from "../utils/bot.prompt";
 import { getMessageHistory, addMessageToHistory } from "../config/redis";
-import { container } from "../di/container";
-import { DI_TOKENS } from "../di/tokens";
 
 export class ChatController {
-  private langChainService: LangChainService;
-
-  constructor() {
-    this.langChainService = container.resolve<LangChainService>(
-      DI_TOKENS.LANGCHAIN_SERVICE
-    );
-  }
+  constructor(private langChainService: LangChainService) {}
 
   async completions(req: AuthenticatedRequest, res: Response) {
     try {

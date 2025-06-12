@@ -5,29 +5,15 @@ import { PatientService } from "../services/patient.service";
 import { User } from "../models/user.model";
 import { DoctorService } from "../services/doctor.service";
 import { SampleDataService } from "../services/sample-data.service";
-import { container } from "../di/container";
-import { DI_TOKENS } from "../di/tokens";
 
 export class AuthController {
-  private authService: AuthService;
-  private userService: UserService;
-  private patientService: PatientService;
-  private doctorService: DoctorService;
-  private sampleDataService: SampleDataService;
-
-  constructor() {
-    this.authService = container.resolve<AuthService>(DI_TOKENS.AUTH_SERVICE);
-    this.userService = container.resolve<UserService>(DI_TOKENS.USER_SERVICE);
-    this.patientService = container.resolve<PatientService>(
-      DI_TOKENS.PATIENT_SERVICE
-    );
-    this.doctorService = container.resolve<DoctorService>(
-      DI_TOKENS.DOCTOR_SERVICE
-    );
-    this.sampleDataService = container.resolve<SampleDataService>(
-      DI_TOKENS.SAMPLE_DATA_SERVICE
-    );
-  }
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private patientService: PatientService,
+    private doctorService: DoctorService,
+    private sampleDataService: SampleDataService
+  ) {}
 
   public async authenticate(req: Request, res: Response): Promise<void> {
     const { identifier, password } = req.body;

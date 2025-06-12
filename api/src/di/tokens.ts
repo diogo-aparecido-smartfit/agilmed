@@ -21,4 +21,4 @@ export const DI_TOKENS = {
   AI_CONFIG_SERVICE: "AIConfigService",
   LANGCHAIN_SERVICE: "LangChainService",
   SAMPLE_DATA_SERVICE: "SampleDataService",
-};
+} as const;

@@ -1,17 +1,9 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { AppointmentService } from "../services/appointment.service";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
-import { container } from "../di/container";
-import { DI_TOKENS } from "../di/tokens";
 
 export class AppointmentController {
-  private appointmentService: AppointmentService;
-
-  constructor() {
-    this.appointmentService = container.resolve<AppointmentService>(
-      DI_TOKENS.APPOINTMENT_SERVICE
-    );
-  }
+  constructor(private appointmentService: AppointmentService) {}
 
   async createAppointment(req: AuthenticatedRequest, res: Response) {
     try {

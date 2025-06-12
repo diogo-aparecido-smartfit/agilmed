@@ -1,47 +1,56 @@
+import { DependencyMap } from "./maps";
 import { setupDependencies } from "./registry";
 
-type Constructor<T> = new (...args: any[]) => T;
+class Container {
+  private dependencies: Map<string, any> = new Map();
+  private initialized = false;
+  private static instance: Container | null = null;
 
-export class Container {
-  private services: Map<string, any> = new Map();
-  private factories: Map<string, () => any> = new Map();
-  private isInitialized = false;
+  private constructor() {}
 
   private initializeDependencies() {
-    if (this.isInitialized) return;
+    if (this.initialized) return;
 
     setupDependencies();
-    this.isInitialized = true;
+    this.initialized = true;
   }
 
-  register<T>(token: string, instance: T): void {
-    this.services.set(token, instance);
+  public static getInstance(): Container {
+    if (!Container.instance) {
+      Container.instance = new Container();
+    }
+    return Container.instance;
   }
 
-  registerFactory<T>(token: string, factory: () => T): void {
-    this.factories.set(token, factory);
+  public isInitialized(): boolean {
+    return this.initialized;
   }
 
-  resolve<T>(token: string): T {
+  register<K extends keyof DependencyMap>(
+    token: K,
+    dependency: DependencyMap[K]
+  ): void {
+    this.dependencies.set(token as string, dependency);
+    this.initialized = true;
+  }
+
+  resolve<Key extends keyof DependencyMap>(token: Key): DependencyMap[Key] {
     this.initializeDependencies();
 
-    if (this.services.has(token)) {
-      return this.services.get(token) as T;
+    if (!this.initialized) {
+      throw new Error(
+        "Container not initialized. Make sure setupDependencies() is called before accessing services."
+      );
     }
 
-    if (this.factories.has(token)) {
-      const factory = this.factories.get(token)!;
-      const instance = factory();
-      this.services.set(token, instance);
-      return instance as T;
+    const dependency = this.dependencies.get(token as string);
+
+    if (!dependency) {
+      throw new Error(`Dependency with token ${String(token)} not found`);
     }
 
-    throw new Error(`Dependência não registrada: ${token}`);
-  }
-
-  registerType<T>(token: string, Type: Constructor<T>): void {
-    this.registerFactory(token, () => new Type());
+    return dependency as DependencyMap[Key];
   }
 }
 
-export const container = new Container();
+export const container = Container.getInstance();

@@ -2,15 +2,9 @@ import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
 import { upload } from "../middlewares/upload";
 import { UserCreationAttributes, UserAttributes } from "../models/user.model";
-import { container } from "../di/container";
-import { DI_TOKENS } from "../di/tokens";
 
 export class UserController {
-  private userService: UserService;
-
-  constructor() {
-    this.userService = container.resolve<UserService>(DI_TOKENS.USER_SERVICE);
-  }
+  constructor(private userService: UserService) {}
 
   public async createUser(req: Request, res: Response): Promise<void> {
     try {

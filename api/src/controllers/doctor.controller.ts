@@ -7,17 +7,9 @@ import {
   DoctorAttributes,
 } from "../models/doctor.model";
 import { UserCreationAttributes } from "../models/user.model";
-import { container } from "../di/container";
-import { DI_TOKENS } from "../di/tokens";
 
 export class DoctorController {
-  private doctorService: DoctorService;
-
-  constructor() {
-    this.doctorService = container.resolve<DoctorService>(
-      DI_TOKENS.DOCTOR_SERVICE
-    );
-  }
+  constructor(private doctorService: DoctorService) {}
 
   async createDoctor(req: Request, res: Response) {
     try {
