@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ControllerFactory } from "../controllers/controller.factory";
+import { ControllerFactory } from "../di/factories/controller.factory";
 
 const router = Router();
 const authController = ControllerFactory.createAuthController();

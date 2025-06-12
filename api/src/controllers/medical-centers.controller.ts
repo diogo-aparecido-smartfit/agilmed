@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { MedicalCentersService } from "../services/medical-centers.service";
-import { container } from "../utils/container";
+import { container } from "../di/container";
+import { DI_TOKENS } from "../di/tokens";
 
 export class MedicalCentersController {
   private medicalCentersService: MedicalCentersService;
 
   constructor() {
     this.medicalCentersService = container.resolve<MedicalCentersService>(
-      "MedicalCentersService"
+      DI_TOKENS.MEDICAL_CENTERS_SERVICE
     );
   }
 

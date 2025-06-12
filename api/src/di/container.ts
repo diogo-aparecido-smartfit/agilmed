@@ -1,4 +1,5 @@
-import { setupDependencies } from "../config/dependencies";
+import { setupDependencies } from "./registry";
+
 type Constructor<T> = new (...args: any[]) => T;
 
 export class Container {

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticateJWT, isAdmin } from "../middlewares/auth.middleware";
-import { ControllerFactory } from "../controllers/controller.factory";
+import { ControllerFactory } from "../di/factories/controller.factory";
 
 const appointmentRouter = Router();
 const appointmentController = ControllerFactory.createAppointmentController();

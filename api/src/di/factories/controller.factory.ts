@@ -1,10 +1,10 @@
-import { AuthController } from "../controllers/auth.controller";
-import { UserController } from "../controllers/user.controller";
-import { PatientController } from "../controllers/patient.controller";
-import { DoctorController } from "../controllers/doctor.controller";
-import { AppointmentController } from "../controllers/appointment.controller";
-import { MedicalCentersController } from "../controllers/medical-centers.controller";
-import { ChatController } from "../controllers/chat.controller";
+import { AppointmentController } from "../../controllers/appointment.controller";
+import { AuthController } from "../../controllers/auth.controller";
+import { ChatController } from "../../controllers/chat.controller";
+import { DoctorController } from "../../controllers/doctor.controller";
+import { MedicalCentersController } from "../../controllers/medical-centers.controller";
+import { PatientController } from "../../controllers/patient.controller";
+import { UserController } from "../../controllers/user.controller";
 
 export class ControllerFactory {
   static createAuthController(): AuthController {

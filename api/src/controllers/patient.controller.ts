@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import { PatientService } from "../services/patient.service";
-import Patient from "../models/patient.model";
-import { container } from "../utils/container";
+import { container } from "../di/container";
+import { DI_TOKENS } from "../di/tokens";
 
 export class PatientController {
   private patientService: PatientService;
 
   constructor() {
-    this.patientService = container.resolve<PatientService>("PatientService");
+    this.patientService = container.resolve<PatientService>(
+      DI_TOKENS.PATIENT_SERVICE
+    );
   }
 
   async createPatient(req: Request, res: Response) {

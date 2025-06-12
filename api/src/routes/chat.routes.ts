@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authenticateJWT } from "../middlewares/auth.middleware";
 import { debugMiddleware } from "../middlewares/debug.middleware";
-import { ControllerFactory } from "../controllers/controller.factory";
+import { ControllerFactory } from "../di/factories/controller.factory";
 
 const router = Router();
 const chatController = ControllerFactory.createChatController();
