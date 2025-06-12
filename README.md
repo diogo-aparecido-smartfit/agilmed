@@ -1,95 +1,198 @@
-# AgilMed — Documentação Técnica
+# AgilMed
 
-## Tecnologias Utilizadas
+AgilMed is a healthcare application platform consisting of a backend API and a mobile application, designed to facilitate appointment scheduling, doctor-patient communication, and healthcare management.
 
-### Frontend (Mobile)
+## Project Structure
 
-- **React Native (Expo)**
-- **Redux Toolkit** (gerenciamento de estado)
-- **Redux Saga** (side effects)
-- **React Hook Form + Yup** (formulários e validação)
-- **Axios** (requisições HTTP)
-- **React Query** (cache e fetch de dados)
-- **React Native Flash Message** (notificações)
-- **@react-native-async-storage/async-storage** (armazenamento local)
-- **Expo Router** (navegação)
-- **Styled Components** (estilização)
-- **Date-fns** (manipulação de datas)
+The project is divided into two main components:
 
-### Backend (API)
+- **Backend API** (api): Node.js-based backend service
+- **Mobile App** (app): React Native mobile application
 
-- **Node.js + Express**
-- **Sequelize** (ORM)
-- **PostgreSQL** (banco de dados)
-- **JWT** (autenticação)
-- **Nodemailer** (envio de e-mails)
-- **Swagger** (documentação da API)
-- **Azure Blob Storage** (upload de imagens)
-- **Natural** (NLP para chatbot)
-- **Docker** (containerização)
+## Technologies
 
----
+### Backend API
 
-## Estrutura de Pastas
+- **Node.js + Express**: Web server framework
+- **Sequelize**: ORM for database operations
+- **Microsoft SQL Server**: Database
+- **JWT**: Authentication mechanism
+- **Nodemailer**: Email services
+- **Swagger**: API documentation
+- **Azure Blob Storage**: Image and file storage
+- **Natural**: NLP for chatbot functionality
+- **Docker**: Containerization
 
-### Mobile
+### Mobile App
 
-- `/app/screens`: Telas principais (login, cadastro, home, agendamentos, etc)
-- `/app/store`: Redux slices, sagas e store
-- `/app/services`: Serviços de API e integração
-- `/app/hooks`: Hooks customizados (ex: `useAppointments`)
-- `/app/types`: Tipos TypeScript globais
-- `/app/utils`: Funções utilitárias
+- **React Native (Expo)**: Cross-platform mobile framework
+- **Redux Toolkit**: State management
+- **Redux Saga**: Side effect management
+- **React Hook Form + Yup**: Form handling and validation
+- **Axios**: HTTP client
+- **React Query**: Data fetching and caching
+- **Expo Router**: Navigation
+- **Emotion/Styled Components**: Styling
+- **Date-fns**: Date manipulation
 
-### Backend
+## Setup Instructions
 
-- `/api/src/controllers`: Controllers das rotas
-- `/api/src/services`: Lógica de negócio
-- `/api/src/repositories`: Acesso ao banco de dados
-- `/api/src/models`: Modelos Sequelize
-- `/api/src/middlewares`: Middlewares (auth, upload, bot-actions)
-- `/api/src/routes`: Rotas Express
-- `/api/src/utils`: Utilitários (formatação, NLP, templates de e-mail)
-- `/api/migrations`: Migrations do banco
+### Backend API Setup
 
----
+1. Navigate to the API directory:
 
-## Fluxo de Uso
+   ```bash
+   cd agilmed/api
+   ```
 
-### 1. Autenticação
+2. Install dependencies:
 
-- **Cadastro:** Usuário preenche formulário, recebe código de confirmação por e-mail.
-- **Login:** Usuário entra com CPF ou e-mail e senha.
-- **Verificação:** Código enviado por e-mail deve ser validado para ativar conta.
-- **Recuperação de senha:** Envio de código para redefinição.
+   ```bash
+   yarn install
+   ```
 
-### 2. Agendamentos
+3. Create a `.env` file in the root of the api directory with the following variables:
 
-- **Listagem:** Usuário vê seus agendamentos futuros.
-- **Criação:** Seleciona profissional, data e motivo. Confirmação via chatbot ou tela.
-- **Cancelamento:** Usuário pode cancelar agendamento.
-- **Detalhes:** Visualização de informações do agendamento, endereço e mapa.
+   ```
+   PORT=3000
+   DB_URL=your_mssql_connection_string
+   JWT_SECRET=your_jwt_secret
+   AZURE_STORAGE_CONNECTION_STRING=your_azure_storage_connection_string
+   OPENROUTER_MODEL=openai/gpt-4o
+   FIRST_OPENROUTER_API_KEY=your_openrouter_api_key
+   ```
 
-### 3. Unidades Médicas
+4. Run database migrations:
 
-- **Busca de unidades próximas:** Baseada em localização e tipo de serviço.
-- **Detalhes da unidade:** Endereço, horário de funcionamento, avaliações.
+   ```bash
+   npx sequelize-cli db:migrate
+   ```
 
-### 4. Chatbot
+5. Start the development server:
 
-- **Assistente virtual:** Ajuda a agendar consultas, tirar dúvidas e encontrar médicos.
-- **NLP:** Classificação de intenções e respostas automáticas.
+   ```bash
+   yarn dev
+   ```
 
-### 5. Perfil do Usuário
+6. For production:
 
-- **Visualização e edição:** Dados pessoais, foto de perfil (upload para Azure).
-- **Exclusão de conta:** Usuário pode remover sua conta.
+   ```bash
+   yarn build
+   yarn start
+   ```
 
----
+7. Docker alternative:
+   ```bash
+   docker build -t agilmed-api .
+   docker run -p 3000:3000 agilmed-api
+   ```
 
-## Observações
+### Mobile App Setup
 
-- **API protegida por JWT:** Rotas sensíveis exigem autenticação.
-- **Upload de imagens:** Feito via `multipart/form-data` para Azure Blob Storage.
-- **Documentação da API:** Disponível via Swagger em `/docs`.
-- **Mensagens de erro e sucesso:** Exibidas via Flash Message no app.
+1. Navigate to the app directory:
+
+   ```bash
+   cd agilmed/app
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   yarn install
+   ```
+
+3. Create a `.env` file in the root of the app directory with:
+
+   ```
+   API_URL=http://your-api-url:3000
+   ```
+
+4. Start the Expo development server:
+
+   ```bash
+   npx expo start
+   ```
+
+5. Use the Expo Go app on your mobile device to scan the QR code or press 'i' to open in iOS simulator or 'a' for Android emulator.
+
+## Architecture
+
+### Backend Architecture
+
+The API follows a layered architecture:
+
+- **Controllers** (controllers): Handle HTTP requests and responses
+- **Services** (services): Implement business logic
+- **Repositories** (repositories): Database access layer
+- **Models** (models): Sequelize data models
+- **Routes** (routes): Define API endpoints
+- **Middlewares** (middlewares): Handle authentication and request processing
+- **Utils** (utils): Helper functions
+
+Key features include:
+
+- RESTful API design
+- JWT-based authentication
+- Database migrations for version control
+- Docker containerization for deployment
+- AI-powered chatbot capabilities
+- Azure blob storage integration for file uploads
+
+### Mobile Architecture
+
+The mobile app uses a modern React Native architecture:
+
+- **Screens** (organized in app): Main application screens
+- **Components** (components): Reusable UI components
+- **Redux Store** (store): State management
+- **Services** (services): API communication
+- **Hooks** (hooks): Custom React hooks
+- **Providers** (providers): Context providers
+
+Features:
+
+- Redux Toolkit for state management
+- React Query for data fetching
+- Expo Router for navigation
+- Responsive design with Emotion/Styled Components
+- Offline capabilities with AsyncStorage
+
+## API Documentation
+
+When running the backend, Swagger documentation is available at:
+
+```
+http://localhost:3000/docs
+```
+
+## Database Schema
+
+The database includes tables for:
+
+- Users (doctors, patients, admins)
+- Doctors
+- Patients
+- Appointments
+- Medical Centers
+
+The schema relationships are defined in associations.ts.
+
+## Development Workflow
+
+1. Backend: Make changes, run tests, and use migrations for database changes
+2. Mobile: Use Expo's hot reloading for rapid development
+3. Both use TypeScript for type safety and better developer experience
+
+## Troubleshooting
+
+- If the API doesn't connect to the database, check your connection string and network settings
+- For mobile app issues, ensure your API_URL is accessible from your device/emulator
+- Check logs using `yarn logs` in the respective directories
+
+## Contributing
+
+Please follow the established code structure and patterns when contributing to the project.
+
+## License
+
+This project is proprietary and confidential.
