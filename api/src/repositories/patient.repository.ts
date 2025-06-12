@@ -1,11 +1,25 @@
 import { Op } from "sequelize";
-import Patient, { PatientCreationAttributes } from "../models/patient.model";
-import User from "../models/user.model";
+import {
+  Patient,
+  PatientAttributes,
+  PatientCreationAttributes,
+  PatientFilters,
+} from "../models/patient.model";
+import { User, UserCreationAttributes } from "../models/user.model";
+import { BaseRepository } from "./base.repository";
+import { IPatientRepository } from "./interfaces/patient.interface";
 
-export class PatientRepository {
+export class PatientRepository
+  extends BaseRepository<Patient>
+  implements IPatientRepository
+{
+  constructor() {
+    super(Patient);
+  }
+
   async createPatient(
-    userData: any,
-    patientData: any
+    userData: UserCreationAttributes,
+    patientData: PatientCreationAttributes
   ): Promise<{ user: User; patient: Patient }> {
     const transaction = await User.sequelize!.transaction();
 
@@ -35,9 +49,7 @@ export class PatientRepository {
   }
 
   async getPatientById(id: number): Promise<Patient | null> {
-    return Patient.findByPk(id, {
-      include: [{ model: User, as: "user" }],
-    });
+    return this.findById(id);
   }
 
   async getPatientByUserId(userId: number): Promise<Patient | null> {
@@ -51,19 +63,10 @@ export class PatientRepository {
     id: number,
     data: Partial<Patient>
   ): Promise<Patient | null> {
-    const [affectedCount, affectedRows] = await Patient.update(data, {
-      where: { id },
-      returning: true,
-    });
-
-    if (affectedCount > 0) {
-      return affectedRows[0];
-    }
-
-    return null;
+    return this.update(id, data);
   }
 
-  async getAllPatients(filters?: any): Promise<Patient[]> {
+  async getAllPatients(filters?: PatientFilters): Promise<Patient[]> {
     const where: any = {};
     const userWhere: any = {};
 

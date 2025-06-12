@@ -156,10 +156,10 @@ export class AuthController {
           available_hours,
         };
 
-        const { user, doctor } = await this.doctorService.createDoctor({
-          ...userData,
-          ...doctorData,
-        });
+        const { user, doctor } = await this.doctorService.createDoctor(
+          userData,
+          doctorData
+        );
 
         this.authService.sendVerificationEmail(
           email,

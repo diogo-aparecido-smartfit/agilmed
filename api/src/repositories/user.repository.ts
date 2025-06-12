@@ -1,31 +1,38 @@
 import { Op } from "sequelize";
-import { User, UserCreationAttributes } from "../models/user.model";
+import {
+  User,
+  UserAttributes,
+  UserCreationAttributes,
+} from "../models/user.model";
+import { BaseRepository } from "./base.repository";
+import { IUserRepository } from "./interfaces/user.interface";
 
-export class UserRepository {
+export class UserRepository
+  extends BaseRepository<User>
+  implements IUserRepository
+{
+  constructor() {
+    super(User);
+  }
+
   async createUser(data: UserCreationAttributes): Promise<User> {
-    return await User.create(data);
+    return this.create(data);
   }
 
   async getUserById(id: number): Promise<User | null> {
-    return await User.findByPk(id);
+    return this.findById(id);
   }
 
-  async updateUser(id: number, data: Partial<User>): Promise<User | null> {
-    const [affectedCount, affectedRows] = await User.update(data, {
-      where: { id },
-      returning: true,
-    });
-
-    if (affectedCount > 0) {
-      return await this.getUserById(id);
-    }
-
-    return null;
+  async updateUser(
+    id: number,
+    data: Partial<UserAttributes>
+  ): Promise<User | null> {
+    return this.update(id, data);
   }
 
   async deleteUser(id: number): Promise<boolean> {
-    const deleted = await User.destroy({ where: { id } });
-    return deleted > 0;
+    await this.delete(id);
+    return true;
   }
 
   async getAllUsers(filters?: any): Promise<User[]> {
@@ -47,10 +54,10 @@ export class UserRepository {
       };
     }
 
-    return await User.findAll({ where });
+    return this.findAll(where);
   }
 
-  public async findByEmailOrCpf(identifier: string): Promise<User | null> {
+  async findByEmailOrCpf(identifier: string): Promise<User | null> {
     return User.findOne({
       where: {
         [Op.or]: [{ email: identifier }, { cpf: identifier }],

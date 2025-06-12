@@ -1,141 +1,107 @@
 import { DoctorRepository } from "../repositories/doctor.repository";
 import { UserRepository } from "../repositories/user.repository";
-import { removeEmptyFields } from "../utils";
-import { Doctor } from "../models/doctor.model";
-import { User } from "../models/user.model";
+import {
+  Doctor,
+  DoctorAttributes,
+  DoctorCreationAttributes,
+  DoctorFilters,
+} from "../models/doctor.model";
+import { UserCreationAttributes } from "../models/user.model";
 
 export class DoctorService {
   private doctorRepository: DoctorRepository;
   private userRepository: UserRepository;
 
-  constructor() {
-    this.doctorRepository = new DoctorRepository();
-    this.userRepository = new UserRepository();
+  constructor(
+    doctorRepository?: DoctorRepository,
+    userRepository?: UserRepository
+  ) {
+    this.doctorRepository = doctorRepository || new DoctorRepository();
+    this.userRepository = userRepository || new UserRepository();
   }
 
-  async createDoctor(data: any) {
-    const userData = {
-      full_name: data.full_name,
-      email: data.email,
-      password: data.password,
-      cpf: data.cpf,
-      phone: data.phone,
-      profile_picture_url: data.profile_picture_url,
-      role: "doctor",
-    };
-
-    const doctorData = {
-      specialty: data.specialty,
-      crm: data.crm,
-      birthdate: data.birthdate,
-
-      address: data.address,
-      city: data.city,
-      state: data.state,
-      gender: data.gender,
-      bio: data.bio,
-      available_hours: data.available_hours,
-    };
-
-    return this.doctorRepository.createDoctor(userData, doctorData);
+  async createDoctor(
+    userData: UserCreationAttributes,
+    doctorData: Omit<DoctorCreationAttributes, "user_id">
+  ) {
+    try {
+      return this.doctorRepository.createDoctor(
+        userData,
+        doctorData as DoctorCreationAttributes
+      );
+    } catch (error) {
+      console.error("Erro ao criar médico:", error);
+      throw error;
+    }
   }
 
   async getDoctorById(id: number): Promise<Doctor | null> {
-    return this.doctorRepository.getDoctorById(id);
+    try {
+      return this.doctorRepository.getDoctorById(id);
+    } catch (error) {
+      console.error(`Erro ao buscar médico ID ${id}:`, error);
+      throw error;
+    }
   }
 
   async getDoctorByUserId(userId: number): Promise<Doctor | null> {
-    return this.doctorRepository.getDoctorByUserId(userId);
+    try {
+      return this.doctorRepository.getDoctorByUserId(userId);
+    } catch (error) {
+      console.error(
+        `Erro ao buscar médico por ID de usuário ${userId}:`,
+        error
+      );
+      throw error;
+    }
   }
 
   async getDoctorByCpf(cpf: string): Promise<Doctor | null> {
-    return this.doctorRepository.getDoctorByCpf(cpf);
+    try {
+      return this.doctorRepository.getDoctorByCpf(cpf);
+    } catch (error) {
+      console.error(`Erro ao buscar médico por CPF ${cpf}:`, error);
+      throw error;
+    }
   }
 
-  async updateDoctor(id: number, data: any) {
-    if (
-      data.full_name ||
-      data.email ||
-      data.phone ||
-      data.profile_picture_url
-    ) {
-      const doctor = await this.doctorRepository.getDoctorById(id);
-
-      if (doctor && doctor.user_id) {
-        const userData = removeEmptyFields({
-          full_name: data.full_name,
-          email: data.email,
-          phone: data.phone,
-          cpf: data.cpf,
-          profile_picture_url: data.profile_picture_url,
-        });
-
-        if (Object.keys(userData).length > 0) {
-          await this.userRepository.updateUser(doctor.user_id, userData);
-        }
-      }
+  async getDoctorByCRM(crm: string): Promise<Doctor | null> {
+    try {
+      return this.doctorRepository.getDoctorByCRM(crm);
+    } catch (error) {
+      console.error(`Erro ao buscar médico por CRM ${crm}:`, error);
+      throw error;
     }
-
-    const doctorData = removeEmptyFields({
-      specialty: data.specialty,
-      crm: data.crm,
-      birthdate: data.birthdate,
-
-      address: data.address,
-      city: data.city,
-      state: data.state,
-      gender: data.gender,
-      bio: data.bio,
-      available_hours: data.available_hours,
-    });
-
-    if (Object.keys(doctorData).length > 0) {
-      return this.doctorRepository.updateDoctor(id, doctorData);
-    }
-
-    return this.doctorRepository.getDoctorById(id);
   }
 
-  async getAllDoctors(filters?: any) {
-    return this.doctorRepository.getAllDoctors(filters);
+  async updateDoctor(
+    id: number,
+    data: Partial<DoctorAttributes>
+  ): Promise<Doctor | null> {
+    try {
+      return this.doctorRepository.updateDoctor(id, data);
+    } catch (error) {
+      console.error(`Erro ao atualizar médico ID ${id}:`, error);
+      throw error;
+    }
   }
 
-  async deleteDoctor(id: number) {
-    const doctor = await this.doctorRepository.getDoctorById(id);
-    if (!doctor) {
-      return false;
+  async getAllDoctors(filters?: DoctorFilters): Promise<Doctor[]> {
+    try {
+      return this.doctorRepository.getAllDoctors(filters);
+    } catch (error) {
+      console.error("Erro ao buscar médicos:", error);
+      throw error;
     }
-
-    await this.doctorRepository.deleteDoctor(id);
-
-    if (doctor.user_id) {
-      await this.userRepository.deleteUser(doctor.user_id);
-    }
-
-    return true;
   }
 
-  /**
-   * Método para retornar informações completas do médico
-   * Combina dados do usuário e do médico em um único objeto
-   */
-  async getDoctorCompleteInfo(doctorId: number) {
-    const doctor = await this.doctorRepository.getDoctorById(doctorId);
-    if (!doctor || !doctor.user_id) {
-      return null;
+  async deleteDoctor(id: number): Promise<boolean> {
+    try {
+      await this.doctorRepository.deleteDoctor(id);
+      return true;
+    } catch (error) {
+      console.error(`Erro ao excluir médico ID ${id}:`, error);
+      throw error;
     }
-
-    const user = await this.userRepository.getUserById(doctor.user_id);
-    if (!user) {
-      return null;
-    }
-
-    const { password, ...userWithoutPassword } = user.toJSON();
-    const doctorData = doctor.toJSON();
-
-    return {
-      ...userWithoutPassword,
-      ...doctorData,
-    };
   }
 }

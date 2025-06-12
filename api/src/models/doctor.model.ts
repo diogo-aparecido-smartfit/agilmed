@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/database";
 import User from "./user.model";
 
-interface DoctorAttributes {
+export interface DoctorAttributes {
   id: number;
   user_id: number;
   specialty: string;
@@ -16,6 +16,11 @@ interface DoctorAttributes {
   available_hours?: string;
   created_at?: Date;
   updated_at?: Date;
+}
+
+export interface DoctorFilters {
+  specialty?: string;
+  name?: string;
 }
 
 export interface DoctorCreationAttributes

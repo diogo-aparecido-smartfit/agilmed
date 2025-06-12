@@ -1,17 +1,24 @@
+import { IMedicalCentersRepository } from "../repositories/interfaces/medical-centers.interface";
 import { MedicalCentersRepository } from "../repositories/medical-centers.repository";
 
 export class MedicalCentersService {
-  private medicalCentersRepository: MedicalCentersRepository;
+  private medicalCentersRepository: IMedicalCentersRepository;
 
-  constructor() {
-    this.medicalCentersRepository = new MedicalCentersRepository();
+  constructor(medicalCentersRepository?: IMedicalCentersRepository) {
+    this.medicalCentersRepository =
+      medicalCentersRepository || new MedicalCentersRepository();
   }
 
   async findNearbyPlaces(lat: number, lon: number, query: string) {
-    return await this.medicalCentersRepository.getNearbyMedicalCenters(
-      lat,
-      lon,
-      query
-    );
+    try {
+      return this.medicalCentersRepository.getNearbyMedicalCenters(
+        lat,
+        lon,
+        query
+      );
+    } catch (error) {
+      console.error("Erro ao buscar centros médicos próximos:", error);
+      return [];
+    }
   }
 }

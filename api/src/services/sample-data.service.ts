@@ -2,7 +2,7 @@ import { AppointmentService } from "./appointment.service";
 import { DoctorService } from "./doctor.service";
 import { Patient } from "../models/patient.model";
 import { Doctor } from "../models/doctor.model";
-import { AppointmentCreationData } from "../models/appointment.model";
+import { AppointmentCreationAttributes } from "../models/appointment.model";
 
 export class SampleDataService {
   private appointmentService: AppointmentService;
@@ -95,10 +95,10 @@ export class SampleDataService {
     doctor: Doctor,
     date: Date,
     reason: string,
-    status: string
+    status: "pending" | "confirmed" | "cancelled" | "completed"
   ): Promise<void> {
     try {
-      const appointmentData: AppointmentCreationData = {
+      const appointmentData: AppointmentCreationAttributes = {
         doctor_id: doctor.id,
         patient_id: patient.id,
         appointment_date: date,

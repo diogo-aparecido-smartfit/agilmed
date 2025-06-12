@@ -2,6 +2,11 @@ import { Request, Response } from "express";
 import { DoctorService } from "../services/doctor.service";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
 import { invalidateCache } from "../middlewares/cache.middleware";
+import {
+  DoctorCreationAttributes,
+  DoctorAttributes,
+} from "../models/doctor.model";
+import { UserCreationAttributes } from "../models/user.model";
 
 export class DoctorController {
   private doctorService: DoctorService;
@@ -13,10 +18,55 @@ export class DoctorController {
   async createDoctor(req: Request, res: Response) {
     try {
       const data = req.body;
-      const result = await this.doctorService.createDoctor(data);
+
+      const {
+        full_name,
+        email,
+        password,
+        cpf,
+        phone,
+        role,
+        specialty,
+        crm,
+        birthdate,
+        address,
+        city,
+        state,
+        gender,
+        bio,
+        available_hours,
+        ...rest
+      } = data;
+
+      const userData: UserCreationAttributes = {
+        full_name,
+        email,
+        password,
+        cpf,
+        phone,
+        role: "doctor",
+        isVerified: false,
+      };
+
+      const doctorData: Omit<DoctorCreationAttributes, "user_id"> = {
+        specialty,
+        crm,
+        birthdate: new Date(birthdate),
+        address,
+        city,
+        state,
+        gender,
+        bio,
+        available_hours,
+      };
+
+      const result = await this.doctorService.createDoctor(
+        userData,
+        doctorData
+      );
 
       const { user, doctor } = result;
-      const { password, ...userWithoutPassword } = user.dataValues;
+      const { password: _, ...userWithoutPassword } = user.dataValues;
 
       await invalidateCache("doctors*");
       res.status(201).json({
@@ -79,9 +129,11 @@ export class DoctorController {
         return;
       }
 
+      const updateData: Partial<DoctorAttributes> = data;
+
       const updatedDoctor = await this.doctorService.updateDoctor(
         Number(id),
-        data
+        updateData
       );
       const sanitizedDoctor = this.sanitizeDoctorData(updatedDoctor);
 
@@ -106,17 +158,9 @@ export class DoctorController {
       const filters = req.query;
       const doctors = await this.doctorService.getAllDoctors(filters);
 
-      const sanitizedDoctors = doctors.map((doctor) => {
-        if (doctor.user) {
-          const { password, ...userWithoutPassword } = doctor.user.dataValues;
-          const sanitizedDoctor = {
-            ...doctor.toJSON(),
-            user: userWithoutPassword,
-          };
-          Object.assign(doctor, sanitizedDoctor);
-        }
-        return doctor;
-      });
+      const sanitizedDoctors = doctors.map((doctor) =>
+        this.sanitizeDoctorData(doctor)
+      );
 
       res.json(sanitizedDoctors);
     } catch (error: any) {

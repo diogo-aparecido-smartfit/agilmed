@@ -122,6 +122,7 @@ export class ToolService {
         patient_id,
         appointment_date,
         reason,
+        status: "pending",
       });
 
       return {

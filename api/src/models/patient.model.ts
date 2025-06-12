@@ -1,8 +1,8 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/database";
-import User from "./user.model";
+import User, { UserAttributes } from "./user.model";
 
-interface PatientAttributes {
+export interface PatientAttributes {
   id: number;
   user_id: number;
   birthdate: Date;
@@ -10,15 +10,21 @@ interface PatientAttributes {
   city: string;
   state: string;
   gender: string;
-  blood_type?: string;
-  allergies?: string;
-  medical_history?: string;
+  blood_type?: string | null;
+  allergies?: string | null;
+  medical_history?: string | null;
   created_at?: Date;
   updated_at?: Date;
+  user?: UserAttributes;
+}
+
+export interface PatientFilters {
+  name?: string;
+  cpf?: string;
 }
 
 export interface PatientCreationAttributes
-  extends Optional<PatientAttributes, "id"> {}
+  extends Optional<PatientAttributes, "id" | "user" | "user_id"> {}
 
 export class Patient
   extends Model<PatientAttributes, PatientCreationAttributes>

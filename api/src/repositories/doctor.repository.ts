@@ -1,11 +1,25 @@
 import { Op } from "sequelize";
-import Doctor, { DoctorCreationAttributes } from "../models/doctor.model";
-import User from "../models/user.model";
+import {
+  Doctor,
+  DoctorAttributes,
+  DoctorCreationAttributes,
+  DoctorFilters,
+} from "../models/doctor.model";
+import { User, UserCreationAttributes } from "../models/user.model";
+import { BaseRepository } from "./base.repository";
+import { IDoctorRepository } from "./interfaces/doctor.interface";
 
-export class DoctorRepository {
+export class DoctorRepository
+  extends BaseRepository<Doctor>
+  implements IDoctorRepository
+{
+  constructor() {
+    super(Doctor);
+  }
+
   async createDoctor(
-    userData: any,
-    doctorData: any
+    userData: UserCreationAttributes,
+    doctorData: DoctorCreationAttributes
   ): Promise<{ user: User; doctor: Doctor }> {
     const transaction = await User.sequelize!.transaction();
 
@@ -35,9 +49,7 @@ export class DoctorRepository {
   }
 
   async getDoctorById(id: number): Promise<Doctor | null> {
-    return Doctor.findByPk(id, {
-      include: [{ model: User, as: "user" }],
-    });
+    return this.findById(id);
   }
 
   async getDoctorByUserId(userId: number): Promise<Doctor | null> {
@@ -49,21 +61,12 @@ export class DoctorRepository {
 
   async updateDoctor(
     id: number,
-    data: Partial<Doctor>
+    data: Partial<DoctorAttributes>
   ): Promise<Doctor | null> {
-    const [affectedCount, affectedRows] = await Doctor.update(data, {
-      where: { id },
-      returning: true,
-    });
-
-    if (affectedCount > 0) {
-      return affectedRows[0];
-    }
-
-    return null;
+    return this.update(id, data);
   }
 
-  async getAllDoctors(filters?: any): Promise<Doctor[]> {
+  async getAllDoctors(filters?: DoctorFilters): Promise<Doctor[]> {
     try {
       const where: any = {};
       const userWhere: any = {};
@@ -89,16 +92,11 @@ export class DoctorRepository {
         includeOptions.where = userWhere;
       }
 
-      console.log("Buscando médicos com filtros:", { where, userWhere });
-
-      const doctors = await Doctor.findAll({
+      return await Doctor.findAll({
         where,
         include: [includeOptions],
         nest: true,
       });
-
-      console.log(`Encontrados ${doctors.length} médicos`);
-      return doctors;
     } catch (error) {
       console.error("Erro ao buscar médicos:", error);
       throw error;
@@ -133,6 +131,13 @@ export class DoctorRepository {
   async getDoctorByCpf(cpf: string): Promise<Doctor | null> {
     return Doctor.findOne({
       include: [{ model: User, as: "user", where: { cpf } }],
+    });
+  }
+
+  async getDoctorByCRM(crm: string): Promise<Doctor | null> {
+    return Doctor.findOne({
+      where: { crm },
+      include: [{ model: User, as: "user" }],
     });
   }
 }

@@ -1,138 +1,178 @@
 import { Op } from "sequelize";
-import Doctor, { DoctorCreationAttributes } from "../models/doctor.model";
-import User from "../models/user.model";
+import Appointment, {
+  AppointmentAttributes,
+  AppointmentCreationAttributes,
+  AppointmentFilters,
+} from "../models/appointment.model";
+import { Doctor } from "../models/doctor.model";
+import { Patient } from "../models/patient.model";
+import { User } from "../models/user.model";
+import { BaseRepository } from "./base.repository";
+import { IAppointmentRepository } from "./interfaces/appointment.interface";
 
-export class DoctorRepository {
-  async createDoctor(
-    userData: any,
-    doctorData: any
-  ): Promise<{ user: User; doctor: Doctor }> {
-    const transaction = await User.sequelize!.transaction();
-
-    try {
-      const user = await User.create(
-        {
-          ...userData,
-          role: "doctor",
-        },
-        { transaction }
-      );
-
-      const doctor = await Doctor.create(
-        {
-          ...doctorData,
-          user_id: user.id,
-        },
-        { transaction }
-      );
-
-      await transaction.commit();
-      return { user, doctor };
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+export class AppointmentRepository
+  extends BaseRepository<Appointment>
+  implements IAppointmentRepository
+{
+  constructor() {
+    super(Appointment);
   }
 
-  async getDoctorById(id: number): Promise<Doctor | null> {
-    return Doctor.findByPk(id, {
-      include: [{ model: User, as: "user" }],
+  async getAppointmentById(id: number): Promise<Appointment | null> {
+    return Appointment.findByPk(id, {
+      include: [
+        {
+          model: Doctor,
+          as: "doctor",
+          include: [{ model: User, as: "user" }],
+        },
+        {
+          model: Patient,
+          as: "patient",
+          include: [{ model: User, as: "user" }],
+        },
+      ],
     });
   }
 
-  async getDoctorByUserId(userId: number): Promise<Doctor | null> {
-    return Doctor.findOne({
-      where: { user_id: userId },
-      include: [{ model: User, as: "user" }],
-    });
+  async createAppointment(
+    data: AppointmentCreationAttributes
+  ): Promise<Appointment> {
+    return Appointment.create(data);
   }
 
-  async updateDoctor(
+  async updateAppointment(
     id: number,
-    data: Partial<Doctor>
-  ): Promise<Doctor | null> {
-    const [affectedCount, affectedRows] = await Doctor.update(data, {
+    data: Partial<AppointmentAttributes>
+  ): Promise<Appointment | null> {
+    const appointment = await Appointment.findByPk(id);
+
+    if (!appointment) {
+      return null;
+    }
+
+    await appointment.update(data);
+    return this.getAppointmentById(id);
+  }
+
+  async deleteAppointment(id: number): Promise<boolean> {
+    const result = await Appointment.destroy({
       where: { id },
-      returning: true,
     });
 
-    if (affectedCount > 0) {
-      return affectedRows[0];
-    }
-
-    return null;
+    return result > 0;
   }
 
-  async getAllDoctors(filters?: any): Promise<Doctor[]> {
-    try {
-      const where: any = {};
-      const userWhere: any = {};
+  async getAllAppointments(
+    filters: AppointmentFilters = {}
+  ): Promise<Appointment[]> {
+    const where: any = {};
 
-      if (filters?.specialty) {
-        where.specialty = {
-          [Op.like]: `%${filters.specialty}%`,
-        };
-      }
+    if (filters.doctor_id) {
+      where.doctor_id = filters.doctor_id;
+    }
 
-      if (filters?.name) {
-        userWhere.full_name = {
-          [Op.like]: `%${filters.name}%`,
-        };
-      }
+    if (filters.patient_id) {
+      where.patient_id = filters.patient_id;
+    }
 
-      const includeOptions: any = {
-        model: User,
-        as: "user",
+    if (filters.status) {
+      where.status = filters.status;
+    }
+
+    // Filtro por data
+    if (filters.date) {
+      const date = new Date(filters.date);
+      const nextDay = new Date(date);
+      nextDay.setDate(date.getDate() + 1);
+
+      where.appointment_date = {
+        [Op.gte]: date,
+        [Op.lt]: nextDay,
       };
-
-      if (Object.keys(userWhere).length > 0) {
-        includeOptions.where = userWhere;
-      }
-
-      console.log("Buscando médicos com filtros:", { where, userWhere });
-
-      const doctors = await Doctor.findAll({
-        where,
-        include: [includeOptions],
-        nest: true,
-      });
-
-      console.log(`Encontrados ${doctors.length} médicos`);
-      return doctors;
-    } catch (error) {
-      console.error("Erro ao buscar médicos:", error);
-      throw error;
     }
+
+    // Filtro por período
+    if (filters.start_date && filters.end_date) {
+      where.appointment_date = {
+        [Op.between]: [
+          new Date(filters.start_date),
+          new Date(filters.end_date),
+        ],
+      };
+    } else if (filters.start_date) {
+      where.appointment_date = {
+        [Op.gte]: new Date(filters.start_date),
+      };
+    } else if (filters.end_date) {
+      where.appointment_date = {
+        [Op.lte]: new Date(filters.end_date),
+      };
+    }
+
+    return Appointment.findAll({
+      where,
+      include: [
+        {
+          model: Doctor,
+          as: "doctor",
+          include: [{ model: User, as: "user" }],
+        },
+        {
+          model: Patient,
+          as: "patient",
+          include: [{ model: User, as: "user" }],
+        },
+      ],
+      order: [["appointment_date", "ASC"]],
+    });
   }
 
-  async deleteDoctor(id: number): Promise<void> {
-    const doctor = await Doctor.findByPk(id);
+  async getAppointmentsByDoctorId(doctorId: number): Promise<Appointment[]> {
+    return Appointment.findAll({
+      where: { doctor_id: doctorId },
+      include: [
+        {
+          model: Patient,
+          as: "patient",
+          include: [{ model: User, as: "user" }],
+        },
+      ],
+      order: [["appointment_date", "ASC"]],
+    });
+  }
+
+  async getAppointmentsByPatientId(patientId: number): Promise<Appointment[]> {
+    return Appointment.findAll({
+      where: { patient_id: patientId },
+      include: [
+        {
+          model: Doctor,
+          as: "doctor",
+          include: [{ model: User, as: "user" }],
+        },
+      ],
+      order: [["appointment_date", "ASC"]],
+    });
+  }
+
+  async getAppointmentsForUser(userId: number): Promise<Appointment[]> {
+    const patient = await Patient.findOne({
+      where: { user_id: userId },
+    });
+
+    const doctor = await Doctor.findOne({
+      where: { user_id: userId },
+    });
+
+    if (patient) {
+      return this.getAppointmentsByPatientId(patient.id);
+    }
 
     if (doctor) {
-      const transaction = await User.sequelize!.transaction();
-
-      try {
-        await Doctor.destroy({
-          where: { id },
-          transaction,
-        });
-
-        await User.destroy({
-          where: { id: doctor.user_id },
-          transaction,
-        });
-
-        await transaction.commit();
-      } catch (error) {
-        await transaction.rollback();
-        throw error;
-      }
+      return this.getAppointmentsByDoctorId(doctor.id);
     }
-  }
 
-  async getDoctorByCpf(cpf: string): Promise<Doctor | null> {
-    return Doctor.findOne({
-      include: [{ model: User, as: "user", where: { cpf } }],
-    });
+    return [];
   }
 }

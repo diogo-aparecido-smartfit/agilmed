@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
 import { upload } from "../middlewares/upload";
+import { UserCreationAttributes, UserAttributes } from "../models/user.model";
 
 export class UserController {
   private userService: UserService;
@@ -11,7 +12,7 @@ export class UserController {
 
   public async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const data = req.body;
+      const data = req.body as UserCreationAttributes;
       const user = await this.userService.createUser(data);
 
       const { password, ...userWithoutPassword } = user.toJSON();
@@ -56,18 +57,15 @@ export class UserController {
       }
 
       const { id } = req.params;
-      const data = req.body;
+      const data = req.body as Partial<UserAttributes>;
       const file = req.file;
 
       try {
-        const updatedUser = await this.userService.updateUser(
-          Number(id),
-          data,
-          file
-        );
+        const updatedUser = await this.userService.updateUser(Number(id), data);
 
         if (updatedUser) {
-          return res.status(200).json(updatedUser);
+          const { password, ...userWithoutPassword } = updatedUser.toJSON();
+          return res.status(200).json(userWithoutPassword);
         }
 
         res.status(404).json({ message: "Usuário não encontrado" });
@@ -103,7 +101,13 @@ export class UserController {
     try {
       const filters = req.query;
       const users = await this.userService.getAllUsers(filters);
-      res.json(users);
+
+      const sanitizedUsers = users.map((user) => {
+        const { password, ...userWithoutPassword } = user.toJSON();
+        return userWithoutPassword;
+      });
+
+      res.json(sanitizedUsers);
     } catch (error: any) {
       console.error("Erro ao listar usuários:", error);
       res.status(500).json({

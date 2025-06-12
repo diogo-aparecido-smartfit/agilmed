@@ -1,100 +1,152 @@
 import { PatientRepository } from "../repositories/patient.repository";
 import { UserRepository } from "../repositories/user.repository";
-import { removeEmptyFields } from "../utils";
+import {
+  Patient,
+  PatientAttributes,
+  PatientCreationAttributes,
+  PatientFilters,
+} from "../models/patient.model";
+import { UserCreationAttributes } from "../models/user.model";
 
 export class PatientService {
   private patientRepository: PatientRepository;
   private userRepository: UserRepository;
 
-  constructor() {
-    this.patientRepository = new PatientRepository();
-    this.userRepository = new UserRepository();
+  constructor(
+    patientRepository?: PatientRepository,
+    userRepository?: UserRepository
+  ) {
+    this.patientRepository = patientRepository || new PatientRepository();
+    this.userRepository = userRepository || new UserRepository();
   }
 
-  async createPatient(data: any) {
-    const userData = {
-      full_name: data.full_name,
-      email: data.email,
-      cpf: data.cpf,
-      password: data.password,
-      phone: data.phone,
-      profile_picture_url: data.profile_picture_url,
-      role: "patient",
-    };
+  async createPatient(
+    combinedData: UserCreationAttributes & PatientCreationAttributes
+  ) {
+    try {
+      const {
+        full_name,
+        email,
+        password,
+        cpf,
+        phone,
+        role,
+        verificationCode,
+        ...patientData
+      } = combinedData;
 
-    const patientData = {
-      birthdate: data.birthdate,
-      address: data.address,
-      city: data.city,
-      state: data.state,
-      gender: data.gender,
-      blood_type: data.blood_type,
-      allergies: data.allergies,
-      medical_history: data.medical_history,
-    };
+      const userData: UserCreationAttributes = {
+        full_name,
+        email,
+        password,
+        cpf,
+        phone,
+        role: role || "patient",
+        verificationCode,
+        isVerified: false,
+      };
 
-    return this.patientRepository.createPatient(userData, patientData);
+      return this.patientRepository.createPatient(userData, patientData);
+    } catch (error) {
+      console.error("Erro ao criar paciente:", error);
+      throw error;
+    }
   }
 
-  async getPatientById(id: number) {
-    return this.patientRepository.getPatientById(id);
+  async getPatientById(id: number): Promise<Patient | null> {
+    try {
+      return this.patientRepository.getPatientById(id);
+    } catch (error) {
+      console.error(`Erro ao buscar paciente ID ${id}:`, error);
+      throw error;
+    }
   }
 
-  async getPatientByUserId(userId: number) {
-    return this.patientRepository.getPatientByUserId(userId);
+  async getPatientByUserId(userId: number): Promise<Patient | null> {
+    try {
+      return this.patientRepository.getPatientByUserId(userId);
+    } catch (error) {
+      console.error(
+        `Erro ao buscar paciente por ID de usuário ${userId}:`,
+        error
+      );
+      throw error;
+    }
   }
 
-  async updatePatient(id: number, data: any) {
-    if (
-      data.full_name ||
-      data.email ||
-      data.phone ||
-      data.profile_picture_url
-    ) {
-      const patient = await this.patientRepository.getPatientById(id);
+  async getPatientByCpf(cpf: string): Promise<Patient | null> {
+    try {
+      return this.patientRepository.getPatientByCpf(cpf);
+    } catch (error) {
+      console.error(`Erro ao buscar paciente por CPF ${cpf}:`, error);
+      throw error;
+    }
+  }
 
-      if (patient && patient.user_id) {
-        const userData = removeEmptyFields({
-          full_name: data.full_name,
-          cpf: data.cpf,
-          email: data.email,
-          phone: data.phone,
-          profile_picture_url: data.profile_picture_url,
-        });
+  async updatePatient(
+    id: number,
+    data: Partial<PatientAttributes>
+  ): Promise<Patient | null> {
+    try {
+      if (
+        data.user?.full_name ||
+        data.user?.email ||
+        data.user?.phone ||
+        data.user?.profile_picture_url
+      ) {
+        const patient = await this.patientRepository.getPatientById(id);
 
-        if (Object.keys(userData).length > 0) {
-          await this.userRepository.updateUser(patient.user_id, userData);
+        if (patient && patient.user_id) {
+          const userData = removeEmptyFields({
+            full_name: data.user?.full_name,
+            cpf: data.user?.cpf,
+            email: data.user?.email,
+            phone: data.user?.phone,
+            profile_picture_url: data.user?.profile_picture_url,
+          });
+
+          if (Object.keys(userData).length > 0) {
+            await this.userRepository.updateUser(patient.user_id, userData);
+          }
         }
       }
+
+      const { user, ...patientData } = data;
+
+      if (Object.keys(patientData).length > 0) {
+        const filteredPatientData = removeEmptyFields(patientData);
+        return this.patientRepository.updatePatient(id, filteredPatientData);
+      }
+
+      return this.patientRepository.getPatientById(id);
+    } catch (error) {
+      console.error(`Erro ao atualizar paciente ID ${id}:`, error);
+      throw error;
     }
+  }
 
-    const patientData = removeEmptyFields({
-      birthdate: data.birthdate,
-      address: data.address,
-      city: data.city,
-      state: data.state,
-      gender: data.gender,
-      blood_type: data.blood_type,
-      allergies: data.allergies,
-      medical_history: data.medical_history,
-    });
-
-    if (Object.keys(patientData).length > 0) {
-      return this.patientRepository.updatePatient(id, patientData);
+  async getAllPatients(filters?: PatientFilters): Promise<Patient[]> {
+    try {
+      return this.patientRepository.getAllPatients(filters);
+    } catch (error) {
+      console.error("Erro ao buscar pacientes:", error);
+      throw error;
     }
-
-    return this.patientRepository.getPatientById(id);
   }
 
-  async getAllPatients(filters?: any) {
-    return this.patientRepository.getAllPatients(filters);
+  async deletePatient(id: number): Promise<boolean> {
+    try {
+      await this.patientRepository.deletePatient(id);
+      return true;
+    } catch (error) {
+      console.error(`Erro ao excluir paciente ID ${id}:`, error);
+      throw error;
+    }
   }
+}
 
-  async deletePatient(id: number) {
-    return this.patientRepository.deletePatient(id);
-  }
-
-  async getPatientByCpf(cpf: string) {
-    return this.patientRepository.getPatientByCpf(cpf);
-  }
+function removeEmptyFields(obj: any): any {
+  return Object.entries(obj)
+    .filter(([_, v]) => v !== null && v !== undefined)
+    .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {});
 }

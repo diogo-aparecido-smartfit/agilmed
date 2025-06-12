@@ -1,31 +1,33 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/database";
-import Doctor from "./doctor.model";
-import Patient from "./patient.model";
+import Doctor, { DoctorAttributes } from "./doctor.model";
+import Patient, { PatientAttributes } from "./patient.model";
 
-export interface AppointmentCreationData {
-  doctor_id?: number;
-  patient_id: number;
-  appointment_date: Date;
-  reason: string;
-  status?: string;
-  notes?: string;
-  doctor_name?: string;
-}
-interface AppointmentAttributes {
+export interface AppointmentAttributes {
   id: number;
   doctor_id: number;
   patient_id: number;
   appointment_date: Date;
   reason: string;
-  status: string;
+  status: "pending" | "confirmed" | "cancelled" | "completed";
   notes?: string | null;
   created_at?: Date;
   updated_at?: Date;
+  doctor?: DoctorAttributes;
+  patient?: PatientAttributes;
 }
 
-interface AppointmentCreationAttributes
-  extends Optional<AppointmentAttributes, "id"> {}
+export interface AppointmentCreationAttributes
+  extends Optional<AppointmentAttributes, "id" | "doctor" | "patient"> {}
+
+export interface AppointmentFilters {
+  doctor_id?: number;
+  patient_id?: number;
+  status?: string;
+  date?: Date;
+  start_date?: Date;
+  end_date?: Date;
+}
 
 class Appointment
   extends Model<AppointmentAttributes, AppointmentCreationAttributes>
@@ -36,7 +38,7 @@ class Appointment
   public patient_id!: number;
   public appointment_date!: Date;
   public reason!: string;
-  public status!: string;
+  public status!: "pending" | "confirmed" | "cancelled" | "completed";
   public notes?: string | null;
 
   public readonly created_at!: Date;
