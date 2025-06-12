@@ -1,3 +1,4 @@
+import { setupDependencies } from "../config/dependencies";
 type Constructor<T> = new (...args: any[]) => T;
 
 export class Container {
@@ -8,7 +9,6 @@ export class Container {
   private initializeDependencies() {
     if (this.isInitialized) return;
 
-    const { setupDependencies } = require("../config/dependencies");
     setupDependencies();
     this.isInitialized = true;
   }

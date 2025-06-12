@@ -1,5 +1,7 @@
 # AgilMed
 
+![AgilMed Banner](./assets/banner.png)
+
 AgilMed is a healthcare application platform consisting of a backend API and a mobile application, designed to facilitate appointment scheduling, doctor-patient communication, and healthcare management.
 
 ## Project Structure
@@ -137,6 +139,8 @@ Key features include:
 - Docker containerization for deployment
 - AI-powered chatbot capabilities
 - Azure blob storage integration for file uploads
+
+![API Architeture](./assets/api-architeture.png)
 
 ### Mobile Architecture
 
