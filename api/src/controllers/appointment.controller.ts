@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
 import { AppointmentService } from "../services/appointment.service";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
+import { container } from "../utils/container";
 
 export class AppointmentController {
   private appointmentService: AppointmentService;
 
   constructor() {
-    this.appointmentService = new AppointmentService();
+    this.appointmentService =
+      container.resolve<AppointmentService>("AppointmentService");
   }
 
   async createAppointment(req: AuthenticatedRequest, res: Response) {

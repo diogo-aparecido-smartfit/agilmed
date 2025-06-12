@@ -8,9 +8,12 @@ export class SampleDataService {
   private appointmentService: AppointmentService;
   private doctorService: DoctorService;
 
-  constructor() {
-    this.appointmentService = new AppointmentService();
-    this.doctorService = new DoctorService();
+  constructor(
+    appointmentService?: AppointmentService,
+    doctorService?: DoctorService
+  ) {
+    this.appointmentService = appointmentService || new AppointmentService();
+    this.doctorService = doctorService || new DoctorService();
   }
 
   /**

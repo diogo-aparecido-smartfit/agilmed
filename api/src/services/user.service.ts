@@ -5,12 +5,13 @@ import {
   UserCreationAttributes,
 } from "../models/user.model";
 import bcrypt from "bcryptjs";
+import { IUserRepository } from "../repositories/interfaces/user.interface";
 
 export class UserService {
-  private userRepository: UserRepository;
+  private userRepository: IUserRepository;
 
-  constructor(userRepository?: UserRepository) {
-    this.userRepository = userRepository || new UserRepository();
+  constructor(userRepository: IUserRepository) {
+    this.userRepository = userRepository;
   }
 
   async createUser(data: UserCreationAttributes): Promise<User> {

@@ -7,14 +7,16 @@ import {
   DoctorFilters,
 } from "../models/doctor.model";
 import { UserCreationAttributes } from "../models/user.model";
+import { IDoctorRepository } from "../repositories/interfaces/doctor.interface";
+import { IUserRepository } from "../repositories/interfaces/user.interface";
 
 export class DoctorService {
-  private doctorRepository: DoctorRepository;
-  private userRepository: UserRepository;
+  private doctorRepository: IDoctorRepository;
+  private userRepository: IUserRepository;
 
   constructor(
-    doctorRepository?: DoctorRepository,
-    userRepository?: UserRepository
+    doctorRepository?: IDoctorRepository,
+    userRepository?: IUserRepository
   ) {
     this.doctorRepository = doctorRepository || new DoctorRepository();
     this.userRepository = userRepository || new UserRepository();

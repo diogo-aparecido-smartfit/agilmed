@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { ChatController } from "../controllers/chat.controller";
 import { authenticateJWT } from "../middlewares/auth.middleware";
 import { debugMiddleware } from "../middlewares/debug.middleware";
+import { ControllerFactory } from "../controllers/controller.factory";
 
 const router = Router();
-const chatController = new ChatController();
+const chatController = ControllerFactory.createChatController();
 
 /**
  * @openapi

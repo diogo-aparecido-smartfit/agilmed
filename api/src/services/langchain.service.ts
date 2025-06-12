@@ -15,9 +15,9 @@ export class LangChainService {
   private model: ChatOpenAI;
   private toolService: ToolService;
 
-  constructor() {
+  constructor(toolService?: ToolService) {
     this.model = AIConfigService.createModel();
-    this.toolService = new ToolService();
+    this.toolService = toolService || new ToolService();
   }
 
   /**

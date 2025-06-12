@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { UserController } from "../controllers/user.controller";
 import { authenticateJWT } from "../middlewares/auth.middleware";
+import { ControllerFactory } from "../controllers/controller.factory";
 
 const userRouter = Router();
-const userController = new UserController();
+const userController = ControllerFactory.createUserController();
 
 /**
  * @openapi

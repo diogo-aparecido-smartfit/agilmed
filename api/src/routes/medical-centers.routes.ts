@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { MedicalCentersController } from "../controllers/medical-centers.controller";
+import { ControllerFactory } from "../controllers/controller.factory";
 
 const medicalCentersRouter = Router();
-const placesController = new MedicalCentersController();
+const placesController = ControllerFactory.createMedicalCentersController();
 
 /**
  * @openapi

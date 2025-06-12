@@ -1,5 +1,3 @@
-import { PatientRepository } from "../repositories/patient.repository";
-import { UserRepository } from "../repositories/user.repository";
 import {
   Patient,
   PatientAttributes,
@@ -7,17 +5,19 @@ import {
   PatientFilters,
 } from "../models/patient.model";
 import { UserCreationAttributes } from "../models/user.model";
+import { IPatientRepository } from "../repositories/interfaces/patient.interface";
+import { IUserRepository } from "../repositories/interfaces/user.interface";
 
 export class PatientService {
-  private patientRepository: PatientRepository;
-  private userRepository: UserRepository;
+  private patientRepository: IPatientRepository;
+  private userRepository: IUserRepository;
 
   constructor(
-    patientRepository?: PatientRepository,
-    userRepository?: UserRepository
+    patientRepository: IPatientRepository,
+    userRepository: IUserRepository
   ) {
-    this.patientRepository = patientRepository || new PatientRepository();
-    this.userRepository = userRepository || new UserRepository();
+    this.patientRepository = patientRepository;
+    this.userRepository = userRepository;
   }
 
   async createPatient(

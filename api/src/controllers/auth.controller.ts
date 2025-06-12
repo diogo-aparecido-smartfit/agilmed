@@ -5,6 +5,7 @@ import { PatientService } from "../services/patient.service";
 import { User } from "../models/user.model";
 import { DoctorService } from "../services/doctor.service";
 import { SampleDataService } from "../services/sample-data.service";
+import { container } from "../utils/container";
 
 export class AuthController {
   private authService: AuthService;
@@ -14,11 +15,12 @@ export class AuthController {
   private sampleDataService: SampleDataService;
 
   constructor() {
-    this.authService = new AuthService();
-    this.userService = new UserService();
-    this.patientService = new PatientService();
-    this.doctorService = new DoctorService();
-    this.sampleDataService = new SampleDataService();
+    this.authService = container.resolve<AuthService>("AuthService");
+    this.userService = container.resolve<UserService>("UserService");
+    this.patientService = container.resolve<PatientService>("PatientService");
+    this.doctorService = container.resolve<DoctorService>("DoctorService");
+    this.sampleDataService =
+      container.resolve<SampleDataService>("SampleDataService");
   }
 
   public async authenticate(req: Request, res: Response): Promise<void> {

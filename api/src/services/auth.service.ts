@@ -6,17 +6,24 @@ import { PatientRepository } from "../repositories/patient.repository";
 import { DoctorRepository } from "../repositories/doctor.repository";
 import { resetPasswordTemplate, signUpTemplate } from "../utils/email.template";
 import { User } from "../models/user.model";
+import { IDoctorRepository } from "../repositories/interfaces/doctor.interface";
+import { IPatientRepository } from "../repositories/interfaces/patient.interface";
+import { IUserRepository } from "../repositories/interfaces/user.interface";
 
 export class AuthService {
-  private userRepository: UserRepository;
-  private patientRepository: PatientRepository;
-  private doctorRepository: DoctorRepository;
+  private userRepository: IUserRepository;
+  private patientRepository: IPatientRepository;
+  private doctorRepository: IDoctorRepository;
   private jwtSecret: string;
 
-  constructor() {
-    this.userRepository = new UserRepository();
-    this.patientRepository = new PatientRepository();
-    this.doctorRepository = new DoctorRepository();
+  constructor(
+    userRepository: IUserRepository,
+    patientRepository: IPatientRepository,
+    doctorRepository: IDoctorRepository
+  ) {
+    this.userRepository = userRepository;
+    this.patientRepository = patientRepository;
+    this.doctorRepository = doctorRepository;
     this.jwtSecret = process.env.JWT_SECRET || "your_default_secret";
   }
 

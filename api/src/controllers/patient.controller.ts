@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { PatientService } from "../services/patient.service";
 import Patient from "../models/patient.model";
+import { container } from "../utils/container";
 
 export class PatientController {
   private patientService: PatientService;
 
   constructor() {
-    this.patientService = new PatientService();
+    this.patientService = container.resolve<PatientService>("PatientService");
   }
 
   async createPatient(req: Request, res: Response) {

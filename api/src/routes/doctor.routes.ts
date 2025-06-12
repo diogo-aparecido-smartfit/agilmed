@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { DoctorController } from "../controllers/doctor.controller";
 import { authenticateJWT } from "../middlewares/auth.middleware";
 import { cacheMiddleware } from "../middlewares/cache.middleware";
+import { ControllerFactory } from "../controllers/controller.factory";
 
 const doctorRouter = Router();
-const doctorController = new DoctorController();
+const doctorController = ControllerFactory.createDoctorController();
 
 /**
  * @openapi

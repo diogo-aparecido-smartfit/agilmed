@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { AppointmentController } from "../controllers/appointment.controller";
 import { authenticateJWT, isAdmin } from "../middlewares/auth.middleware";
+import { ControllerFactory } from "../controllers/controller.factory";
 
 const appointmentRouter = Router();
-const appointmentController = new AppointmentController();
+const appointmentController = ControllerFactory.createAppointmentController();
 
 /**
  * @openapi

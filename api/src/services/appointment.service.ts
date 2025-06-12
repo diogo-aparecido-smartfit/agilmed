@@ -8,18 +8,21 @@ import { PatientRepository } from "../repositories/patient.repository";
 import { DoctorRepository } from "../repositories/doctor.repository";
 import { UserRepository } from "../repositories/user.repository";
 import { IAppointmentRepository } from "../repositories/interfaces/appointment.interface";
+import { IPatientRepository } from "../repositories/interfaces/patient.interface";
+import { IDoctorRepository } from "../repositories/interfaces/doctor.interface";
+import { IUserRepository } from "../repositories/interfaces/user.interface";
 
 export class AppointmentService {
   private appointmentRepository: IAppointmentRepository;
-  private patientRepository: PatientRepository;
-  private doctorRepository: DoctorRepository;
-  private userRepository: UserRepository;
+  private patientRepository: IPatientRepository;
+  private doctorRepository: IDoctorRepository;
+  private userRepository: IUserRepository;
 
   constructor(
     appointmentRepository?: IAppointmentRepository,
-    patientRepository?: PatientRepository,
-    doctorRepository?: DoctorRepository,
-    userRepository?: UserRepository
+    patientRepository?: IPatientRepository,
+    doctorRepository?: IDoctorRepository,
+    userRepository?: IUserRepository
   ) {
     this.appointmentRepository =
       appointmentRepository || new AppointmentRepository();

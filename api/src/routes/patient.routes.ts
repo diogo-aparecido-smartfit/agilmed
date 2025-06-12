@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { PatientController } from "../controllers/patient.controller";
 import { authenticateJWT } from "../middlewares/auth.middleware";
+import { ControllerFactory } from "../controllers/controller.factory";
 
 const patientRouter = Router();
-const patientController = new PatientController();
+const patientController = ControllerFactory.createPatientController();
 
 /**
  * @openapi

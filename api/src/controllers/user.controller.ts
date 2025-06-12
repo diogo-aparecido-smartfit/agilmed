@@ -2,12 +2,13 @@ import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
 import { upload } from "../middlewares/upload";
 import { UserCreationAttributes, UserAttributes } from "../models/user.model";
+import { container } from "../utils/container";
 
 export class UserController {
   private userService: UserService;
 
   constructor() {
-    this.userService = new UserService();
+    this.userService = container.resolve<UserService>("UserService");
   }
 
   public async createUser(req: Request, res: Response): Promise<void> {

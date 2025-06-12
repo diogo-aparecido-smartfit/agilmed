@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { AuthController } from "../controllers/auth.controller";
+import { ControllerFactory } from "../controllers/controller.factory";
 
 const router = Router();
-const authController = new AuthController();
+const authController = ControllerFactory.createAuthController();
 
 /**
  * @openapi
@@ -30,7 +30,7 @@ const authController = new AuthController();
  *       401:
  *         description: Credenciais inválidas
  */
-router.post("/login", (req, res) => authController.authenticate(req, res));
+router.post("/login", authController.authenticate.bind(authController));
 
 /**
  * @openapi

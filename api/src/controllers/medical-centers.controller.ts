@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import { MedicalCentersService } from "../services/medical-centers.service";
+import { container } from "../utils/container";
 
 export class MedicalCentersController {
   private medicalCentersService: MedicalCentersService;
 
   constructor() {
-    this.medicalCentersService = new MedicalCentersService();
+    this.medicalCentersService = container.resolve<MedicalCentersService>(
+      "MedicalCentersService"
+    );
   }
 
   async getNearbyPlaces(req: Request, res: Response) {
