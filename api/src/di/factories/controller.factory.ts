@@ -11,11 +11,11 @@ import { DI_TOKENS } from "../tokens";
 
 export class ControllerFactory {
   static createAuthController(): AuthController {
-    const authService = container.resolve(DI_TOKENS.AUTH_SERVICE);
-    const userService = container.resolve(DI_TOKENS.USER_SERVICE);
-    const patientService = container.resolve(DI_TOKENS.PATIENT_SERVICE);
-    const doctorService = container.resolve(DI_TOKENS.DOCTOR_SERVICE);
-    const sampleDataService = container.resolve(DI_TOKENS.SAMPLE_DATA_SERVICE);
+    const authService = container.resolve(DI_TOKENS.IAUTH_SERVICE);
+    const userService = container.resolve(DI_TOKENS.IUSER_SERVICE);
+    const patientService = container.resolve(DI_TOKENS.IPATIENT_SERVICE);
+    const doctorService = container.resolve(DI_TOKENS.IDOCTOR_SERVICE);
+    const sampleDataService = container.resolve(DI_TOKENS.ISAMPLE_DATA_SERVICE);
 
     return new AuthController(
       authService,
@@ -28,35 +28,37 @@ export class ControllerFactory {
 
   static createUserController(): UserController {
     const userService = container.resolve(
-      DI_TOKENS.USER_SERVICE
+      DI_TOKENS.IUSER_SERVICE
     ) as UserService;
     return new UserController(userService);
   }
 
   static createPatientController(): PatientController {
-    const patientService = container.resolve(DI_TOKENS.PATIENT_SERVICE);
+    const patientService = container.resolve(DI_TOKENS.IPATIENT_SERVICE);
     return new PatientController(patientService);
   }
 
   static createDoctorController(): DoctorController {
-    const doctorService = container.resolve(DI_TOKENS.DOCTOR_SERVICE);
+    const doctorService = container.resolve(DI_TOKENS.IDOCTOR_SERVICE);
     return new DoctorController(doctorService);
   }
 
   static createAppointmentController(): AppointmentController {
-    const appointmentService = container.resolve(DI_TOKENS.APPOINTMENT_SERVICE);
+    const appointmentService = container.resolve(
+      DI_TOKENS.IAPPOINTMENT_SERVICE
+    );
     return new AppointmentController(appointmentService);
   }
 
   static createMedicalCentersController(): MedicalCentersController {
     const medicalCenterService = container.resolve(
-      DI_TOKENS.MEDICAL_CENTERS_SERVICE
+      DI_TOKENS.IMEDICAL_CENTERS_SERVICE
     );
     return new MedicalCentersController(medicalCenterService);
   }
 
   static createChatController(): ChatController {
-    const chatService = container.resolve(DI_TOKENS.LANGCHAIN_SERVICE);
+    const chatService = container.resolve(DI_TOKENS.ILANGCHAIN_SERVICE);
     return new ChatController(chatService);
   }
 }
