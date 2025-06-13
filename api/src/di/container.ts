@@ -19,6 +19,7 @@ class Container {
     if (!Container.instance) {
       Container.instance = new Container();
     }
+
     return Container.instance;
   }
 

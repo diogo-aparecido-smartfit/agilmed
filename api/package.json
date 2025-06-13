@@ -9,6 +9,7 @@
     "@langchain/community": "^0.3.45",
     "@langchain/core": "^0.3.57",
     "@langchain/openai": "^0.5.11",
+    "@scalar/express-api-reference": "^0.8.3",
     "axios": "^1.7.7",
     "bcryptjs": "^3.0.2",
     "date-fns": "^4.1.0",

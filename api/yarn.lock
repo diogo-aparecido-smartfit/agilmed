@@ -506,6 +506,36 @@
   resolved "https://registry.yarnpkg.com/@redis/time-series/-/time-series-5.1.1.tgz#72a05fe1c39817b5eb8e2a255608ed43e05a031f"
   integrity sha512-HPjZLfcZxh5mBLqRgx7KCZG6JXxGnb7yJqo9qZ/KMTWK/k3SWyH47DHJbYbRNzKOEkbK/l/5kikDTm79uJuCbg==
 
+"@scalar/core@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@scalar/core/-/core-0.3.2.tgz#ed27a39931555b11aa56e89c5e08981df2f027d5"
+  integrity sha512-XxB9/xVEVYpBgVyUoAjoALaFkJMvz+7GjSTYyc1jKVP7o5VAdvNTDWdGMNqlYtzpQmco7LQllb7aAmDo33S4xg==
+  dependencies:
+    "@scalar/types" "0.2.2"
+
+"@scalar/express-api-reference@^0.8.3":
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/@scalar/express-api-reference/-/express-api-reference-0.8.3.tgz#2c72bf0273e3bb71a1dfaa565e111bc90eafce47"
+  integrity sha512-bnYwBZVGL2GWtMuHM6dvuzENG+SiqYCdAQq0FZLI52gZd6ACNjeHYsvpV35LCucmlcLDMY3Sf3udA1D3426BfQ==
+  dependencies:
+    "@scalar/core" "0.3.2"
+
+"@scalar/openapi-types@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@scalar/openapi-types/-/openapi-types-0.3.2.tgz#82c01768e49b97c18bcbd1d5cdfbe803a7b6eb03"
+  integrity sha512-O1AnVF29Z34TTiuMPzA8Bi9zAZuxLq5xGbW5vLvm9zUkwtI1v/mUsDNiWF3b0oOdk5LlVkrppKvI3xRFYUiyXg==
+  dependencies:
+    zod "3.24.1"
+
+"@scalar/types@0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@scalar/types/-/types-0.2.2.tgz#ed3dc105e7c40712e1067abf227b856ef7e43917"
+  integrity sha512-56KPwde4+zemnA/Nln6TP0ezBiem7K/UcEk94WhsPZU8PV9DVScyepCPU1xEMCNayMrOGG9OHybYyXKkbqt/fA==
+  dependencies:
+    "@scalar/openapi-types" "0.3.2"
+    nanoid "^5.1.5"
+    zod "3.24.1"
+
 "@scarf/scarf@=1.4.0":
   version "1.4.0"
   resolved "https://registry.npmjs.org/@scarf/scarf/-/scarf-1.4.0.tgz"
@@ -2384,6 +2414,11 @@ nanoid@^3.3.1:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.11.tgz#4f4f112cefbe303202f2199838128936266d185b"
   integrity sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==
 
+nanoid@^5.1.5:
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.1.5.tgz#f7597f9d9054eb4da9548cdd53ca70f1790e87de"
+  integrity sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==
+
 native-duplexpair@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/native-duplexpair/-/native-duplexpair-1.0.0.tgz#7899078e64bf3c8a3d732601b3d40ff05db58fa0"
@@ -3658,6 +3693,11 @@ zod-to-json-schema@^3.22.3, zod-to-json-schema@^3.22.5:
   version "3.24.5"
   resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.24.5.tgz#d1095440b147fb7c2093812a53c54df8d5df50a3"
   integrity sha512-/AuWwMP+YqiPbsJx5D6TfgRTc4kTLjsh5SOcd4bLsfUg2RcEXrFMJl1DGgdHy2aCfsIA/cr/1JM0xcB2GZji8g==
+
+zod@3.24.1:
+  version "3.24.1"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.1.tgz#27445c912738c8ad1e9de1bea0359fa44d9d35ee"
+  integrity sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==
 
 zod@^3.22.3, zod@^3.22.4:
   version "3.25.36"

@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import userRouter from "../routes/user.routes";
 import authRouter from "../routes/auth.routes";
 import { connectDB } from "./database";
-import { setupSwagger } from "./swagger";
+import { setupScalar } from "./docs";
 import appointmentRouter from "../routes/appointment.routes";
 import chatRouter from "../routes/chat.routes";
 import patientRouter from "../routes/patient.routes";
@@ -44,7 +44,7 @@ export class App {
     this.app.use("/api/appointments", appointmentRouter);
     this.app.use("/api/bot", chatRouter);
 
-    setupSwagger(this.app);
+    setupScalar(this.app);
   }
 
   public async start(): Promise<void> {
