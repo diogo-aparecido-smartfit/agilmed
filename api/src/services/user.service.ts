@@ -6,8 +6,9 @@ import {
 } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import { IUserRepository } from "../repositories/interfaces/user.interface";
+import { IUserService } from "./interfaces/user.interface";
 
-export class UserService {
+export class UserService implements IUserService {
   private userRepository: IUserRepository;
 
   constructor(userRepository: IUserRepository) {

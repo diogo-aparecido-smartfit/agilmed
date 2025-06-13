@@ -3,33 +3,19 @@ import Appointment, {
   AppointmentCreationAttributes,
   AppointmentFilters,
 } from "../models/appointment.model";
-import { AppointmentRepository } from "../repositories/appointment.repository";
-import { PatientRepository } from "../repositories/patient.repository";
-import { DoctorRepository } from "../repositories/doctor.repository";
-import { UserRepository } from "../repositories/user.repository";
 import { IAppointmentRepository } from "../repositories/interfaces/appointment.interface";
 import { IPatientRepository } from "../repositories/interfaces/patient.interface";
 import { IDoctorRepository } from "../repositories/interfaces/doctor.interface";
 import { IUserRepository } from "../repositories/interfaces/user.interface";
+import { IAppointmentService } from "./interfaces/appointment.interface";
 
-export class AppointmentService {
-  private appointmentRepository: IAppointmentRepository;
-  private patientRepository: IPatientRepository;
-  private doctorRepository: IDoctorRepository;
-  private userRepository: IUserRepository;
-
+export class AppointmentService implements IAppointmentService {
   constructor(
-    appointmentRepository?: IAppointmentRepository,
-    patientRepository?: IPatientRepository,
-    doctorRepository?: IDoctorRepository,
-    userRepository?: IUserRepository
-  ) {
-    this.appointmentRepository =
-      appointmentRepository || new AppointmentRepository();
-    this.patientRepository = patientRepository || new PatientRepository();
-    this.doctorRepository = doctorRepository || new DoctorRepository();
-    this.userRepository = userRepository || new UserRepository();
-  }
+    private appointmentRepository: IAppointmentRepository,
+    private patientRepository: IPatientRepository,
+    private doctorRepository: IDoctorRepository,
+    private userRepository: IUserRepository
+  ) {}
 
   async createAppointment(
     data: AppointmentCreationAttributes

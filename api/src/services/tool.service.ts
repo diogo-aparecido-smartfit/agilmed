@@ -1,20 +1,17 @@
 import { AppointmentService } from "./appointment.service";
 import { DoctorService } from "./doctor.service";
+import { IToolService } from "./interfaces/tool.interface";
 import { MedicalCentersService } from "./medical-centers.service";
 
 /**
  * Serviço para execução das ferramentas de IA
  */
-export class ToolService {
-  private doctorService: DoctorService;
-  private medicalCentersService: MedicalCentersService;
-  private appointmentService: AppointmentService;
-
-  constructor() {
-    this.doctorService = new DoctorService();
-    this.medicalCentersService = new MedicalCentersService();
-    this.appointmentService = new AppointmentService();
-  }
+export class ToolService implements IToolService {
+  constructor(
+    private doctorService: DoctorService,
+    private medicalCentersService: MedicalCentersService,
+    private appointmentService: AppointmentService
+  ) {}
 
   /**
    * Executa a ferramenta adequada com base no nome

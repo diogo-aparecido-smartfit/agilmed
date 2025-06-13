@@ -22,7 +22,6 @@ import { AIConfigService } from "../services/ai-config.service";
 export function setupDependencies(): void {
   setupRepositories();
   setupDomainServices();
-  setupIntegrationServices();
 }
 
 function setupRepositories(): void {
@@ -90,21 +89,21 @@ function setupDomainServices(): void {
     doctorRepository
   );
   container.register(DI_TOKENS.AUTH_SERVICE, authService);
-}
 
-function setupIntegrationServices(): void {
-  const toolService = new ToolService();
+  const toolService = new ToolService(
+    doctorService,
+    medicalCentersService,
+    appointmentService
+  );
   container.register(DI_TOKENS.TOOL_SERVICE, toolService);
 
   const aiConfigService = new AIConfigService();
   container.register(DI_TOKENS.AI_CONFIG_SERVICE, aiConfigService);
 
-  const langChainService = new LangChainService(toolService);
+  const langChainService = new LangChainService(toolService, aiConfigService);
   container.register(DI_TOKENS.LANGCHAIN_SERVICE, langChainService);
 
   // Sample data depends on domain services
-  const appointmentService = container.resolve(DI_TOKENS.APPOINTMENT_SERVICE);
-  const doctorService = container.resolve(DI_TOKENS.DOCTOR_SERVICE);
 
   const sampleDataService = new SampleDataService(
     appointmentService,

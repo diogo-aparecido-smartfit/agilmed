@@ -9,8 +9,9 @@ import {
 import { UserCreationAttributes } from "../models/user.model";
 import { IDoctorRepository } from "../repositories/interfaces/doctor.interface";
 import { IUserRepository } from "../repositories/interfaces/user.interface";
+import { IDoctorService } from "./interfaces/doctor.interface";
 
-export class DoctorService {
+export class DoctorService implements IDoctorService {
   private doctorRepository: IDoctorRepository;
   private userRepository: IUserRepository;
 

@@ -1,7 +1,8 @@
 import { IMedicalCentersRepository } from "../repositories/interfaces/medical-centers.interface";
 import { MedicalCentersRepository } from "../repositories/medical-centers.repository";
+import { IMedicalCentersService } from "./interfaces/medical-centers.interface";
 
-export class MedicalCentersService {
+export class MedicalCentersService implements IMedicalCentersService {
   private medicalCentersRepository: IMedicalCentersRepository;
 
   constructor(medicalCentersRepository?: IMedicalCentersRepository) {
@@ -9,7 +10,11 @@ export class MedicalCentersService {
       medicalCentersRepository || new MedicalCentersRepository();
   }
 
-  async findNearbyPlaces(lat: number, lon: number, query: string) {
+  async findNearbyPlaces(
+    lat: number,
+    lon: number,
+    query: string
+  ): Promise<any[]> {
     try {
       return this.medicalCentersRepository.getNearbyMedicalCenters(
         lat,

@@ -7,8 +7,9 @@ import {
 import { UserCreationAttributes } from "../models/user.model";
 import { IPatientRepository } from "../repositories/interfaces/patient.interface";
 import { IUserRepository } from "../repositories/interfaces/user.interface";
+import { IPatientService } from "./interfaces/patient.interface";
 
-export class PatientService {
+export class PatientService implements IPatientService {
   private patientRepository: IPatientRepository;
   private userRepository: IUserRepository;
 

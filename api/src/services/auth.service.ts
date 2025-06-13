@@ -9,8 +9,9 @@ import { User } from "../models/user.model";
 import { IDoctorRepository } from "../repositories/interfaces/doctor.interface";
 import { IPatientRepository } from "../repositories/interfaces/patient.interface";
 import { IUserRepository } from "../repositories/interfaces/user.interface";
+import { IAuthService } from "./interfaces/auth.interface";
 
-export class AuthService {
+export class AuthService implements IAuthService {
   private userRepository: IUserRepository;
   private patientRepository: IPatientRepository;
   private doctorRepository: IDoctorRepository;

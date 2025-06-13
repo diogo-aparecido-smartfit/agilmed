@@ -3,18 +3,13 @@ import { DoctorService } from "./doctor.service";
 import { Patient } from "../models/patient.model";
 import { Doctor } from "../models/doctor.model";
 import { AppointmentCreationAttributes } from "../models/appointment.model";
+import { ISampleDataService } from "./interfaces/sample-data.interface";
 
-export class SampleDataService {
-  private appointmentService: AppointmentService;
-  private doctorService: DoctorService;
-
+export class SampleDataService implements ISampleDataService {
   constructor(
-    appointmentService?: AppointmentService,
-    doctorService?: DoctorService
-  ) {
-    this.appointmentService = appointmentService || new AppointmentService();
-    this.doctorService = doctorService || new DoctorService();
-  }
+    private appointmentService: AppointmentService,
+    private doctorService: DoctorService
+  ) {}
 
   /**
    * Creates sample appointments for a newly registered patient

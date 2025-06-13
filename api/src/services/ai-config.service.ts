@@ -1,13 +1,14 @@
 import { ChatOpenAI } from "@langchain/openai";
+import { IAIConfigService } from "./interfaces/ai-config.interface";
 
 /**
  * Serviço para configuração do modelo de IA
  */
-export class AIConfigService {
+export class AIConfigService implements IAIConfigService {
   /**
    * Cria uma instância do modelo de linguagem
    */
-  static createModel(): ChatOpenAI {
+  public createModel(): ChatOpenAI {
     return new ChatOpenAI({
       modelName: process.env.OPENROUTER_MODEL || "openai/gpt-4o",
       temperature: 0.2,
@@ -25,7 +26,7 @@ export class AIConfigService {
   /**
    * Define as ferramentas disponíveis para o modelo
    */
-  static getTools() {
+  public getTools() {
     return [
       {
         type: "function",

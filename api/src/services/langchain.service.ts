@@ -6,18 +6,20 @@ import {
 } from "@langchain/core/messages";
 import { ToolService } from "./tool.service";
 import { AIConfigService } from "./ai-config.service";
-import { SYSTEM_PROMPT, TOOL_SYSTEM_PROMPT } from "../utils/bot.prompt";
+import { TOOL_SYSTEM_PROMPT } from "../utils/bot.prompt";
+import { ILangChainService } from "./interfaces/langchain.interface";
 
 /**
  * Serviço principal para integração com LangChain
  */
-export class LangChainService {
+export class LangChainService implements ILangChainService {
   private model: ChatOpenAI;
-  private toolService: ToolService;
 
-  constructor(toolService?: ToolService) {
-    this.model = AIConfigService.createModel();
-    this.toolService = toolService || new ToolService();
+  constructor(
+    private toolService: ToolService,
+    private aiConfigServer: AIConfigService
+  ) {
+    this.model = this.aiConfigServer.createModel();
   }
 
   /**
@@ -30,8 +32,8 @@ export class LangChainService {
     userName?: string
   ) {
     try {
-      const modelWithTools = this.model.bind({
-        tools: AIConfigService.getTools(),
+      const modelWithTools = this.model.withConfig({
+        tools: this.aiConfigServer.getTools(),
         tool_choice: "auto",
       });
 
