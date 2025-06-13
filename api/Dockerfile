@@ -1,5 +1,5 @@
 # Etapa 1: Instalar as dependências
-FROM node:18 AS build
+FROM node:20 AS build
 
 WORKDIR /app
 
