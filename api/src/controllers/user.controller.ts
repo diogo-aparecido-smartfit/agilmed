@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { UserService } from "../services/user.service";
 import { upload } from "../middlewares/upload";
 import { UserCreationAttributes, UserAttributes } from "../models/user.model";
+import { IUserService } from "../services/interfaces/user.interface";
 
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: IUserService) {}
 
   public async createUser(req: Request, res: Response): Promise<void> {
     try {

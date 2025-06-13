@@ -3,9 +3,10 @@ import { LangChainService } from "../services/langchain.service";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
 import { SYSTEM_PROMPT } from "../utils/bot.prompt";
 import { getMessageHistory, addMessageToHistory } from "../config/redis";
+import { ILangChainService } from "../services/interfaces/langchain.interface";
 
 export class ChatController {
-  constructor(private langChainService: LangChainService) {}
+  constructor(private langChainService: ILangChainService) {}
 
   async completions(req: AuthenticatedRequest, res: Response) {
     try {

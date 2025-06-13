@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { PatientService } from "../services/patient.service";
+import { IPatientService } from "../services/interfaces/patient.interface";
 
 export class PatientController {
-  constructor(private patientService: PatientService) {}
+  constructor(private patientService: IPatientService) {}
 
   async createPatient(req: Request, res: Response) {
     try {

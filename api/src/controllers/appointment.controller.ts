@@ -1,9 +1,10 @@
 import { Response } from "express";
 import { AppointmentService } from "../services/appointment.service";
 import { AuthenticatedRequest } from "../middlewares/auth.middleware";
+import { IAppointmentService } from "../services/interfaces/appointment.interface";
 
 export class AppointmentController {
-  constructor(private appointmentService: AppointmentService) {}
+  constructor(private appointmentService: IAppointmentService) {}
 
   async createAppointment(req: AuthenticatedRequest, res: Response) {
     try {

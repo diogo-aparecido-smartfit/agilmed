@@ -14,7 +14,6 @@ import { AppointmentService } from "../services/appointment.service";
 import { AuthService } from "../services/auth.service";
 import { MedicalCentersService } from "../services/medical-centers.service";
 import { SampleDataService } from "../services/sample-data.service";
-
 import { LangChainService } from "../services/langchain.service";
 import { ToolService } from "../services/tool.service";
 import { AIConfigService } from "../services/ai-config.service";
@@ -31,15 +30,6 @@ function setupRepositories(): void {
   const appointmentRepository = new AppointmentRepository();
   const medicalCentersRepository = new MedicalCentersRepository();
 
-  container.register(DI_TOKENS.USER_REPOSITORY, userRepository);
-  container.register(DI_TOKENS.PATIENT_REPOSITORY, patientRepository);
-  container.register(DI_TOKENS.DOCTOR_REPOSITORY, doctorRepository);
-  container.register(DI_TOKENS.APPOINTMENT_REPOSITORY, appointmentRepository);
-  container.register(
-    DI_TOKENS.MEDICAL_CENTERS_REPOSITORY,
-    medicalCentersRepository
-  );
-
   container.register(DI_TOKENS.IUSER_REPOSITORY, userRepository);
   container.register(DI_TOKENS.IPATIENT_REPOSITORY, patientRepository);
   container.register(DI_TOKENS.IDOCTOR_REPOSITORY, doctorRepository);
@@ -51,24 +41,29 @@ function setupRepositories(): void {
 }
 
 function setupDomainServices(): void {
-  const userRepository = container.resolve(DI_TOKENS.USER_REPOSITORY);
-  const patientRepository = container.resolve(DI_TOKENS.PATIENT_REPOSITORY);
-  const doctorRepository = container.resolve(DI_TOKENS.DOCTOR_REPOSITORY);
+  const userRepository = container.resolve(DI_TOKENS.IUSER_REPOSITORY);
+  const patientRepository = container.resolve(DI_TOKENS.IPATIENT_REPOSITORY);
+  const doctorRepository = container.resolve(DI_TOKENS.IDOCTOR_REPOSITORY);
   const appointmentRepository = container.resolve(
-    DI_TOKENS.APPOINTMENT_REPOSITORY
+    DI_TOKENS.IAPPOINTMENT_REPOSITORY
   );
   const medicalCentersRepository = container.resolve(
-    DI_TOKENS.MEDICAL_CENTERS_REPOSITORY
+    DI_TOKENS.IMEDICAL_CENTERS_REPOSITORY
   );
 
   const userService = new UserService(userRepository);
-  container.register(DI_TOKENS.USER_SERVICE, userService);
+  container.register(DI_TOKENS.IUSER_SERVICE, userService);
 
   const patientService = new PatientService(patientRepository, userRepository);
-  container.register(DI_TOKENS.PATIENT_SERVICE, patientService);
+  container.register(DI_TOKENS.IPATIENT_SERVICE, patientService);
 
   const doctorService = new DoctorService(doctorRepository, userRepository);
-  container.register(DI_TOKENS.DOCTOR_SERVICE, doctorService);
+  container.register(DI_TOKENS.IDOCTOR_SERVICE, doctorService);
+
+  const medicalCentersService = new MedicalCentersService(
+    medicalCentersRepository
+  );
+  container.register(DI_TOKENS.IMEDICAL_CENTERS_SERVICE, medicalCentersService);
 
   const appointmentService = new AppointmentService(
     appointmentRepository,
@@ -76,38 +71,31 @@ function setupDomainServices(): void {
     doctorRepository,
     userRepository
   );
-  container.register(DI_TOKENS.APPOINTMENT_SERVICE, appointmentService);
-
-  const medicalCentersService = new MedicalCentersService(
-    medicalCentersRepository
-  );
-  container.register(DI_TOKENS.MEDICAL_CENTERS_SERVICE, medicalCentersService);
+  container.register(DI_TOKENS.IAPPOINTMENT_SERVICE, appointmentService);
 
   const authService = new AuthService(
     userRepository,
     patientRepository,
     doctorRepository
   );
-  container.register(DI_TOKENS.AUTH_SERVICE, authService);
+  container.register(DI_TOKENS.IAUTH_SERVICE, authService);
 
   const toolService = new ToolService(
     doctorService,
     medicalCentersService,
     appointmentService
   );
-  container.register(DI_TOKENS.TOOL_SERVICE, toolService);
+  container.register(DI_TOKENS.ITOOL_SERVICE, toolService);
 
   const aiConfigService = new AIConfigService();
-  container.register(DI_TOKENS.AI_CONFIG_SERVICE, aiConfigService);
+  container.register(DI_TOKENS.IAI_CONFIG_SERVICE, aiConfigService);
 
   const langChainService = new LangChainService(toolService, aiConfigService);
-  container.register(DI_TOKENS.LANGCHAIN_SERVICE, langChainService);
-
-  // Sample data depends on domain services
+  container.register(DI_TOKENS.ILANGCHAIN_SERVICE, langChainService);
 
   const sampleDataService = new SampleDataService(
     appointmentService,
     doctorService
   );
-  container.register(DI_TOKENS.SAMPLE_DATA_SERVICE, sampleDataService);
+  container.register(DI_TOKENS.ISAMPLE_DATA_SERVICE, sampleDataService);
 }

@@ -5,14 +5,19 @@ import { PatientService } from "../services/patient.service";
 import { User } from "../models/user.model";
 import { DoctorService } from "../services/doctor.service";
 import { SampleDataService } from "../services/sample-data.service";
+import { IAuthService } from "../services/interfaces/auth.interface";
+import { IUserService } from "../services/interfaces/user.interface";
+import { IPatientService } from "../services/interfaces/patient.interface";
+import { IDoctorService } from "../services/interfaces/doctor.interface";
+import { ISampleDataService } from "../services/interfaces/sample-data.interface";
 
 export class AuthController {
   constructor(
-    private authService: AuthService,
-    private userService: UserService,
-    private patientService: PatientService,
-    private doctorService: DoctorService,
-    private sampleDataService: SampleDataService
+    private authService: IAuthService,
+    private userService: IUserService,
+    private patientService: IPatientService,
+    private doctorService: IDoctorService,
+    private sampleDataService: ISampleDataService
   ) {}
 
   public async authenticate(req: Request, res: Response): Promise<void> {

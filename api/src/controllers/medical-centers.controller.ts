@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { MedicalCentersService } from "../services/medical-centers.service";
+import { IMedicalCentersService } from "../services/interfaces/medical-centers.interface";
 
 export class MedicalCentersController {
-  constructor(private medicalCentersService: MedicalCentersService) {}
+  constructor(private medicalCentersService: IMedicalCentersService) {}
 
   async getNearbyPlaces(req: Request, res: Response) {
     try {
