@@ -1,4 +1,4 @@
-import { DependenciesMap, DependencyMap } from "./maps";
+import { DependenciesMap, DependencyKey, DependencyMap } from "./maps";
 import { setupDependencies } from "./registry";
 
 class Container {
@@ -27,7 +27,7 @@ class Container {
     return this.initialized;
   }
 
-  register<Key extends keyof DependencyMap>(
+  register<Key extends DependencyKey>(
     token: Key,
     dependency: DependencyMap[Key]
   ): void {
@@ -35,7 +35,7 @@ class Container {
     this.initialized = true;
   }
 
-  resolve<Key extends keyof DependencyMap>(token: Key): DependencyMap[Key] {
+  resolve<Key extends DependencyKey>(token: Key): DependencyMap[Key] {
     this.initializeDependencies();
 
     if (!this.initialized) {
