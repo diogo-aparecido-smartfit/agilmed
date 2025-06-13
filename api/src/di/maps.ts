@@ -50,3 +50,18 @@ export type RepositoryInterfaceMap = {
 };
 
 export type DependencyMap = ServiceMap & RepositoryMap & RepositoryInterfaceMap;
+
+/**
+ * Type representing dependency keys in the container
+ */
+export type DependencyKey = keyof DependencyMap;
+
+/**
+ * Type representing dependency values in the container
+ */
+export type DependencyValue = DependencyMap[DependencyKey];
+
+/**
+ * Type for the dependencies map used in the container
+ */
+export type DependenciesMap = Map<DependencyKey, DependencyValue>;

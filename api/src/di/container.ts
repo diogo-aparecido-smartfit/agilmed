@@ -1,8 +1,8 @@
-import { DependencyMap } from "./maps";
+import { DependenciesMap, DependencyMap } from "./maps";
 import { setupDependencies } from "./registry";
 
 class Container {
-  private dependencies: Map<string, any> = new Map();
+  private dependencies: DependenciesMap = new Map();
   private initialized = false;
   private static instance: Container | null = null;
 
@@ -27,11 +27,11 @@ class Container {
     return this.initialized;
   }
 
-  register<K extends keyof DependencyMap>(
-    token: K,
-    dependency: DependencyMap[K]
+  register<Key extends keyof DependencyMap>(
+    token: Key,
+    dependency: DependencyMap[Key]
   ): void {
-    this.dependencies.set(token as string, dependency);
+    this.dependencies.set(token, dependency);
     this.initialized = true;
   }
 
@@ -44,7 +44,7 @@ class Container {
       );
     }
 
-    const dependency = this.dependencies.get(token as string);
+    const dependency = this.dependencies.get(token);
 
     if (!dependency) {
       throw new Error(`Dependency with token ${String(token)} not found`);
