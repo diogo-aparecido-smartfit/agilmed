@@ -10,6 +10,7 @@
     "@langchain/core": "^0.3.57",
     "@langchain/openai": "^0.5.11",
     "@scalar/express-api-reference": "^0.8.3",
+    "@sequelize/postgres": "^7.0.0-alpha.46",
     "axios": "^1.7.7",
     "bcryptjs": "^3.0.2",
     "date-fns": "^4.1.0",
@@ -28,7 +29,6 @@
     "sequelize": "^6.37.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "tedious": "^18.6.1",
     "zod": "^3.25.39"
   },
   "scripts": {

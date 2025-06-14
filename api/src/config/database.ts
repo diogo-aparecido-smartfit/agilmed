@@ -9,21 +9,10 @@ export const sequelize = new Sequelize(
   process.env.DATABASE_PASSWORD as string,
   {
     host: process.env.DATABASE_URL as string,
-    dialect: "mssql",
-    // logging: process.env.NODE_ENV === "development",
-    logging: true,
+    dialect: "postgres",
+    logging: process.env.NODE_ENV === "development",
     define: {
       underscored: true,
-    },
-    dialectOptions: {
-      options: {
-        encrypt: true,
-        requestTimeout: 30000,
-      },
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
     },
     pool: {
       max: 5,
@@ -52,10 +41,10 @@ export const connectDB = async () => {
     setupAssociations();
     console.log("✅ [DATABASE] Model associations configured successfully");
 
-    // if (process.env.NODE_ENV === "development") {
-    //   await sequelize.sync({ alter: true });
-    //   console.log("✅ [DATABASE] Models synchronized with database");
-    // }
+    if (process.env.NODE_ENV === "development") {
+      await sequelize.sync({ alter: true });
+      console.log("✅ [DATABASE] Models synchronized with database");
+    }
 
     console.log("🚀 [DATABASE] Database ready");
     return Promise.resolve();
