@@ -9,9 +9,6 @@ import { AIConfigService } from "./ai-config.service";
 import { TOOL_SYSTEM_PROMPT } from "../utils/bot.prompt";
 import { ILangChainService } from "./interfaces/langchain.interface";
 
-/**
- * Serviço principal para integração com LangChain
- */
 export class LangChainService implements ILangChainService {
   private model: ChatOpenAI;
 
@@ -22,9 +19,6 @@ export class LangChainService implements ILangChainService {
     this.model = this.aiConfigServer.createModel();
   }
 
-  /**
-   * Processa a mensagem do usuário e retorna uma resposta
-   */
   public async processMessage(
     userId: number,
     message: string,
@@ -39,7 +33,6 @@ export class LangChainService implements ILangChainService {
 
       const formattedHistory = this.formatChatHistory(history);
 
-      // Adicionar o nome do usuário ao prompt do sistema
       let systemPrompt = TOOL_SYSTEM_PROMPT;
       if (userName) {
         systemPrompt += `\n\n# INFORMAÇÕES DO USUÁRIO:\nNome do usuário: ${userName}\n\nLembre-se de sempre se dirigir ao usuário pelo nome quando responder.`;
@@ -76,9 +69,6 @@ export class LangChainService implements ILangChainService {
     }
   }
 
-  /**
-   * Formata o histórico de chat para o formato esperado pelo LangChain
-   */
   private formatChatHistory(history: any[]) {
     return history.map((msg) => {
       return msg.role === "user"
@@ -87,9 +77,6 @@ export class LangChainService implements ILangChainService {
     });
   }
 
-  /**
-   * Processa chamadas de ferramentas e retorna resposta final
-   */
   private async handleToolCalls(
     response: any,
     systemMessage: SystemMessage,

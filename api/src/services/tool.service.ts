@@ -3,9 +3,6 @@ import { DoctorService } from "./doctor.service";
 import { IToolService } from "./interfaces/tool.interface";
 import { MedicalCentersService } from "./medical-centers.service";
 
-/**
- * Serviço para execução das ferramentas de IA
- */
 export class ToolService implements IToolService {
   constructor(
     private doctorService: DoctorService,
@@ -13,9 +10,6 @@ export class ToolService implements IToolService {
     private appointmentService: AppointmentService
   ) {}
 
-  /**
-   * Executa a ferramenta adequada com base no nome
-   */
   async executeTool(toolName: string, args: any): Promise<any> {
     switch (toolName) {
       case "list_doctors":
@@ -31,9 +25,6 @@ export class ToolService implements IToolService {
     }
   }
 
-  /**
-   * Lista médicos disponíveis
-   */
   private async executeDoctorListing(args: any) {
     try {
       const { specialty } = args;
@@ -64,9 +55,6 @@ export class ToolService implements IToolService {
     }
   }
 
-  /**
-   * Encontra estabelecimentos próximos
-   */
   private async executeFindNearbyPlaces(args: any) {
     try {
       const {
@@ -100,9 +88,6 @@ export class ToolService implements IToolService {
     }
   }
 
-  /**
-   * Cria um novo agendamento
-   */
   private async executeCreateAppointment(args: any) {
     try {
       const { doctor_id, patient_id, appointment_date, reason } = args;

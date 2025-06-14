@@ -11,12 +11,7 @@ export class SampleDataService implements ISampleDataService {
     private doctorService: DoctorService
   ) {}
 
-  /**
-   * Creates sample appointments for a newly registered patient
-   * This runs asynchronously without awaiting to avoid delaying registration
-   */
   public createSampleAppointmentsForPatient(patient: Patient): void {
-    // Execute this asynchronously without awaiting
     this.generateSampleAppointments(patient)
       .then(() =>
         console.log(`Sample appointments created for patient ${patient.id}`)
@@ -31,14 +26,12 @@ export class SampleDataService implements ISampleDataService {
 
   private async generateSampleAppointments(patient: Patient): Promise<void> {
     try {
-      // Get available doctors
       const doctors = await this.doctorService.getAllDoctors();
       if (!doctors || doctors.length === 0) {
         console.log("No doctors available to create sample appointments");
         return;
       }
 
-      // Sample reasons for appointments
       const reasons = [
         "Consulta de rotina para check-up anual",
         "Dor de cabeça frequente nas últimas semanas",
@@ -48,7 +41,6 @@ export class SampleDataService implements ISampleDataService {
         "Avaliação de exames recentes",
       ];
 
-      // Create completed appointment (in the past)
       await this.createAppointment(
         patient,
         this.getRandomDoctor(doctors),
@@ -57,7 +49,6 @@ export class SampleDataService implements ISampleDataService {
         "completed"
       );
 
-      // Create confirmed appointment (in the future)
       await this.createAppointment(
         patient,
         this.getRandomDoctor(doctors),
@@ -66,7 +57,6 @@ export class SampleDataService implements ISampleDataService {
         "confirmed"
       );
 
-      // Create pending appointment (in the future)
       await this.createAppointment(
         patient,
         this.getRandomDoctor(doctors),
@@ -75,7 +65,6 @@ export class SampleDataService implements ISampleDataService {
         "pending"
       );
 
-      // Create cancelled appointment
       await this.createAppointment(
         patient,
         this.getRandomDoctor(doctors),
@@ -124,9 +113,8 @@ export class SampleDataService implements ISampleDataService {
     const result = new Date(today);
     result.setDate(today.getDate() + offsetDays);
 
-    // Set a reasonable hour between 8 AM and 5 PM
-    const hour = 8 + Math.floor(Math.random() * 9); // 8 AM to 5 PM
-    const minute = Math.random() > 0.5 ? 0 : 30; // Either on the hour or half past
+    const hour = 8 + Math.floor(Math.random() * 9);
+    const minute = Math.random() > 0.5 ? 0 : 30;
 
     result.setHours(hour, minute, 0, 0);
 
