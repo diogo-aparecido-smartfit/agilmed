@@ -12,6 +12,7 @@ const (
 
 type User struct {
 	ID                string    `json:"id"`
+	HealthID          string    `json:"health_id"`
 	Name              string    `json:"name"`
 	Email             string    `json:"email"`
 	PasswordHash      string    `json:"password"`
@@ -26,6 +27,18 @@ type User struct {
 	UpdatedAt         time.Time `json:"updated_at"`
 }
 
+type UserRegister struct {
+	Name              string
+	Email             string
+	PasswordHash      string
+	Phone             string
+	DocumentType      string
+	Document          string
+	ProfilePictureUrl **string
+	Birthdate         *time.Time
+	Role              *Role
+}
+
 type UserUpdate struct {
 	Name              *string
 	Email             *string
@@ -37,4 +50,16 @@ type UserUpdate struct {
 	IsVerified        *bool
 	Birthdate         *time.Time
 	Role              *Role
+}
+
+type UserResponse struct {
+	Name              string
+	Email             string
+	Phone             string
+	DocumentType      string
+	Document          string
+	ProfilePictureUrl **string
+	IsVerified        bool
+	Birthdate         time.Time
+	Role              Role
 }

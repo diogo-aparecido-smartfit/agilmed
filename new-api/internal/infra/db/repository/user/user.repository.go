@@ -14,8 +14,20 @@ func NewRepository(db *gorm.DB) user.Repository {
 	return &dbUserRepository{db: db}
 }
 
-func (r *dbUserRepository) Create(user *user.User) error {
-	return r.db.Create(user).Error
+func (r *dbUserRepository) Create(payload *user.UserRegister) (*user.UserResponse, error) {
+	createdUser := &user.UserResponse{
+		Name:              payload.Name,
+		Email:             payload.Email,
+		Document:          payload.Document,
+		DocumentType:      payload.DocumentType,
+		Birthdate:         *payload.Birthdate,
+		Phone:             payload.Phone,
+		ProfilePictureUrl: payload.ProfilePictureUrl,
+		Role:              *payload.Role,
+		IsVerified:        false,
+	}
+
+	return createdUser, r.db.Create(payload).Error
 }
 
 func (r *dbUserRepository) Delete(id string) error {
@@ -46,12 +58,12 @@ func (r *dbUserRepository) GetByID(id string) (*user.User, error) {
 	return &u, err
 }
 
-func (r *dbUserRepository) Update(id string, payload user.UserUpdate) (*user.User, error) {
+func (r *dbUserRepository) Update(id string, payload user.UserUpdate) (*user.UserResponse, error) {
 	if err := r.db.Model(&user.User{}).Where("id = ?", id).Updates(payload).Error; err != nil {
 		return nil, err
 	}
 
-	var updatedUser user.User
+	var updatedUser user.UserResponse
 	if err := r.db.Where("id = ?", id).First(&updatedUser).Error; err != nil {
 		return nil, err
 	}

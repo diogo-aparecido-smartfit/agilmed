@@ -14,27 +14,45 @@ func NewRepository(db *gorm.DB) userverification.Repository {
 	return &dbUserRepository{db: db}
 }
 
-// Create implements userverification.Repository.
-func (d *dbUserRepository) Create(verification *userverification.Verification) error {
-	panic("unimplemented")
+func (r *dbUserRepository) Create(user *userverification.Verification) error {
+	return r.db.Create(user).Error
 }
 
-// Delete implements userverification.Repository.
-func (d *dbUserRepository) Delete(id string) error {
-	panic("unimplemented")
+func (r *dbUserRepository) Delete(id string) error {
+	return r.db.Where("id = ?", id).Delete(&userverification.Verification{}).Error
 }
 
-// GetAll implements userverification.Repository.
-func (d *dbUserRepository) GetAll() ([]*userverification.Verification, error) {
-	panic("unimplemented")
+func (r *dbUserRepository) GetAll() ([]*userverification.Verification, error) {
+	var filters []*userverification.Verification
+
+	err := r.db.Find(&filters).Error
+
+	return filters, err
 }
 
-// GetByID implements userverification.Repository.
-func (d *dbUserRepository) GetByID(id string) (*userverification.Verification, error) {
-	panic("unimplemented")
+func (r *dbUserRepository) GetByID(id string) (*userverification.Verification, error) {
+	var u userverification.Verification
+	err := r.db.Where("id = ?", id).First(&u).Error
+
+	return &u, err
 }
 
-// Update implements userverification.Repository.
-func (d *dbUserRepository) Update(id string, verification userverification.Verification) (*userverification.Verification, error) {
-	panic("unimplemented")
+func (r *dbUserRepository) GetByUserID(userId string) (*userverification.Verification, error) {
+	var u userverification.Verification
+	err := r.db.Where("user_id = ?", userId).First(&u).Error
+
+	return &u, err
+}
+
+func (r *dbUserRepository) Update(id string, payload userverification.VerificationUpdate) (*userverification.Verification, error) {
+	if err := r.db.Model(&userverification.Verification{}).Where("id = ?", id).Updates(payload).Error; err != nil {
+		return nil, err
+	}
+
+	var updatedUser userverification.Verification
+	if err := r.db.Where("id = ?", id).First(&updatedUser).Error; err != nil {
+		return nil, err
+	}
+
+	return &updatedUser, nil
 }

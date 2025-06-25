@@ -10,3 +10,8 @@ type Verification struct {
 	UsedAt    *time.Time `json:"used_at,omitempty"`
 	CreatedAt time.Time  `json:"created_at"`
 }
+
+type VerificationUpdate struct {
+	Code   *string
+	UsedAt *time.Time
+}

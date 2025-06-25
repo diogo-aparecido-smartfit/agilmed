@@ -9,9 +9,9 @@ type UserFilter struct {
 }
 
 type Repository interface {
-	Create(user *User) error
+	Create(user *UserRegister) (*UserResponse, error)
 	GetAll(filter UserFilter) ([]*User, error)
 	GetByID(id string) (*User, error)
-	Update(id string, user UserUpdate) (*User, error)
+	Update(id string, user UserUpdate) (*UserResponse, error)
 	Delete(id string) error
 }
